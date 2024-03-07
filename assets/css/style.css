@@ -1,0 +1,314 @@
+@import url("https://fonts.googleapis.com/css?family=Sanchez");
+* {
+  padding: 0;
+  margin: 0;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+
+body {
+  font-size: 10pt;
+  background-color: #181818;
+  color: white;
+  font-family: Mont, serif;
+  font-weight: 600;
+  padding: 0;
+  margin: 0;
+  overscroll-behavior: none;
+  overflow: hidden;
+  -webkit-tap-highlight-color: #FFFFFF00;
+  -moz-tap-highlight-color: #FFFFFF00;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+#page-preloader {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  background: black;
+}
+
+.main {
+  display: flex;
+  flex-direction: row;
+}
+
+.header {
+  background-image: url(https://64.media.tumblr.com/752e98a41362e1c7e51c7a50a78c179c/317f3fca563a82e5-a4/s1280x1920/187cb60ba078ceeefb7d36860495fdde9aec83b9.gifv);
+  background-position: center;
+  background-color: #00000040;
+  padding: 15px;
+  margin: 0;
+  width: auto;
+  height: auto;
+  border-radius: 20px;
+  box-shadow: 0 0 5px #00000020;
+}
+
+.appinfo {
+  margin: 10px 0;
+  padding: 20px;
+  background-color: #00000040;
+  border-radius: 20px;
+  font-family: 'Fira Mono', monospace;
+  box-shadow: 0 0 5px #00000020;
+}
+
+.logo {
+  width: 40px;
+  height: 40px;
+  margin: auto 0 auto auto;
+  border-radius: 100px;
+}
+
+.name {
+  color: #000000a9;
+  font-size: 30px;
+  font-weight: 900;
+  margin: auto auto auto 10px;
+}
+.btn {
+  background-color: transparent;
+  border: 2px solid #505050;
+  color: white;
+  padding: 15px;
+  margin: 5px 2px 0 2px;
+  transition: 0.3s;
+  text-align: center;
+}
+
+.src {border-radius: 20px 5px 5px 5px;}
+.beta {border-radius: 5px 5px 5px 20px;}
+.web {border-radius: 5px 5px 20px 5px;}
+.dwn {border-radius: 5px 5px 5px 5px;}
+.tg {border-radius: 5px 20px 5px 5px;}
+
+.tg, .src {margin-top: 20px;}
+.tg, .src, .beta, .web{width: 100%;}
+
+.btn:hover {
+  font-size: 15px;
+  background-color: #00000050;
+}
+
+.list {
+  display: flex;
+  width: auto;
+  flex-direction: column;
+  -webkit-tap-highlight-color: #FFFFFF00;
+  -moz-tap-highlight-color: #FFFFFF00;
+}
+
+.list a {
+  height: auto;
+  width: auto;
+  display: flex;
+  flex-direction: row;
+  text-decoration: none;
+  transition: 0.5s;
+  margin: 5px 0;
+  padding: 5px;
+}
+
+.list a:hover {
+  background: #00000040;
+  padding: 10px 10px;
+  margin: 10px 0;
+  border-radius: 20px;
+  box-shadow: 0 0 5px #00000020;
+}
+
+.list a:hover .listbtn {
+  background: transparent;
+}
+
+.list a:hover .listpic:hover {
+  width: 100px;
+  height: 100px;
+}
+
+.listpic {
+  height: 50px;
+  width: 50px;
+  background: #FFFFFF10;
+  border-radius: 100px;
+  transition: 0.5s;
+}
+
+.listdesc {
+  font-size: 10px;
+  color: #848484;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: auto;
+}
+
+.listname {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.listinfo {
+  height: auto;
+  color: white;
+  text-align: left;
+  margin-left: 12px;
+  align-self: center;
+}
+
+.fired {
+  display: flex;
+  width: auto;
+  flex-direction: column;
+  -webkit-tap-highlight-color: #FFFFFF00;
+  -moz-tap-highlight-color: #FFFFFF00;
+}
+
+.fired a {
+  height: auto;
+  width: auto;
+  display: flex;
+  flex-direction: row;
+  text-decoration: none;
+  transition: 0.5s;
+  margin: 5px 0;
+  padding: 5px;
+}
+
+.fired a:hover {
+  background: #00000040;
+  padding: 10px 10px;
+  margin: 10px 0;
+  border-radius: 20px;
+  box-shadow: 0 0 5px #00000020;
+}
+
+.fired a:hover .firedbtn {
+  background: transparent;
+}
+
+.fired a:hover .firedpic:hover {
+  width: 100px;
+  height: 100px;
+}
+
+.firedpic {
+  height: 50px;
+  width: 50px;
+  background: #FFFFFF10;
+  border-radius: 100px;
+  transition: 0.5s;
+}
+
+.fireddesc {
+  font-size: 10px;
+  color: #848484;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: auto;
+}
+
+.firedname {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.firedinfo {
+  height: auto;
+  color: white;
+  text-align: left;
+  margin-left: 12px;
+  align-self: center;
+}
+
+.horiz {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+.footer {
+  text-align: center;
+  margin-top: 10px;
+  background: #00000040;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 0 5px #00000020;
+  font-family: Mont, serif;
+}
+
+.credits {
+  font-size: 10px;
+  margin-top: 5px;
+  color: #909090;
+}
+
+.listbtn:active {color: #FFFFFF20;}
+
+.actbtns {
+  margin: auto 0 auto auto;
+  display: flex;
+  flex-direction: row;
+}
+
+.listbtn {
+  padding: 10px;
+  background: #00000040;
+  border-radius: 100px;
+  margin: auto 0 auto auto;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0.0;
+    transition: 1s;
+  }
+}
+
+.blink {
+  animation: blink 1s ease infinite;
+}
+
+.bash {
+  display: flex;
+  flex-direction: row;
+}
+.me{
+  text-align: center;
+  font-size: 15px;
+  border: 1px solid #00000020;
+  background-color: #00000040;
+  border-radius: 20px;
+}
+.footer p{
+  font-size: 1rem;
+  padding: 0.5rem;
+  letter-spacing: 0.1rem;
+  text-align: center;
+  overflow: hidden;
+}
+.footer p span.typed-text {
+  font-weight: normal;
+  color: #dd7732;
+}
+.footer p span.cursor {
+  display: inline-block;
+  background-color: #ccc;
+  margin-left: 0.1rem;
+  width: 3px;
+  animation: blink 1s infinite;
+}
+.footer p span.cursor.typing {
+  animation: none;
+}

@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'export',
   images: {
     unoptimized: true,
     remotePatterns: [
@@ -15,6 +16,6 @@ const nextConfig = {
       }
     ],
   },
-  reactStrictMode: false,
   basePath: '',
+  reactStrictMode: false,
 }

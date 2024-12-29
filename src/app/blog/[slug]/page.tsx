@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: data.title,
       description: data.description,
     };
-  } catch (error) {
+  } catch {
     return {
       title: 'Blog Post Not Found',
     };
@@ -50,7 +50,7 @@ export default async function BlogPost({ params }: Props) {
         </div>
       </article>
     );
-  } catch (error) {
+  } catch {
     return (
       <div className="container mx-auto px-4 py-16">
         <div className="max-w-4xl mx-auto">

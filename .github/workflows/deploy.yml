@@ -41,6 +41,17 @@ jobs:
           SPOTIFY_REFRESH_TOKEN: ${{ secrets.SPOTIFY_REFRESH_TOKEN }}
           STEAM_API_KEY: ${{ secrets.STEAM_API_KEY }}
           STEAM_ID: ${{ secrets.STEAM_ID }}
+
+      - name: Debug directory structure
+        run: |
+          echo "Current directory:"
+          pwd
+          echo "Directory contents:"
+          ls -la
+          echo "Build directory contents:"
+          ls -la .next || echo "No .next directory"
+          echo "Out directory contents:"
+          ls -la out || echo "No out directory"
           
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2

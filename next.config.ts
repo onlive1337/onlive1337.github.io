@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'export',
+  distDir: 'out',
+  trailingSlash: true,
   images: {
     unoptimized: true,
     remotePatterns: [
@@ -18,4 +20,7 @@ const nextConfig = {
   },
   basePath: '',
   reactStrictMode: false,
+  experimental: {
+    enableUndici: true,
+  }
 }

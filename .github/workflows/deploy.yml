@@ -34,16 +34,13 @@ jobs:
         run: npm ci
         
       - name: Build with Next.js
-        run: npm run build
+        run: npm run build && npx next export
         env:
           SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
           SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
           SPOTIFY_REFRESH_TOKEN: ${{ secrets.SPOTIFY_REFRESH_TOKEN }}
           STEAM_API_KEY: ${{ secrets.STEAM_API_KEY }}
           STEAM_ID: ${{ secrets.STEAM_ID }}
-          
-      - name: Check output directory
-        run: ls -la out
           
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2

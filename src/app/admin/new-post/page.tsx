@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import matter from 'gray-matter';
 import dynamic from 'next/dynamic';
-import { ArrowLeft } from 'lucide-react';
 
 const Markdown = dynamic(() => import('@/components/Markdown'), { ssr: false });
 

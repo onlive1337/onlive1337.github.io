@@ -3,6 +3,35 @@ import { useState, useEffect } from "react";
 import { GithubRepo } from "@/types";
 import Link from "next/link";
 
+interface GithubTopic {
+ topic: {
+   name: string;
+ };
+}
+
+interface GithubRepoNode {
+ name: string;
+ description: string | null;
+ url: string;
+ stargazerCount: number;
+ primaryLanguage: {
+   name: string;
+ } | null;
+ repositoryTopics: {
+   nodes: GithubTopic[];
+ };
+}
+
+interface GithubApiResponse {
+ data: {
+   user: {
+     pinnedItems: {
+       nodes: GithubRepoNode[];
+     };
+   };
+ };
+}
+
 const getTopicColor = (topic: string) => {
  const colors: { [key: string]: string } = {
    typescript: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
@@ -66,14 +95,14 @@ export function Portfolio() {
          body: JSON.stringify({ query: PINNED_REPOS_QUERY }),
        });
        
-       const { data } = await res.json();
-       const pinnedRepos = data.user.pinnedItems.nodes.map((node: any) => ({
+       const response = (await res.json()) as GithubApiResponse;
+       const pinnedRepos = response.data.user.pinnedItems.nodes.map((node: GithubRepoNode) => ({
          name: node.name,
          description: node.description,
          html_url: node.url,
          stargazers_count: node.stargazerCount,
-         language: node.primaryLanguage?.name,
-         topics: node.repositoryTopics.nodes.map((topic: any) => topic.topic.name)
+         language: node.primaryLanguage?.name || null,
+         topics: node.repositoryTopics.nodes.map((topicNode: GithubTopic) => topicNode.topic.name)
        }));
        
        setRepos(pinnedRepos);

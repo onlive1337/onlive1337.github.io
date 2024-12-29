@@ -1,8 +1,11 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import fs from 'fs/promises';
 import path from 'path';
 
-export async function POST(req: NextRequest) {
+export const dynamic = 'force-static';
+export const revalidate = 0;
+
+export async function POST(req: Request) {
   try {
     const { slug, content } = await req.json();
     const postsDirectory = path.join(process.cwd(), 'src/content/blog');

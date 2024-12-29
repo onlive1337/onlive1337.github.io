@@ -1,7 +1,6 @@
-import { cookies } from 'next/headers';
-
 const client_id = process.env.SPOTIFY_CLIENT_ID;
 const client_secret = process.env.SPOTIFY_CLIENT_SECRET;
+const refresh_token = process.env.SPOTIFY_REFRESH_TOKEN;
 
 const basic = Buffer.from(`${client_id}:${client_secret}`).toString('base64');
 
@@ -13,26 +12,28 @@ interface SpotifyToken {
 }
 
 async function getAccessToken(): Promise<SpotifyToken | null> {
-  const cookieStore = await cookies();
-  const refresh_token = cookieStore.get('spotify_refresh_token')?.value;
-
   if (!refresh_token) {
     return null;
   }
 
-  const response = await fetch('https://accounts.spotify.com/api/token', {
-    method: 'POST',
-    headers: {
-      Authorization: `Basic ${basic}`,
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    body: new URLSearchParams({
-      grant_type: 'refresh_token',
-      refresh_token: refresh_token,
-    }),
-  });
+  try {
+    const response = await fetch('https://accounts.spotify.com/api/token', {
+      method: 'POST',
+      headers: {
+        Authorization: `Basic ${basic}`,
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({
+        grant_type: 'refresh_token',
+        refresh_token: refresh_token,
+      }),
+    });
 
-  return response.json();
+    return response.json();
+  } catch (error) {
+    console.error('Error getting access token:', error);
+    return null;
+  }
 }
 
 export async function getNowPlaying() {

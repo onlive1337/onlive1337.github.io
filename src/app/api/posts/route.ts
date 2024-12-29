@@ -3,6 +3,9 @@ import fs from 'fs/promises';
 import path from 'path';
 import matter from 'gray-matter';
 
+export const dynamic = 'force-static';
+export const revalidate = 0;
+
 export async function GET() {
   try {
     const postsDirectory = path.join(process.cwd(), 'src/content/blog');

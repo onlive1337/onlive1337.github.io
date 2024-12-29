@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 import { getNowPlaying } from '@/lib/spotify';
 
-export const dynamic = 'force-dynamic';
-export const runtime = 'edge';
+export const dynamic = 'force-static';
+export const revalidate = 0;
 
 interface SpotifyArtist {
   name: string;
@@ -25,7 +25,7 @@ export async function GET() {
     const response = await getNowPlaying();
 
     if (response.status === 401) {
-      return NextResponse.json({ isUnauthorized: true }, { status: 401 });
+      return NextResponse.json({ isPlaying: false });
     }
 
     if (response.status === 204 || response.status > 400) {
@@ -48,8 +48,8 @@ export async function GET() {
       albumImageUrl: track.album.images[0].url,
       songUrl: track.external_urls.spotify,
     });
-  } catch (error: unknown) {
+  } catch (error) {
     console.error('Spotify API error:', error);
-    return NextResponse.json({ error: 'Failed to fetch' }, { status: 500 });
+    return NextResponse.json({ isPlaying: false });
   }
 }

@@ -15,6 +15,10 @@ const nextConfig = {
         pathname: '/steam/**',
       }
     ]
+  },
+  experimental: {
+    appDir: true,
+    serverActions: false,
   }
 }
 

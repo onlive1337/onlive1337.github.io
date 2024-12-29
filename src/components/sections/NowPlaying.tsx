@@ -1,7 +1,7 @@
 "use client"
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { Music, ExternalLink } from 'lucide-react';
+import { Music } from 'lucide-react';
 
 interface NowPlayingData {
   isPlaying: boolean;
@@ -20,9 +20,12 @@ export function NowPlaying() {
     const fetchNowPlaying = async () => {
       try {
         const response = await fetch('/api/spotify');
+        if (!response.ok) {
+          throw new Error('Failed to fetch');
+        }
         const data = await response.json();
         setData(data);
-      } catch (error: unknown) {
+      } catch (error) {
         console.error('Failed to fetch now playing:', error);
         setData({ isPlaying: false });
       } finally {
@@ -93,12 +96,9 @@ export function NowPlaying() {
               />
             </div>
             <div className="min-w-0 flex-1">
-              <div className="flex items-center justify-between gap-2">
-                <h3 className="truncate font-medium text-gray-900 dark:text-white group-hover:text-[#1DB954] transition-colors">
-                  {data.title}
-                </h3>
-                <ExternalLink className="h-4 w-4 flex-shrink-0 text-gray-400 group-hover:text-[#1DB954] transition-colors" />
-              </div>
+              <h3 className="truncate font-medium text-gray-900 dark:text-white">
+                {data.title}
+              </h3>
               <p className="truncate text-gray-500 dark:text-gray-400">
                 {data.artist}
               </p>

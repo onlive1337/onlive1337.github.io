@@ -22,7 +22,8 @@ export function NowPlaying() {
         const response = await fetch('/api/spotify');
         const data = await response.json();
         setData(data);
-      } catch (error) {
+      } catch (error: unknown) {
+        console.error('Failed to fetch now playing:', error);
         setData({ isPlaying: false });
       } finally {
         setIsLoading(false);
@@ -41,7 +42,7 @@ export function NowPlaying() {
         <h2 className="mb-6 text-xl font-bold text-gray-900 dark:text-white">
           Now Playing
         </h2>
-        <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#121212] shadow-sm">
+        <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white/30 dark:bg-black/30 backdrop-blur-md">
           <div className="animate-pulse flex space-x-4">
             <div className="h-16 w-16 bg-gray-200 dark:bg-gray-800 rounded-lg" />
             <div className="flex-1 space-y-3 py-1">
@@ -56,32 +57,32 @@ export function NowPlaying() {
 
   return (
     <div>
-      <h2 className="text-center mb-6 text-xl font-bold text-gray-900 dark:text-white">
+      <h2 className="mb-6 text-xl font-bold text-gray-900 dark:text-white">
         Now Playing
       </h2>
       {!data?.isPlaying ? (
-            <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white/30 dark:bg-black/30 backdrop-blur-md">
-              <div className="flex items-center gap-4">
-                <div className="h-16 w-16 flex-shrink-0 bg-gray-100/50 dark:bg-gray-800/50 rounded-lg flex items-center justify-center">
-                  <Music className="h-8 w-8 text-gray-400 dark:text-gray-500" />
-                </div>
-                <div>
-                  <p className="font-medium text-gray-900 dark:text-white">
-                    Not Playing
-                  </p>
-                  <p className="text-gray-500 dark:text-gray-400">
-                    Spotify is paused
-                  </p>
-                </div>
-              </div>
+        <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white/30 dark:bg-black/30 backdrop-blur-md">
+          <div className="flex items-center gap-4">
+            <div className="h-16 w-16 flex-shrink-0 bg-gray-100/50 dark:bg-gray-800/50 rounded-lg flex items-center justify-center">
+              <Music className="h-8 w-8 text-gray-400 dark:text-gray-500" />
             </div>
-          ) : (
-            <a
-              href={data.songUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white/30 dark:bg-black/30 backdrop-blur-md transition-all hover:bg-white/40 dark:hover:bg-black/40"
-            >
+            <div>
+              <p className="font-medium text-gray-900 dark:text-white">
+                Not Playing
+              </p>
+              <p className="text-gray-500 dark:text-gray-400">
+                Spotify is paused
+              </p>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <a
+          href={data.songUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white/30 dark:bg-black/30 backdrop-blur-md transition-all hover:bg-white/40 dark:hover:bg-black/40"
+        >
           <div className="flex items-center gap-4">
             <div className="relative h-16 w-16 flex-shrink-0">
               <Image

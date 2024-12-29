@@ -1,6 +1,25 @@
 import { NextResponse } from 'next/server';
 import { getNowPlaying } from '@/lib/spotify';
 
+export const dynamic = 'force-dynamic';
+export const runtime = 'edge';
+
+interface SpotifyArtist {
+  name: string;
+}
+
+interface SpotifyTrack {
+  name: string;
+  artists: SpotifyArtist[];
+  album: {
+    name: string;
+    images: { url: string }[];
+  };
+  external_urls: {
+    spotify: string;
+  };
+}
+
 export async function GET() {
   try {
     const response = await getNowPlaying();
@@ -19,22 +38,18 @@ export async function GET() {
       return NextResponse.json({ isPlaying: false });
     }
 
-    const isPlaying = song.is_playing;
-    const title = song.item.name;
-    const artist = song.item.artists.map((_artist: any) => _artist.name).join(', ');
-    const album = song.item.album.name;
-    const albumImageUrl = song.item.album.images[0].url;
-    const songUrl = song.item.external_urls.spotify;
+    const track = song.item as SpotifyTrack;
 
     return NextResponse.json({
-      isPlaying,
-      title,
-      artist,
-      album,
-      albumImageUrl,
-      songUrl,
+      isPlaying: song.is_playing,
+      title: track.name,
+      artist: track.artists.map(artist => artist.name).join(', '),
+      album: track.album.name,
+      albumImageUrl: track.album.images[0].url,
+      songUrl: track.external_urls.spotify,
     });
-  } catch (error) {
+  } catch (error: unknown) {
+    console.error('Spotify API error:', error);
     return NextResponse.json({ error: 'Failed to fetch' }, { status: 500 });
   }
 }

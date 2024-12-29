@@ -1,6 +1,3 @@
-const STEAM_API_KEY = process.env.STEAM_API_KEY;
-const STEAM_ID = process.env.STEAM_ID;
-
 interface SteamGameInfo {
   name: string;
   gameId: string;
@@ -8,6 +5,20 @@ interface SteamGameInfo {
   isPlaying: boolean;
   playTime2Weeks?: number;
 }
+
+interface SteamPlayerData {
+  gameextrainfo?: string;
+  gameid?: string;
+}
+
+interface SteamRecentGame {
+  playtime_2weeks: number;
+  appid: number;
+  name: string;
+}
+
+const STEAM_API_KEY = process.env.STEAM_API_KEY;
+const STEAM_ID = process.env.STEAM_ID;
 
 export async function getCurrentGame(): Promise<SteamGameInfo | null> {
   try {
@@ -20,7 +31,7 @@ export async function getCurrentGame(): Promise<SteamGameInfo | null> {
       throw new Error('No player data found');
     }
 
-    const player = data.response.players[0];
+    const player = data.response.players[0] as SteamPlayerData;
 
     if (player.gameextrainfo && player.gameid) {
       return {
@@ -38,7 +49,7 @@ export async function getCurrentGame(): Promise<SteamGameInfo | null> {
 
     if (recentGames?.response?.games && recentGames.response.games.length > 0) {
       const topGame = recentGames.response.games.sort(
-        (a: any, b: any) => b.playtime_2weeks - a.playtime_2weeks
+        (a: SteamRecentGame, b: SteamRecentGame) => b.playtime_2weeks - a.playtime_2weeks
       )[0];
 
       if (topGame) {
@@ -53,7 +64,7 @@ export async function getCurrentGame(): Promise<SteamGameInfo | null> {
     }
 
     return null;
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Error fetching Steam data:', error);
     return null;
   }

@@ -21,7 +21,8 @@ export function Gaming() {
         const response = await fetch('/api/steam');
         const data = await response.json();
         setData(data);
-      } catch (error) {
+      } catch (error: unknown) {
+        console.error('Failed to fetch gaming data:', error);
         setData(null);
       } finally {
         setIsLoading(false);
@@ -40,7 +41,7 @@ export function Gaming() {
         <h2 className="mb-6 text-xl font-bold text-gray-900 dark:text-white">
           Gaming
         </h2>
-        <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#171717] shadow-sm">
+        <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white/30 dark:bg-black/30 backdrop-blur-md">
           <div className="animate-pulse flex space-x-4">
             <div className="h-16 w-16 bg-gray-200 dark:bg-gray-800 rounded-lg" />
             <div className="flex-1 space-y-3 py-1">
@@ -55,32 +56,32 @@ export function Gaming() {
 
   return (
     <div>
-      <h2 className="text-center mb-6 text-xl font-bold text-gray-900 dark:text-white">
+      <h2 className="mb-6 text-xl font-bold text-gray-900 dark:text-white">
         Gaming
       </h2>
       {!data ? (
-            <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white/30 dark:bg-black/30 backdrop-blur-md">
-                <div className="flex items-center gap-4">
-                <div className="h-16 w-16 flex-shrink-0 bg-gray-100/50 dark:bg-gray-800/50 rounded-lg flex items-center justify-center">
-                    <Gamepad2 className="h-8 w-8 text-gray-400 dark:text-gray-500" />
-                </div>
-                <div>
-                    <p className="font-medium text-gray-900 dark:text-white">
-                    Not Playing
-                    </p>
-                    <p className="text-gray-500 dark:text-gray-400">
-                    No recent games
-                    </p>
-                </div>
-                </div>
+        <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white/30 dark:bg-black/30 backdrop-blur-md">
+          <div className="flex items-center gap-4">
+            <div className="h-16 w-16 flex-shrink-0 bg-gray-100/50 dark:bg-gray-800/50 rounded-lg flex items-center justify-center">
+              <Gamepad2 className="h-8 w-8 text-gray-400 dark:text-gray-500" />
             </div>
-            ) : (
-            <a
-                href={`https://store.steampowered.com/app/${data.gameId}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group block rounded-xl border border-gray-200 dark:border-gray-800 bg-white/30 dark:bg-black/30 backdrop-blur-md hover:bg-white/40 dark:hover:bg-black/40 transition-all overflow-hidden"
-            >
+            <div>
+              <p className="font-medium text-gray-900 dark:text-white">
+                Not Playing
+              </p>
+              <p className="text-gray-500 dark:text-gray-400">
+                No recent games
+              </p>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <a
+          href={`https://store.steampowered.com/app/${data.gameId}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group block rounded-xl border border-gray-200 dark:border-gray-800 bg-white/30 dark:bg-black/30 backdrop-blur-md hover:bg-white/40 dark:hover:bg-black/40 transition-all overflow-hidden"
+        >
           <div className="flex items-center gap-4 p-4">
             <div className="relative h-16 w-16 flex-shrink-0">
               <Image

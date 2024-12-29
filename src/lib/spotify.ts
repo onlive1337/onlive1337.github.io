@@ -1,12 +1,20 @@
-import { ensureSpotifyToken } from './spotify-auth';
+import { cookies } from 'next/headers';
 
 const client_id = process.env.SPOTIFY_CLIENT_ID;
 const client_secret = process.env.SPOTIFY_CLIENT_SECRET;
 
 const basic = Buffer.from(`${client_id}:${client_secret}`).toString('base64');
 
-async function getAccessToken() {
-  const refresh_token = await ensureSpotifyToken();
+interface SpotifyToken {
+  access_token: string;
+  token_type: string;
+  expires_in: number;
+  error?: string;
+}
+
+async function getAccessToken(): Promise<SpotifyToken | null> {
+  const cookieStore = await cookies();
+  const refresh_token = cookieStore.get('spotify_refresh_token')?.value;
 
   if (!refresh_token) {
     return null;

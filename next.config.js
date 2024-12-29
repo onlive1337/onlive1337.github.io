@@ -1,8 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'export',
-  distDir: 'out',
-  trailingSlash: true,
   images: {
     unoptimized: true,
     remotePatterns: [
@@ -16,11 +14,8 @@ const nextConfig = {
         hostname: 'cdn.cloudflare.steamstatic.com',
         pathname: '/steam/**',
       }
-    ],
-  },
-  basePath: '',
-  reactStrictMode: false,
-  experimental: {
-    enableUndici: true,
+    ]
   }
 }
+
+module.exports = nextConfig

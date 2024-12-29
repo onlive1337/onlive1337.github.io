@@ -33,6 +33,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
         
+      - name: Rename config
+        run: |
+          if [ -f "next.config.ts" ]; then
+            mv next.config.ts next.config.js
+          fi
+        
       - name: Build with Next.js
         run: npm run build
         env:
@@ -42,21 +48,15 @@ jobs:
           STEAM_API_KEY: ${{ secrets.STEAM_API_KEY }}
           STEAM_ID: ${{ secrets.STEAM_ID }}
 
-      - name: Debug directory structure
+      - name: Debug directory
         run: |
-          echo "Current directory:"
           pwd
-          echo "Directory contents:"
           ls -la
-          echo "Build directory contents:"
-          ls -la .next || echo "No .next directory"
-          echo "Out directory contents:"
-          ls -la out || echo "No out directory"
           
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
         with:
-          path: ./out
+          path: out
 
   deploy:
     environment:

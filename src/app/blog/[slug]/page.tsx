@@ -4,13 +4,14 @@ import matter from 'gray-matter';
 import { BlogPostContent } from '@/components/BlogPostContent';
 import { Metadata } from 'next';
 
-interface Props {
+interface PageProps {
   params: {
     slug: string;
   };
+  searchParams: { [key: string]: string | string[] | undefined };
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = params;
   const filePath = path.join(process.cwd(), 'src/content/blog', `${slug}.mdx`);
 
@@ -29,7 +30,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-export default async function BlogPost({ params }: Props) {
+export default async function BlogPost({ params, searchParams }: PageProps) {
   const { slug } = params;
   const filePath = path.join(process.cwd(), 'src/content/blog', `${slug}.mdx`);
 

@@ -1,21 +1,12 @@
 "use client"
 import Link from "next/link"
 import { ThemeToggle } from "./ThemeToggle"
-import { useEffect, useState } from "react"
 
 export function Navigation() {
-  const [isLocal, setIsLocal] = useState(false);
-
-  useEffect(() => {
-    setIsLocal(window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-  }, []);
-
   const navigation = [
     { name: "Socials", href: "#socials" },
     { name: "Technologies", href: "#technologies" },
-    { name: "Portfolio", href: "#portfolio" },
-    { name: "Blog", href: "#blog" },
-    ...(isLocal ? [{ name: "New Post", href: "/admin/new-post" }] : []),
+    { name: "Portfolio", href: "#portfolio" }
   ]
 
   return (

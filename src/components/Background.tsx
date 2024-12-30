@@ -20,15 +20,21 @@ export function Background() {
         />
       </div>
   
-      <div className="snowflakes" aria-hidden="true">
-        {[...Array(15)].map((_, i) => (
-          <div 
-            key={i} 
-            className={`snowflake ${theme === 'dark' ? 'snowflake-dark' : 'snowflake-light'}`}
-          >
-            ❄
-          </div>
-        ))}
+      <div className="hidden md:block">
+        <div className="snowflakes" aria-hidden="true">
+          {[...Array(8)].map((_, i) => (
+            <div 
+              key={i} 
+              className={`snowflake ${theme === 'dark' ? 'snowflake-dark' : 'snowflake-light'}`}
+              style={{
+                animationDelay: `${i * 0.5}s`,
+                left: `${(i + 1) * 10}%`
+              }}
+            >
+              ❄
+            </div>
+          ))}
+        </div>
       </div>
     </>
   );

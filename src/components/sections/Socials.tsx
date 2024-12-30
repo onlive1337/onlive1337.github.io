@@ -34,17 +34,17 @@ export function Socials() {
         <h2 className="mb-12 text-center text-3xl font-bold text-gray-900 dark:text-white">
           Connect with me
         </h2>
-        <div className="flex justify-center gap-8">
+        <div className="flex flex-wrap justify-center gap-4 sm:gap-8">
           {socials.map((social) => (
             <a
               key={social.name}
               href={social.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="group flex items-center gap-2 text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
+              className="group flex items-center gap-2 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800/50 text-gray-600 transition-all hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
             >
               <social.icon className="h-6 w-6" />
-              <span className="font-medium">{social.name}</span>
+              <span className="font-medium hidden sm:inline">{social.name}</span>
             </a>
           ))}
         </div>

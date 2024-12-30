@@ -8,7 +8,7 @@ export function Hero() {
         <div className="flex flex-col items-center gap-8">
           <div className="relative h-40 w-40 overflow-hidden rounded-full ring-2 ring-gray-200 dark:ring-gray-800">
             <Image
-              src="/avatar.png"
+              src="/avatar.webp"
               alt="Avatar"
               fill
               className="object-cover"

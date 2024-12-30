@@ -14,12 +14,10 @@ const technologies = {
     { name: "Node.js", color: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-300" },
     { name: "Express", color: "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300" },
     { name: "FastAPI", color: "bg-teal-100 text-teal-800 dark:bg-teal-900 dark:text-teal-300" },
-    { name: "Django", color: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300" }
   ],
   databases: [
     { name: "PostgreSQL", color: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300" },
     { name: "MongoDB", color: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300" },
-    { name: "Redis", color: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300" }
   ],
   tools: [
     { name: "Git", color: "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300" },

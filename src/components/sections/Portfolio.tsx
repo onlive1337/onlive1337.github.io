@@ -3,35 +3,6 @@ import { useState, useEffect } from "react";
 import { GithubRepo } from "@/types";
 import Link from "next/link";
 
-interface GithubTopic {
- topic: {
-   name: string;
- };
-}
-
-interface GithubRepoNode {
- name: string;
- description: string | null;
- url: string;
- stargazerCount: number;
- primaryLanguage: {
-   name: string;
- } | null;
- repositoryTopics: {
-   nodes: GithubTopic[];
- };
-}
-
-interface GithubApiResponse {
- data: {
-   user: {
-     pinnedItems: {
-       nodes: GithubRepoNode[];
-     };
-   };
- };
-}
-
 const getTopicColor = (topic: string) => {
  const colors: { [key: string]: string } = {
    typescript: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
@@ -53,50 +24,23 @@ const getTopicColor = (topic: string) => {
  return colors[topic.toLowerCase()] || "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300";
 };
 
-const PINNED_REPOS_QUERY = `
- query {
-   user(login: "onlive1337") {
-     pinnedItems(first: 6, types: REPOSITORY) {
-       nodes {
-         ... on Repository {
-           name
-           description
-           url
-           stargazerCount
-           primaryLanguage {
-             name
-           }
-           repositoryTopics(first: 10) {
-             nodes {
-               topic {
-                 name
-               }
-             }
-           }
-         }
-       }
+export function Portfolio() {
+ const [repos, setRepos] = useState<GithubRepo[]>([]);
+
+ useEffect(() => {
+   async function fetchPinnedRepos() {
+     try {
+       const response = await fetch('https://portfolio-api-taupe-theta.vercel.app/api/github');
+       const data = await response.json();
+       setRepos(data);
+     } catch (error) {
+       console.error('Error fetching pinned repos:', error);
+       setRepos([]);
      }
    }
- }
-`;
 
-export function Portfolio() {
-  const [repos, setRepos] = useState<GithubRepo[]>([]);
-
-  useEffect(() => {
-    async function fetchPinnedRepos() {
-      try {
-        const response = await fetch('https://portfolio-api-taupe-theta.vercel.app/api/github');
-        const data = await response.json();
-        setRepos(data);
-      } catch (error) {
-        console.error('Error fetching pinned repos:', error);
-        setRepos([]);
-      }
-    }
-
-    fetchPinnedRepos();
-  }, []);
+   fetchPinnedRepos();
+ }, []);
 
  return (
    <section id="portfolio" className="py-16">

@@ -81,38 +81,22 @@ const PINNED_REPOS_QUERY = `
 `;
 
 export function Portfolio() {
- const [repos, setRepos] = useState<GithubRepo[]>([]);
+  const [repos, setRepos] = useState<GithubRepo[]>([]);
 
- useEffect(() => {
-   async function fetchPinnedRepos() {
-     try {
-       const res = await fetch('https://api.github.com/graphql', {
-         method: 'POST',
-         headers: {
-           'Authorization': `bearer ${process.env.NEXT_PUBLIC_GITHUB_TOKEN}`,
-           'Content-Type': 'application/json',
-         },
-         body: JSON.stringify({ query: PINNED_REPOS_QUERY }),
-       });
-       
-       const response = (await res.json()) as GithubApiResponse;
-       const pinnedRepos = response.data.user.pinnedItems.nodes.map((node: GithubRepoNode) => ({
-         name: node.name,
-         description: node.description,
-         html_url: node.url,
-         stargazers_count: node.stargazerCount,
-         language: node.primaryLanguage?.name || null,
-         topics: node.repositoryTopics.nodes.map((topicNode: GithubTopic) => topicNode.topic.name)
-       }));
-       
-       setRepos(pinnedRepos);
-     } catch (error) {
-       console.error('Error fetching pinned repos:', error);
-     }
-   }
+  useEffect(() => {
+    async function fetchPinnedRepos() {
+      try {
+        const response = await fetch('https://portfolio-api-taupe-theta.vercel.app/api/github');
+        const data = await response.json();
+        setRepos(data);
+      } catch (error) {
+        console.error('Error fetching pinned repos:', error);
+        setRepos([]);
+      }
+    }
 
-   fetchPinnedRepos();
- }, []);
+    fetchPinnedRepos();
+  }, []);
 
  return (
    <section id="portfolio" className="py-16">

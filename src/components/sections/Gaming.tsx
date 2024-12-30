@@ -18,10 +18,10 @@ export function Gaming() {
   useEffect(() => {
     const fetchGaming = async () => {
       try {
-        const response = await fetch('/api/steam');
+        const response = await fetch('https://portfolio-api-taupe-theta.vercel.app/api/steam');
         const data = await response.json();
         setData(data);
-      } catch (error: unknown) {
+      } catch (error) {
         console.error('Failed to fetch gaming data:', error);
         setData(null);
       } finally {
@@ -31,7 +31,6 @@ export function Gaming() {
 
     fetchGaming();
     const interval = setInterval(fetchGaming, 60000);
-
     return () => clearInterval(interval);
   }, []);
 

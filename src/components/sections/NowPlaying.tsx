@@ -19,10 +19,8 @@ export function NowPlaying() {
   useEffect(() => {
     const fetchNowPlaying = async () => {
       try {
-        const response = await fetch('/api/spotify');
-        if (!response.ok) {
-          throw new Error('Failed to fetch');
-        }
+        const response = await fetch('https://portfolio-api-taupe-theta.vercel.app/api/spotify');
+        if (!response.ok) throw new Error('Failed to fetch');
         const data = await response.json();
         setData(data);
       } catch (error) {
@@ -35,7 +33,6 @@ export function NowPlaying() {
 
     fetchNowPlaying();
     const interval = setInterval(fetchNowPlaying, 10000);
-
     return () => clearInterval(interval);
   }, []);
 

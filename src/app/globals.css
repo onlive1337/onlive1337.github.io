@@ -2,90 +2,67 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
- --background: 255 255 255;
- --foreground: 0 0 0;
+@layer base {
+  :root {
+    color-scheme: light;
+    background-color: white;
+  }
+
+  .dark {
+    color-scheme: dark;
+    background-color: black;
+  }
 }
 
-[data-theme="dark"] {
- --background: 0 0 0;
- --foreground: 255 255 255;
+html, body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: inherit;
 }
 
 body {
- background: rgb(var(--background));
- color: rgb(var(--foreground));
- overscroll-behavior: none;
+  color: black;
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: touch;
 }
 
-@layer utilities {
- .no-animation {
-   animation: none !important;
-   transform: none !important;
-   transition: opacity 0.5s ease-out !important;
- }
-
- .bg-gradient-dark {
-   background: linear-gradient(
-     135deg,
-     rgba(0, 0, 0, 1) 0%,
-     rgba(2, 10, 20, 0.95) 100%
-   );
- }
-
- .bg-gradient-light {
-   background: linear-gradient(
-     45deg,
-     rgba(59, 130, 246, 0.1) 0%,
-     rgba(236, 72, 153, 0.1) 100%
-   );
- }
-
- @media (min-width: 768px) {
-   .bg-gradient-dark,
-   .bg-gradient-light {
-     animation: gradientMove 20s ease infinite;
-     background-size: 400% 400%;
-   }
- }
+.dark body {
+  color: white;
 }
 
-@keyframes gradientMove {
- 0% { background-position: 0% 50%; }
- 50% { background-position: 100% 50%; }
- 100% { background-position: 0% 50%; }
-}
-
-.snowflakes {
- position: fixed;
- top: 0;
- left: 0;
- right: 0;
- bottom: 0;
- pointer-events: none;
- z-index: 50;
- will-change: transform;
+@media (max-width: 768px) {
+  * {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
+  
+  body {
+    scrollbar-width: none;
+  }
+  
+  ::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .snowflake {
- position: fixed;
- font-size: 1.5em;
- text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
- opacity: 0;
- will-change: transform;
- animation: snowflakes-fall 10s linear infinite, 
-            snowflakes-shake 3s ease-in-out infinite;
+  position: fixed;
+  font-size: 1.5em;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+  animation: snowfall 10s linear infinite;
+  z-index: 50;
 }
 
 .snowflake-dark { color: rgba(255, 255, 255, 0.9); }
 .snowflake-light { color: rgba(37, 99, 235, 0.6); }
 
-@keyframes snowflakes-fall {
- 0% { top: -10%; opacity: 0.8; }
- 100% { top: 100%; opacity: 0.3; }
-}
-
-@keyframes snowflakes-shake {
- 0%, 100% { transform: translateX(0); }
- 50% { transform: translateX(80px); }
+@keyframes snowfall {
+  0% { 
+    transform: translateY(-10vh);
+    opacity: 0.8;
+  }
+  100% { 
+    transform: translateY(110vh);
+    opacity: 0.3;
+  }
 }

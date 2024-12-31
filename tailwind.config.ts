@@ -8,24 +8,31 @@ module.exports = {
   ],
   theme: {
     extend: {
-      colors: {
-        background: 'rgb(var(--background))',
-        foreground: 'rgb(var(--foreground))',
-      },
       animation: {
-        'gradient': 'gradientMove 15s ease infinite',
-        'snowfall': 'snowfall 10s linear infinite',
+        'snow': 'snowfall 10s linear infinite',
+        'wave': 'wave 20s linear infinite',
+        'wave-reverse': 'wave-reverse 25s linear infinite',
       },
       keyframes: {
-        gradientMove: {
-          '0%, 100%': { backgroundPosition: '0% 50%' },
-          '50%': { backgroundPosition: '100% 50%' },
-        },
         snowfall: {
-          '0%': { transform: 'translateY(-10vh)' },
-          '100%': { transform: 'translateY(110vh)' }
+          '0%': { 
+            transform: 'translateY(-10vh)',
+            opacity: '0.8'
+          },
+          '100%': { 
+            transform: 'translateY(110vh)',
+            opacity: '0.3'
+          }
+        },
+        wave: {
+          '0%': { transform: 'translateX(0%)' },
+          '100%': { transform: 'translateX(-100%)' }
+        },
+        'wave-reverse': {
+          '0%': { transform: 'translateX(-100%)' },
+          '100%': { transform: 'translateX(0%)' }
         }
-      },
+      }
     },
   },
   plugins: [],

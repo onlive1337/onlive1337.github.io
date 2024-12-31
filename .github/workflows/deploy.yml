@@ -33,12 +33,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
         
-      - name: Rename config
-        run: |
-          if [ -f "next.config.ts" ]; then
-            mv next.config.ts next.config.js
-          fi
-        
       - name: Build with Next.js
         run: npm run build
         env:

@@ -6,11 +6,11 @@ import "./globals.css"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata = {
-  title: "onlive - Full Stack Developer",
-  description: "Personal portfolio website",
-  icons: {
-    icon: '/favicon.png',
-  },
+ title: "onlive - Full Stack Developer",
+ description: "Personal portfolio website",
+ icons: {
+   icon: '/favicon.png',
+ },
 }
 
 export default function RootLayout({
@@ -19,15 +19,15 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className="min-h-screen overscroll-none" suppressHydrationWarning>
-      <body className={`${inter.className} min-h-screen overscroll-none`}>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${inter.className}`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
           enableSystem={false}
         >
           <Background />
-          <div className="relative min-h-screen backdrop-blur-[2px]">
+          <div className="relative bg-white dark:bg-black">
             {children}
           </div>
         </ThemeProvider>

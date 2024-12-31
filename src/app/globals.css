@@ -3,67 +3,108 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
-    color-scheme: light;
-    background-color: white;
-  }
+ :root {
+   color-scheme: light;
+   background-color: white;
+ }
 
-  .dark {
-    color-scheme: dark;
-    background-color: black;
-  }
+ .dark {
+   color-scheme: dark;
+   background-color: black;
+ }
 }
 
 html, body {
-  min-height: 100vh;
-  min-height: 100dvh;
-  background-color: inherit;
+ min-height: 100vh;
+ min-height: 100dvh;
+ background-color: inherit;
 }
 
 body {
-  color: black;
-  overscroll-behavior: none;
-  -webkit-overflow-scrolling: touch;
+ color: black;
+ overscroll-behavior: none;
+ overscroll-behavior-y: none;
+ -webkit-tap-highlight-color: transparent;
+ -webkit-overflow-scrolling: touch;
 }
 
 .dark body {
-  color: white;
+ color: white;
 }
 
 @media (max-width: 768px) {
-  * {
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
-  }
-  
-  body {
-    scrollbar-width: none;
-  }
-  
-  ::-webkit-scrollbar {
-    display: none;
-  }
+ * {
+   -webkit-transform: translateZ(0);
+   transform: translateZ(0);
+ }
+ 
+ body {
+   scrollbar-width: none;
+ }
+ 
+ ::-webkit-scrollbar {
+   display: none;
+ }
 }
 
-.snowflake {
+/* В globals.css обновляем стили */
+.falling-light {
   position: fixed;
-  font-size: 1.5em;
-  text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
-  animation: snowfall 10s linear infinite;
-  z-index: 40;
-  pointer-events: none;
+  animation: fall linear infinite, glow 2s ease-in-out infinite;
+  will-change: transform;
 }
 
-.snowflake-dark { color: rgba(255, 255, 255, 0.9); }
-.snowflake-light { color: rgba(37, 99, 235, 0.6); }
+.light-dark { 
+  color: rgba(255, 255, 255, 0.4);
+}
 
-@keyframes snowfall {
+.light-light { 
+  color: rgba(37, 99, 235, 0.3);
+}
+
+@keyframes fall {
   0% { 
-    transform: translateY(-10vh);
-    opacity: 0.8;
+    transform: translateY(-50vh);
   }
   100% { 
-    transform: translateY(110vh);
-    opacity: 0.3;
+    transform: translateY(150vh);
   }
+}
+
+@keyframes glow {
+  0%, 100% { 
+    opacity: 0.3;
+    text-shadow: 0 0 5px currentColor;
+  }
+  50% { 
+    opacity: 0.8;
+    text-shadow: 0 0 10px currentColor,
+                 0 0 20px currentColor;
+  }
+}
+
+@supports (-webkit-overflow-scrolling: touch) {
+ html, body {
+   background-color: var(--overscroll);
+ }
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+ html, body {
+   background-color: var(--overscroll);
+ }
+ 
+ @supports (-webkit-appearance:none) {
+   html, body {
+     background-color: var(--overscroll);
+   }
+ }
+}
+
+:root {
+ --overscroll: #ffffff;
+}
+
+[data-theme="dark"] {
+ --overscroll: #000000;
 }

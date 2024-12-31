@@ -47,39 +47,46 @@ body {
  }
 }
 
-/* В globals.css обновляем стили */
 .falling-light {
   position: fixed;
   animation: fall linear infinite, glow 2s ease-in-out infinite;
-  will-change: transform;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+@media (max-width: 768px) {
+  .falling-light {
+    animation: fall linear infinite;
+  }
 }
 
 .light-dark { 
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.3);
 }
 
 .light-light { 
-  color: rgba(37, 99, 235, 0.3);
+  color: rgba(37, 99, 235, 0.2);
 }
 
 @keyframes fall {
   0% { 
-    transform: translateY(-50vh);
+    transform: translate3d(0, -50vh, 0);
   }
   100% { 
-    transform: translateY(150vh);
+    transform: translate3d(0, 150vh, 0);
   }
 }
 
 @keyframes glow {
   0%, 100% { 
     opacity: 0.3;
-    text-shadow: 0 0 5px currentColor;
+    text-shadow: 0 0 3px currentColor;
   }
   50% { 
-    opacity: 0.8;
-    text-shadow: 0 0 10px currentColor,
-                 0 0 20px currentColor;
+    opacity: 0.6;
+    text-shadow: 0 0 5px currentColor;
   }
 }
 

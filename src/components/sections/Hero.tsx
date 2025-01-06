@@ -4,8 +4,13 @@ import { useEffect, useState } from "react"
 
 interface DiscordStatus {
   status: 'online' | 'idle' | 'dnd' | 'offline';
-  activities?: any[];
-}
+  activities: Array<{
+    type: number;
+    name: string;
+    details?: string;
+    state?: string;
+  }>;
+ }
 
 const statusColors = {
   online: 'bg-green-500',

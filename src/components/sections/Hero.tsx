@@ -24,10 +24,6 @@ export function Hero() {
     return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
-    console.log('Current status:', status);
-  }, [status]);
-
   return (
     <section className="pt-32 pb-16">
       <div className="container mx-auto px-4">
@@ -45,7 +41,7 @@ export function Hero() {
             {status && (
               <div 
                 className={`absolute bottom-1 right-1 h-8 w-8 rounded-full ${
-                  status.status ? statusColors[status.status] : statusColors.offline
+                  statusColors[status.status] || statusColors.offline
                 } ring-4 ring-white dark:ring-black`} 
               />
             )}

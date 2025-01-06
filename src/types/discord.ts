@@ -1,8 +1,8 @@
 export interface DiscordStatus {
-    status: 'online' | 'idle' | 'dnd' | 'offline';
+    status: string;
   }
   
-  export const statusColors = {
+  export const statusColors: Record<string, string> = {
     online: 'bg-green-500',
     idle: 'bg-yellow-500',
     dnd: 'bg-red-500',

@@ -3,137 +3,117 @@
 @tailwind utilities;
 
 @layer base {
- :root {
-   color-scheme: light;
-   background-color: white;
- }
+  :root {
+    color-scheme: light;
+    background-color: white;
+  }
 
- .dark {
-   color-scheme: dark;
-   background-color: black;
- }
-}
-
-@layer utilities {
- .ease-spring {
-   transition-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
- }
+  .dark {
+    color-scheme: dark;
+    background-color: black;
+  }
 }
 
 * {
- transition-property: background-color, border-color, color, fill, stroke;
- transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
- transition-duration: 300ms;
-}
-
-.theme-transition {
- transition-property: background-color, border-color, color, fill, stroke, opacity, transform;
- transition-duration: 300ms;
- transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
- transform: translateZ(0);
- backface-visibility: hidden;
-}
-
-@media (prefers-reduced-motion: reduce) {
- * {
-   transition: none !important;
- }
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-duration: 200ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 html, body {
- min-height: 100vh;
- min-height: 100dvh;
- background-color: inherit;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: inherit;
 }
 
 body {
- color: black;
- overscroll-behavior: none;
- overscroll-behavior-y: none;
- -webkit-tap-highlight-color: transparent;
- -webkit-overflow-scrolling: touch;
+  color: black;
+  overscroll-behavior: none;
+  overscroll-behavior-y: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-overflow-scrolling: touch;
 }
 
 .dark body {
- color: white;
+  color: white;
 }
 
 @media (max-width: 768px) {
- * {
-   -webkit-transform: translateZ(0);
-   transform: translateZ(0);
-   will-change: transform;
- }
- 
- body {
-   scrollbar-width: none;
- }
- 
- ::-webkit-scrollbar {
-   display: none;
- }
+
+  body {
+    scrollbar-width: none;
+  }
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
+  .falling-light {
+    display: none;
+  }
 }
 
 .falling-light {
- position: fixed;
- font-size: 1.2em;
- animation: fall 20s linear infinite, glow 2s ease-in-out infinite;
- transform: translateZ(0);
- -webkit-transform: translateZ(0);
- backface-visibility: hidden;
- -webkit-backface-visibility: hidden;
+  position: fixed;
+  font-size: 1.2em;
+  animation: fall 20s linear infinite, glow 2s ease-in-out infinite;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  will-change: transform;
 }
 
 .light-dark { 
- color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.3);
 }
 
 .light-light { 
- color: rgba(37, 99, 235, 0.2);
+  color: rgba(37, 99, 235, 0.2);
 }
 
 @keyframes fall {
- 0% { 
-   transform: translate3d(0, -50vh, 0);
- }
- 100% { 
-   transform: translate3d(0, 150vh, 0);
- }
+  0% { 
+    transform: translate3d(0, -50vh, 0);
+  }
+  100% { 
+    transform: translate3d(0, 150vh, 0);
+  }
 }
 
 @keyframes glow {
- 0%, 100% { 
-   opacity: 0.3;
-   text-shadow: 0 0 3px currentColor;
- }
- 50% { 
-   opacity: 0.6;
-   text-shadow: 0 0 5px currentColor;
- }
+  0%, 100% { 
+    opacity: 0.3;
+    text-shadow: 0 0 3px currentColor;
+  }
+  50% { 
+    opacity: 0.6;
+    text-shadow: 0 0 5px currentColor;
+  }
 }
 
 @supports (-webkit-overflow-scrolling: touch) {
- html, body {
-   background-color: var(--overscroll);
- }
+  html, body {
+    background-color: var(--overscroll);
+  }
 }
 
 @media screen and (-webkit-min-device-pixel-ratio:0) {
- html, body {
-   background-color: var(--overscroll);
- }
- 
- @supports (-webkit-appearance:none) {
-   html, body {
-     background-color: var(--overscroll);
-   }
- }
+  html, body {
+    background-color: var(--overscroll);
+  }
+  
+  @supports (-webkit-appearance:none) {
+    html, body {
+      background-color: var(--overscroll);
+    }
+  }
 }
 
 :root {
- --overscroll: #ffffff;
+  --overscroll: #ffffff;
 }
 
 [data-theme="dark"] {
- --overscroll: #000000;
+  --overscroll: #000000;
 }

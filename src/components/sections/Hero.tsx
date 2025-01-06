@@ -11,7 +11,7 @@ export function Hero() {
     const fetchStatus = async () => {
       try {
         const response = await fetch('https://portfolio-api-taupe-theta.vercel.app/api/discord');
-        const data = await response.json();
+        const data: DiscordStatus = await response.json();
         setStatus(data);
       } catch (error) {
         console.error('Failed to fetch status:', error);
@@ -23,6 +23,10 @@ export function Hero() {
     const interval = setInterval(fetchStatus, 30000);
     return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    console.log('Current status:', status);
+  }, [status]);
 
   return (
     <section className="pt-32 pb-16">
@@ -39,7 +43,11 @@ export function Hero() {
               />
             </div>
             {status && (
-              <div className={`absolute bottom-1 right-1 h-8 w-8 rounded-full ${statusColors[status.status]} ring-4 ring-white dark:ring-black`} />
+              <div 
+                className={`absolute bottom-1 right-1 h-8 w-8 rounded-full ${
+                  status.status ? statusColors[status.status] : statusColors.offline
+                } ring-4 ring-white dark:ring-black`} 
+              />
             )}
           </div>
           

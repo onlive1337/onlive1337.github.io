@@ -1,8 +1,10 @@
 "use client"
 import { Github } from "lucide-react"
-import Steam from "../icons/Steam"
-import Discord from "../icons/Discord"
-import Telegram from "../icons/Telegram"
+import dynamic from 'next/dynamic'
+
+const Steam = dynamic(() => import('../icons/Steam'))
+const Discord = dynamic(() => import('../icons/Discord'))
+const Telegram = dynamic(() => import('../icons/Telegram'))
 
 const socials = [
   {
@@ -25,7 +27,7 @@ const socials = [
     url: "https://steamcommunity.com/id/onswix",
     icon: Steam,
   },
-]
+] as const;
 
 export function Socials() {
   return (

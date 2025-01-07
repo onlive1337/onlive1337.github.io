@@ -7,14 +7,17 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'i.scdn.co',
-        pathname: '/**',
+        pathname: '/image/**'
       },
       {
         protocol: 'https',
         hostname: 'cdn.cloudflare.steamstatic.com',
-        pathname: '/steam/**',
+        pathname: '/steam/**'
       }
     ]
+  },
+  experimental: {
+    optimizeCss: true,
   }
 }
 

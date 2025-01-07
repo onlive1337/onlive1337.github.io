@@ -15,7 +15,7 @@
 }
 
 * {
-  transition-property: background-color, border-color, color, fill, stroke;
+  transition-property: opacity;
   transition-duration: 200ms;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -24,14 +24,14 @@ html, body {
   min-height: 100vh;
   min-height: 100dvh;
   background-color: inherit;
+  contain: content;
 }
 
 body {
   color: black;
   overscroll-behavior: none;
-  overscroll-behavior-y: none;
   -webkit-tap-highlight-color: transparent;
-  -webkit-overflow-scrolling: touch;
+  contain: content;
 }
 
 .dark body {
@@ -39,7 +39,6 @@ body {
 }
 
 @media (max-width: 768px) {
-
   body {
     scrollbar-width: none;
   }
@@ -53,60 +52,12 @@ body {
   }
 }
 
-.falling-light {
-  position: fixed;
-  font-size: 1.2em;
-  animation: fall 20s linear infinite, glow 2s ease-in-out infinite;
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  will-change: transform;
-}
-
-.light-dark { 
-  color: rgba(255, 255, 255, 0.3);
-}
-
-.light-light { 
-  color: rgba(37, 99, 235, 0.2);
-}
-
 @keyframes fall {
   0% { 
     transform: translate3d(0, -50vh, 0);
   }
   100% { 
     transform: translate3d(0, 150vh, 0);
-  }
-}
-
-@keyframes glow {
-  0%, 100% { 
-    opacity: 0.3;
-    text-shadow: 0 0 3px currentColor;
-  }
-  50% { 
-    opacity: 0.6;
-    text-shadow: 0 0 5px currentColor;
-  }
-}
-
-@supports (-webkit-overflow-scrolling: touch) {
-  html, body {
-    background-color: var(--overscroll);
-  }
-}
-
-@media screen and (-webkit-min-device-pixel-ratio:0) {
-  html, body {
-    background-color: var(--overscroll);
-  }
-  
-  @supports (-webkit-appearance:none) {
-    html, body {
-      background-color: var(--overscroll);
-    }
   }
 }
 

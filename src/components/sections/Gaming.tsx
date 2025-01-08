@@ -86,8 +86,11 @@ export function Gaming() {
               <Image
                 src={data.imageUrl}
                 alt={data.name}
-                fill
-                className="rounded-lg object-cover"
+                width={300}
+                height={140}
+                className="rounded-lg object-cover absolute inset-0 w-full h-full"
+                sizes='64px'
+                quality={75}
               />
             </div>
             <div className="min-w-0 flex-1">

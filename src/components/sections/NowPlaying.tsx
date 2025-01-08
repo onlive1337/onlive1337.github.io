@@ -27,7 +27,7 @@ const AlbumCover = memo(function AlbumCover({
         width={64}
         height={64}
         className="rounded-lg object-cover"
-        quality={85}
+        quality={65}
         sizes="64px"
       />
     </div>

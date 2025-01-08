@@ -17,14 +17,13 @@ const Avatar = memo(function Avatar() {
   return (
     <div className="relative h-40 w-40 overflow-hidden rounded-full ring-2 ring-gray-200 dark:ring-gray-800">
       <Image
-        src="/avatar.webp"
+        src="/avatar.avif"
         alt="Avatar"
         width={160}
         height={160}
-        quality={85}
         priority
         className="object-cover"
-        sizes="160px"
+        sizes="(max-width: 768px) 160px, 160px"
       />
     </div>
   );

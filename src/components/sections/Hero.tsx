@@ -51,17 +51,14 @@ const StatusTooltip = memo(function StatusTooltip({
  
  return createPortal(
    <div 
-     className={`fixed z-50 transition-all duration-200 ease-in-out md:pointer-events-none`}
+     className="fixed z-50 transition-all duration-200 ease-in-out"
      style={{
-       top: position.y + 40,
+       top: `${position.y + 15}px`,
        left: position.x,
        opacity: show ? 1 : 0,
-       transform: `translateY(${show ? 0 : 10}px)`,
+       transform: `translateY(${show ? 0 : -10}px)`,
+       pointerEvents: 'none',
        visibility: show ? 'visible' : 'hidden'
-     }}
-     onClick={(e) => {
-       e.stopPropagation();
-       document.body.click();
      }}
    >
      <div className="bg-black/75 backdrop-blur-sm text-white text-sm py-1 px-3 rounded-lg whitespace-nowrap">
@@ -77,25 +74,23 @@ const StatusIndicator = memo(function StatusIndicator({ status }: { status: Stat
  const [position, setPosition] = useState<{ x: number; y: number } | null>(null);
  const indicatorRef = useRef<HTMLDivElement>(null);
 
- const updatePosition = () => {
+ const updatePosition = useCallback(() => {
    if (indicatorRef.current) {
      const rect = indicatorRef.current.getBoundingClientRect();
      const isMobile = window.innerWidth < 768;
+     
      setPosition({
-       x: isMobile ? window.innerWidth / 2 - 75 : rect.left + (rect.width / 2) - 50,
-       y: rect.top
+       x: isMobile ? (window.innerWidth / 2 - 75) : (rect.left + (rect.width / 2) - 50),
+       y: rect.bottom + window.scrollY
      });
    }
- };
-
- const handleInteraction = () => {
-   updatePosition();
-   setShowTooltip(!showTooltip);
- };
+ }, []);
 
  useEffect(() => {
    const handleScroll = () => {
-     setShowTooltip(false);
+     if (showTooltip) {
+       updatePosition();
+     }
    };
 
    const handleClickOutside = () => {
@@ -103,13 +98,18 @@ const StatusIndicator = memo(function StatusIndicator({ status }: { status: Stat
    };
 
    window.addEventListener('scroll', handleScroll);
-   document.body.addEventListener('click', handleClickOutside);
+   document.addEventListener('click', handleClickOutside);
 
    return () => {
      window.removeEventListener('scroll', handleScroll);
-     document.body.removeEventListener('click', handleClickOutside);
+     document.removeEventListener('click', handleClickOutside);
    };
- }, []);
+ }, [showTooltip, updatePosition]);
+
+ const handleInteraction = () => {
+   updatePosition();
+   setShowTooltip(!showTooltip);
+ };
 
  return (
    <>

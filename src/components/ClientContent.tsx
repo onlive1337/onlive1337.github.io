@@ -44,6 +44,11 @@ const Analytics = dynamic(
   { ssr: false }
 );
 
+const Messages = dynamic(
+  () => import('@/components/sections/Messages').then(mod => mod.Messages),
+  { ssr: false }
+);
+
 export function ClientContent() {
   return (
     <>
@@ -71,6 +76,10 @@ export function ClientContent() {
           </div>
         </div>
       </section>
+
+      <Suspense>
+        <Messages />
+      </Suspense>
 
       <Suspense>
         <Analytics />

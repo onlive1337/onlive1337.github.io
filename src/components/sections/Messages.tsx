@@ -77,7 +77,7 @@ export function Messages() {
           <MessageSquare className="h-5 w-5 mt-1 text-gray-400" />
           <div className="space-y-2 font-mono text-sm">
             <p className="text-gray-500 dark:text-gray-400">
-              $ echo "Send anonymous message"
+              $ echo &ldquo;Send anonymous message&rdquo;
             </p>
 
             <form onSubmit={handleSubmit} className="pl-4 space-y-2">

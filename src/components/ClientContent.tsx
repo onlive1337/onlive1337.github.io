@@ -1,6 +1,7 @@
 "use client";
 import { Suspense } from 'react'
 import dynamic from 'next/dynamic'
+import { InitialFadeIn, ScrollFadeIn } from '../utils/Animations'
 
 const Technologies = dynamic(
   () => import('@/components/sections/Technologies').then(mod => mod.Technologies),
@@ -39,13 +40,13 @@ const Gaming = dynamic(
   }
 );
 
-const Analytics = dynamic(
-  () => import('@/components/sections/Analytics').then(mod => mod.Analytics),
+const Messages = dynamic(
+  () => import('@/components/sections/Messages').then(mod => mod.Messages),
   { ssr: false }
 );
 
-const Messages = dynamic(
-  () => import('@/components/sections/Messages').then(mod => mod.Messages),
+const Analytics = dynamic(
+  () => import('@/components/sections/Analytics').then(mod => mod.Analytics),
   { ssr: false }
 );
 
@@ -53,37 +54,51 @@ export function ClientContent() {
   return (
     <>
       <Suspense>
-        <Socials />
+        <InitialFadeIn delay={500}>
+          <Socials />
+        </InitialFadeIn>
       </Suspense>
 
-      <Suspense>
-        <Technologies />
-      </Suspense>
+      <div className="space-y-32">
+        <Suspense>
+          <Technologies />
+        </Suspense>
 
-      <Suspense>
-        <Portfolio />
-      </Suspense>
+        <Suspense>
+          <ScrollFadeIn>
+            <Portfolio />
+          </ScrollFadeIn>
+        </Suspense>
 
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-            <Suspense>
-              <NowPlaying />
-            </Suspense>
-            <Suspense>
-              <Gaming />
-            </Suspense>
-          </div>
-        </div>
-      </section>
+        <ScrollFadeIn>
+          <section className="py-16">
+            <div className="container mx-auto px-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+                <Suspense>
+                  <NowPlaying />
+                </Suspense>
+                <Suspense>
+                  <Gaming />
+                </Suspense>
+              </div>
+            </div>
+          </section>
+        </ScrollFadeIn>
+      </div>
 
-      <Suspense>
-        <Messages />
-      </Suspense>
+      <div>
+        <Suspense>
+          <ScrollFadeIn>
+            <Messages />
+          </ScrollFadeIn>
+        </Suspense>
 
-      <Suspense>
-        <Analytics />
-      </Suspense>
+        <Suspense>
+          <ScrollFadeIn>
+            <Analytics />
+          </ScrollFadeIn>
+        </Suspense>
+      </div>
     </>
   );
 }

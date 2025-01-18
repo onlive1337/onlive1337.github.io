@@ -14,6 +14,11 @@
   }
 }
 
+html.js-loading * {
+  opacity: 0;
+  transition: none !important;
+}
+
 * {
   transition-property: opacity;
   transition-duration: 200ms;
@@ -45,19 +50,6 @@ body {
 
   ::-webkit-scrollbar {
     display: none;
-  }
-
-  .falling-light {
-    display: none;
-  }
-}
-
-@keyframes fall {
-  0% { 
-    transform: translate3d(0, -50vh, 0);
-  }
-  100% { 
-    transform: translate3d(0, 150vh, 0);
   }
 }
 

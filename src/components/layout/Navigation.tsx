@@ -2,6 +2,7 @@
 import Link from "next/link"
 import { memo } from "react"
 import dynamic from 'next/dynamic'
+import { InitialFadeIn } from '../../utils/Animations'
 
 const ThemeToggle = dynamic(() => import('./ThemeToggle').then(mod => mod.ThemeToggle), {
   ssr: false,
@@ -16,17 +17,19 @@ const navigation = [
 
 const NavLinks = memo(() => (
   <>
-    {navigation.map((item) => (
-      <Link
-        key={item.name}
-        href={item.href}
-        className="text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors"
-      >
-        {item.name}
-      </Link>
+    {navigation.map((item, index) => (
+      <InitialFadeIn key={item.name} delay={100 + index * 100}>
+        <Link
+          href={item.href}
+          className="text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors"
+        >
+          {item.name}
+        </Link>
+      </InitialFadeIn>
     ))}
   </>
 ));
+
 NavLinks.displayName = 'NavLinks';
 
 function NavigationComponent() {
@@ -35,7 +38,9 @@ function NavigationComponent() {
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-center px-4">
         <div className="flex items-center justify-center gap-4 sm:gap-8">
           <NavLinks />
-          <ThemeToggle />
+          <InitialFadeIn delay={400}>
+            <ThemeToggle />
+          </InitialFadeIn>
         </div>
       </nav>
     </header>

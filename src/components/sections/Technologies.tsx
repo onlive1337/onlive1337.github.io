@@ -1,3 +1,6 @@
+'use client';
+import { useEffect, useRef, useState } from 'react';
+
 const technologies = {
   languages: [
     { name: "TypeScript", color: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300" },
@@ -28,8 +31,51 @@ const technologies = {
 }
 
 export function Technologies() {
+  const [isVisible, setIsVisible] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    let observer: IntersectionObserver;
+    
+    const timeoutId = setTimeout(() => {
+      observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setIsVisible(true);
+            if (ref.current) {
+              observer.unobserve(ref.current);
+            }
+          }
+        },
+        {
+          threshold: 0.1,
+          rootMargin: '-50px'
+        }
+      );
+
+      if (ref.current) {
+        observer.observe(ref.current);
+      }
+    }, 100);
+
+    return () => {
+      clearTimeout(timeoutId);
+      if (observer && ref.current) {
+        observer.unobserve(ref.current);
+      }
+    };
+  }, []);
+
   return (
-    <section id="technologies" className="py-16">
+    <section 
+      ref={ref}
+      id="technologies" 
+      className="py-16 mt-32 transition-all duration-1000 ease-out"
+      style={{
+        opacity: isVisible ? 1 : 0,
+        transform: isVisible ? 'translateY(0)' : 'translateY(50px)'
+      }}
+    >
       <div className="container mx-auto px-4">
         <h2 className="mb-12 text-center text-3xl font-bold text-gray-900 dark:text-white">
           Technologies

@@ -7,7 +7,7 @@ const Technologies = dynamic(
   () => import('@/components/sections/Technologies').then(mod => mod.Technologies),
   { 
     ssr: false,
-    loading: () => <div className="h-96" />
+    loading: () => <div className="h-96 opacity-0" />
   }
 );
 

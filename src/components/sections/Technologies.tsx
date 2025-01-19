@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { useEffect, useRef, useState } from 'react';
 
 const technologies = {
@@ -28,52 +28,60 @@ const technologies = {
     { name: "VS Code", color: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300" },
     { name: "Figma", color: "bg-violet-100 text-violet-800 dark:bg-violet-900 dark:text-violet-300" }
   ]
-}
+};
 
 export function Technologies() {
   const [isVisible, setIsVisible] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const ref = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    let observer: IntersectionObserver;
-    
-    const timeoutId = setTimeout(() => {
-      observer = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) {
-            setIsVisible(true);
-            if (ref.current) {
-              observer.unobserve(ref.current);
-            }
-          }
-        },
-        {
-          threshold: 0.1,
-          rootMargin: '-50px'
-        }
-      );
+    const timer = setTimeout(() => {
+      setIsLoaded(true);
+    }, 600);
 
-      if (ref.current) {
-        observer.observe(ref.current);
-      }
-    }, 100);
-
-    return () => {
-      clearTimeout(timeoutId);
-      if (observer && ref.current) {
-        observer.unobserve(ref.current);
-      }
-    };
+    return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    if (!isLoaded) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '-50px',
+      }
+    );
+
+    const currentRef = ref.current;
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, [isLoaded]);
+
+  if (!isLoaded) {
+    return <div className="h-96 opacity-0" />;
+  }
+
   return (
-    <section 
+    <section
       ref={ref}
-      id="technologies" 
+      id="technologies"
       className="py-16 mt-32 transition-all duration-1000 ease-out"
       style={{
         opacity: isVisible ? 1 : 0,
-        transform: isVisible ? 'translateY(0)' : 'translateY(50px)'
+        transform: isVisible ? 'translateY(0)' : 'translateY(50px)',
       }}
     >
       <div className="container mx-auto px-4">
@@ -104,5 +112,5 @@ export function Technologies() {
         </div>
       </div>
     </section>
-  )
+  );
 }

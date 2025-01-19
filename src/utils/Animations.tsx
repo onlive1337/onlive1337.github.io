@@ -2,15 +2,17 @@
 import { useEffect, useRef, useState } from 'react';
 import { cn } from '@/utils/cn';
 
-export function InitialFadeIn({ 
-  children, 
-  className, 
-  delay = 0
-}: {
+interface AnimationProps {
   children: React.ReactNode;
   className?: string;
   delay?: number;
-}) {
+}
+
+export function InitialFadeIn({ 
+  children, 
+  className, 
+  delay = 0 
+}: AnimationProps) {
   const [isVisible, setIsVisible] = useState(false);
   
   useEffect(() => {
@@ -24,7 +26,7 @@ export function InitialFadeIn({
   return (
     <div
       className={cn(
-        'transition-all duration-500 ease-out',
+        'transition-all duration-1000 ease-out',
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4',
         className
       )}
@@ -36,26 +38,24 @@ export function InitialFadeIn({
 
 export function ScrollFadeIn({ 
   children, 
-  className
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) {
+  className 
+}: Omit<AnimationProps, 'delay'>) {
   const [isVisible, setIsVisible] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
-  const [hasBeenVisible, setHasBeenVisible] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting && !hasBeenVisible) {
+        if (entry.isIntersecting) {
           setIsVisible(true);
-          setHasBeenVisible(true);
+          if (ref.current) {
+            observer.unobserve(ref.current);
+          }
         }
       },
       {
-        rootMargin: '-10%',
-        threshold: 0.1
+        threshold: 0.2,
+        rootMargin: '-50px'
       }
     );
 
@@ -68,15 +68,14 @@ export function ScrollFadeIn({
         observer.unobserve(ref.current);
       }
     };
-  }, [hasBeenVisible]);
+  }, []);
 
   return (
     <div
       ref={ref}
       className={cn(
-        'transition-all duration-700 ease-out will-change-opacity will-change-transform',
-        !hasBeenVisible && 'opacity-0 translate-y-8',
-        isVisible && 'opacity-100 translate-y-0',
+        'transition-all duration-1000 ease-out will-change-transform will-change-opacity',
+        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8',
         className
       )}
     >

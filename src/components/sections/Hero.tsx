@@ -2,7 +2,7 @@
 import Image from "next/image"
 import { memo, useEffect, useState, useCallback, useRef } from "react"
 import { createPortal } from 'react-dom'
-import { InitialFadeIn } from '../../utils/Animations'
+import { InitialFadeIn } from '../../utils/Animations';
 
 const statusColors = {
   online: 'bg-green-500',
@@ -148,6 +148,18 @@ const HeroContent = memo(function HeroContent() {
       <p className="max-w-2xl mx-auto text-gray-600 dark:text-gray-400">
         I wanna just code and make the world a better place.
       </p>
+      <div className="pt-2">
+        <p className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-pink-50 dark:bg-pink-900/20 text-pink-600 dark:text-pink-300">
+          <span>I love you, my princess</span>
+          <svg
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            className="w-4 h-4 animate-pulse"
+          >
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+          </svg>
+        </p>
+      </div>
     </div>
   );
 });

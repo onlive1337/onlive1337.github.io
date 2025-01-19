@@ -19,16 +19,6 @@ export function Background() {
           theme === 'dark' ? 'bg-black' : 'bg-white'
         }`} 
       />
-      
-      <div 
-        className="fixed bottom-4 right-4 px-3 py-1.5 rounded-lg backdrop-blur-sm
-                   text-gray-900 dark:text-white font-medium text-sm z-[100] cursor-help
-                   bg-white/10 dark:bg-black/10 opacity-50 hover:opacity-100 
-                   transition-opacity contain-paint"
-        title="2025?"
-      >
-        Soon... 💍
-      </div>
     </div>
   );
 }

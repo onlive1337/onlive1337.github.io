@@ -4,6 +4,33 @@ import { MessageSquare, ChevronDown } from 'lucide-react';
 import type { Message, CreateMessageResponse } from '@/types';
 import { cn } from '@/utils/cn';
 
+function formatDateTime(dateString: string) {
+  const date = new Date(dateString);
+  const today = new Date();
+  const yesterday = new Date(today);
+  yesterday.setDate(yesterday.getDate() - 1);
+
+  const time = date.toLocaleTimeString('en-US', { 
+    hour: '2-digit', 
+    minute: '2-digit',
+    hour12: false 
+  });
+
+  if (date.toDateString() === today.toDateString()) {
+    return `today at ${time}`;
+  }
+  if (date.toDateString() === yesterday.toDateString()) {
+    return `yesterday at ${time}`;
+  }
+  const fullDate = date.toLocaleDateString('en-US', {
+    day: 'numeric',
+    month: 'short',
+    year: date.getFullYear() !== today.getFullYear() ? 'numeric' : undefined
+  });
+  
+  return `${fullDate} at ${time}`;
+}
+
 export function Messages() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
@@ -121,7 +148,7 @@ export function Messages() {
                       <div key={message.id}>
                         <p className="text-gray-700 dark:text-gray-300 break-words">
                           <span className="text-green-500 dark:text-green-400">anon@</span>
-                          <span className="text-gray-400">{new Date(message.created_at).toLocaleTimeString()}</span>
+                          <span className="text-gray-400">{formatDateTime(message.created_at)}</span>
                           <span className="text-gray-400">:</span>
                           {' '}{message.content}
                         </p>

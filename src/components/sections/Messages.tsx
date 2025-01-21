@@ -22,10 +22,10 @@ function formatDateTime(dateString: string) {
   if (date.toDateString() === yesterday.toDateString()) {
     return `yesterday at ${time}`;
   }
+  
   const fullDate = date.toLocaleDateString('en-US', {
     day: 'numeric',
-    month: 'short',
-    year: date.getFullYear() !== today.getFullYear() ? 'numeric' : undefined
+    month: 'short'
   });
   
   return `${fullDate} at ${time}`;
@@ -97,15 +97,20 @@ export function Messages() {
     <div className="container mx-auto px-4 pb-8">
       <div className="p-6 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-black">
         <div className="flex items-start gap-4">
-          <MessageSquare className="h-5 w-5 mt-1 text-gray-400" />
-          <div className="space-y-2 font-mono text-sm flex-1">
-            <p className="text-gray-500 dark:text-gray-400">
-              $ echo &ldquo;Send anonymous message&rdquo;
-            </p>
+          <MessageSquare className="h-5 w-5 mt-1 text-gray-400 hidden sm:block" />
+          <div className="space-y-4 flex-1 font-mono text-sm">
+            <div className="flex items-center justify-between gap-2">
+              <p className="text-gray-500 dark:text-gray-400 text-xs sm:text-sm truncate">
+                $ echo &ldquo;Send anonymous message&rdquo;
+              </p>
+              <span className="text-xs text-gray-400 whitespace-nowrap">
+                {messages.length} messages
+              </span>
+            </div>
 
-            <form onSubmit={handleSubmit} className="pl-4 space-y-2">
+            <form onSubmit={handleSubmit} className="relative">
               <div className="flex items-center gap-2">
-                <span className="text-gray-500 dark:text-gray-400">{'>'}</span>
+                <span className="text-gray-500 dark:text-gray-400 hidden sm:inline">{'>'}</span>
                 <input
                   type="text"
                   value={newMessage}
@@ -113,40 +118,40 @@ export function Messages() {
                   placeholder="Type your message..."
                   maxLength={500}
                   disabled={isSending}
-                  className="flex-1 bg-transparent border-none outline-none text-gray-700 dark:text-gray-300 font-mono placeholder:text-gray-400"
+                  className="flex-1 bg-transparent border-none outline-none text-gray-700 dark:text-gray-300 font-mono text-xs sm:text-sm placeholder:text-gray-400"
                 />
                 <button
                   type="submit"
                   disabled={isSending || !newMessage.trim()}
-                  className="px-3 py-1 rounded bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm"
+                  className="px-3 py-1 rounded bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-xs sm:text-sm whitespace-nowrap"
                 >
                   Send
                 </button>
               </div>
             </form>
 
-            <div className="pl-4 space-y-1">
-              <div className="flex justify-between items-center">
-                <p className="text-gray-500 dark:text-gray-400">
-                  $ messages --list-recent
-                </p>
-                <span className="text-sm text-gray-400">
-                  {messages.length} messages
-                </span>
-              </div>
+            <div className="space-y-2">
+              <p className="text-gray-500 dark:text-gray-400 text-xs sm:text-sm">
+                $ messages --list-recent
+              </p>
+              
               {isLoading ? (
-                <p className="pl-4 text-gray-500 dark:text-gray-400">Loading messages...</p>
+                <p className="text-gray-500 dark:text-gray-400 text-xs sm:text-sm pl-4">
+                  Loading messages...
+                </p>
               ) : messages.length === 0 ? (
-                <p className="pl-4 text-gray-500 dark:text-gray-400">No messages found_</p>
+                <p className="text-gray-500 dark:text-gray-400 text-xs sm:text-sm pl-4">
+                  No messages found_
+                </p>
               ) : (
-                <div className="pl-4">
+                <div className="relative">
                   <div className={cn(
                     "space-y-2 transition-all duration-300",
                     isExpanded ? "max-h-96 overflow-y-auto" : "max-h-48"
                   )}>
                     {visibleMessages.map((message) => (
-                      <div key={message.id}>
-                        <p className="text-gray-700 dark:text-gray-300 break-words">
+                      <div key={message.id} className="pl-4">
+                        <p className="text-gray-700 dark:text-gray-300 break-words text-xs sm:text-sm">
                           <span className="text-green-500 dark:text-green-400">anon@</span>
                           <span className="text-gray-400">{formatDateTime(message.created_at)}</span>
                           <span className="text-gray-400">:</span>
@@ -155,10 +160,11 @@ export function Messages() {
                       </div>
                     ))}
                   </div>
+                  
                   {hasMoreMessages && (
                     <button
                       onClick={() => setIsExpanded(!isExpanded)}
-                      className="mt-2 flex items-center gap-1 text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300"
+                      className="mt-2 flex items-center gap-1 text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 text-xs sm:text-sm"
                     >
                       <ChevronDown className={cn(
                         "h-4 w-4 transition-transform",
@@ -172,7 +178,7 @@ export function Messages() {
             </div>
 
             {error && (
-              <p className="pl-4 text-red-500">
+              <p className="text-red-500 text-xs sm:text-sm">
                 Error: {error}
               </p>
             )}

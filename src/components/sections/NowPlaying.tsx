@@ -14,13 +14,6 @@ interface NowPlayingData {
   explicit: boolean;
 }
 
-const formatTime = (ms: number) => {
-  const seconds = Math.floor(ms / 1000);
-  const minutes = Math.floor(seconds / 60);
-  const remainingSeconds = seconds % 60;
-  return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
-};
-
 const AlbumCover = memo(function AlbumCover({ 
   url, 
   alt 

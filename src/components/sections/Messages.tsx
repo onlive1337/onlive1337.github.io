@@ -112,7 +112,7 @@ export function Messages() {
          <div className="space-y-2 mb-4">
            <div className="flex items-center text-gray-400">
              <span className="text-green-500">$</span>
-             <span className="ml-2">echo "Send anonymous message"</span>
+             <span className="ml-2">echo &ldquo;Send anonymous message&rdquo;</span>
            </div>
          </div>
 

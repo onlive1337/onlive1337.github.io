@@ -144,7 +144,7 @@ const HeroContent = memo(function HeroContent() {
         onlive
       </h1>
       <p className="text-xl md:text-2xl text-gray-700 dark:text-gray-300">
-        Full Stack Developer 💝
+        Full Stack Developer
       </p>
       <div className="flex flex-col items-center gap-1 text-gray-600 dark:text-gray-400">
         <div className="flex items-center gap-2 flex-wrap justify-center">

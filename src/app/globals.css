@@ -14,15 +14,19 @@
   }
 }
 
-html.js-loading * {
-  opacity: 0;
-  transition: none !important;
+*, 
+*::before, 
+*::after {
+  transition: background-color 500ms ease-in-out,
+              border-color 500ms ease-in-out,
+              color 500ms ease-in-out,
+              fill 500ms ease-in-out,
+              stroke 500ms ease-in-out,
+              opacity 500ms ease-in-out;
 }
 
-* {
-  transition-property: opacity;
-  transition-duration: 200ms;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+html.js-loading * {
+  opacity: 0;
 }
 
 html, body {

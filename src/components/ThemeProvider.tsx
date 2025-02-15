@@ -17,6 +17,7 @@ export function ThemeProvider({
     <NextThemesProvider 
       {...props}
       enableSystem={false}
+      disableTransitionOnChange={false}
     >
       {children}
     </NextThemesProvider>

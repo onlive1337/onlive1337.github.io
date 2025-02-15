@@ -90,19 +90,19 @@ export function Messages() {
 
   return (
     <div className="container mx-auto px-4 pb-8">
-      <div className="rounded-xl border border-gray-800 bg-black overflow-hidden">
-        <div className="flex items-center justify-between px-4 py-2 bg-gray-900/50 border-b border-gray-800">
+      <div className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-black overflow-hidden">
+        <div className="flex items-center justify-between px-4 py-2 bg-gray-50 dark:bg-gray-900/50 border-b border-gray-200 dark:border-gray-800">
           <div className="flex items-center gap-2">
-            <MessageSquare className="h-4 w-4 text-gray-400" />
-            <span className="text-gray-400 text-sm">Terminal</span>
+            <MessageSquare className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+            <span className="text-gray-500 dark:text-gray-400 text-sm">Terminal</span>
           </div>
           <span className="text-xs text-gray-500">{messages.length} messages</span>
         </div>
 
         <div className="p-4 font-mono text-sm">
           <div className="space-y-2 mb-4">
-            <div className="flex items-center text-gray-400">
-              <span className="text-green-500">$</span>
+            <div className="flex items-center text-gray-600 dark:text-gray-400">
+              <span className="text-green-600 dark:text-green-500">$</span>
               <span className="ml-2">echo &ldquo;Send anonymous message&rdquo;</span>
             </div>
           </div>
@@ -110,7 +110,7 @@ export function Messages() {
           <div 
             className="h-[300px] overflow-y-auto mb-4 [&::-webkit-scrollbar]:w-2 
                       [&::-webkit-scrollbar-track]:bg-transparent
-                      [&::-webkit-scrollbar-thumb]:bg-gray-800 
+                      [&::-webkit-scrollbar-thumb]:bg-gray-200 dark:[&::-webkit-scrollbar-thumb]:bg-gray-800 
                       [&::-webkit-scrollbar-thumb]:rounded-full"
           >
             {isLoading ? (
@@ -120,8 +120,8 @@ export function Messages() {
             ) : (
               <div className="space-y-1">
                 {messages.map((message) => (
-                  <div key={message.id} className="text-gray-300">
-                    <span className="text-green-500">anon@</span>
+                  <div key={message.id} className="text-gray-600 dark:text-gray-300">
+                    <span className="text-green-600 dark:text-green-500">anon@</span>
                     <span className="text-gray-500">{formatDateTime(message.created_at)}</span>
                     <span className="text-gray-500">:</span>
                     {' '}{message.content}
@@ -141,12 +141,12 @@ export function Messages() {
                 placeholder="Type your message..."
                 maxLength={500}
                 disabled={isSending}
-                className="flex-1 bg-transparent border-none outline-none text-gray-300 placeholder:text-gray-600"
+                className="flex-1 bg-transparent border-none outline-none text-gray-600 dark:text-gray-300 placeholder:text-gray-400 dark:placeholder:text-gray-600"
               />
               <button
                 type="submit"
                 disabled={isSending || !newMessage.trim()}
-                className="px-3 py-1 rounded bg-gray-800 text-gray-300 hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-xs whitespace-nowrap"
+                className="px-3 py-1 rounded bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-xs whitespace-nowrap"
               >
                 Send
               </button>

@@ -11,21 +11,25 @@ const socials = [
     name: "GitHub",
     url: "https://github.com/onlive1337",
     icon: Github,
+    hoverColor: "group-hover:text-[#333]"
   },
   {
     name: "Telegram",
     url: "https://t.me/onswix",
     icon: Telegram,
+    hoverColor: "group-hover:text-[#229ED9]"
   },
   {
     name: "Discord",
     url: "https://discord.com/users/605732226201550892",
     icon: Discord,
+    hoverColor: "group-hover:text-[#5865F2]"
   },
   {
     name: "Steam",
     url: "https://steamcommunity.com/id/onswix",
     icon: Steam,
+    hoverColor: "group-hover:text-[#1b2838]"
   },
 ] as const;
 
@@ -43,10 +47,14 @@ export function Socials() {
               href={social.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="group flex items-center gap-2 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800/50 text-gray-600 transition-all hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
+              className="group flex items-center gap-2 p-2 text-gray-600 dark:text-gray-300 transition-colors duration-300"
             >
-              <social.icon className="h-6 w-6" />
-              <span className="font-medium hidden sm:inline">{social.name}</span>
+              <social.icon 
+                className={`h-6 w-6 transition-colors duration-300 ${social.hoverColor}`} 
+              />
+              <span className={`font-medium hidden sm:inline transition-colors duration-300 ${social.hoverColor}`}>
+                {social.name}
+              </span>
             </a>
           ))}
         </div>

@@ -17,12 +17,64 @@
 *, 
 *::before, 
 *::after {
-  transition: background-color 500ms ease-in-out,
-              border-color 500ms ease-in-out,
-              color 500ms ease-in-out,
-              fill 500ms ease-in-out,
-              stroke 500ms ease-in-out,
-              opacity 500ms ease-in-out;
+  transition: background-color 700ms ease-in-out,
+              border-color 700ms ease-in-out,
+              color 700ms ease-in-out,
+              fill 700ms ease-in-out,
+              stroke 700ms ease-in-out,
+              opacity 700ms ease-in-out;
+}
+
+@media (min-width: 768px) {
+  * {
+    cursor: none !important;
+  }
+  
+  a, button, input, [role="button"], 
+  [type="button"], [type="submit"], 
+  [type="reset"], [onclick], select {
+    cursor: none !important;
+  }
+  
+  *:hover {
+    cursor: none !important;
+  }
+  
+  p, h1, h2, h3, h4, h5, h6, span, div {
+    cursor: none !important;
+  }
+  
+  ::selection {
+    @apply bg-gray-400/30 text-current;
+  }
+}
+
+@media (max-width: 767px) {
+  body {
+    scrollbar-width: none;
+  }
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) {
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-400/30 rounded-full hover:bg-gray-400/50 transition-colors;
+  }
+
+  .dark ::-webkit-scrollbar-thumb {
+    @apply bg-gray-600/30 hover:bg-gray-600/50;
+  }
 }
 
 html.js-loading * {
@@ -37,24 +89,10 @@ html, body {
 }
 
 body {
-  color: black;
+  @apply text-black dark:text-white;
   overscroll-behavior: none;
   -webkit-tap-highlight-color: transparent;
   contain: content;
-}
-
-.dark body {
-  color: white;
-}
-
-@media (max-width: 768px) {
-  body {
-    scrollbar-width: none;
-  }
-
-  ::-webkit-scrollbar {
-    display: none;
-  }
 }
 
 :root {
@@ -63,4 +101,22 @@ body {
 
 [data-theme="dark"] {
   --overscroll: #000000;
+}
+
+@layer components {
+  .interactive-hover {
+    @apply transition-all duration-300 ease-out;
+  }
+  
+  .interactive-hover:hover {
+    @apply scale-105;
+  }
+  
+  .interactive-hover:active {
+    @apply scale-95;
+  }
+}
+
+input, textarea {
+  @apply focus:outline-none focus:ring-2 focus:ring-blue-500/50 dark:focus:ring-blue-400/50;
 }

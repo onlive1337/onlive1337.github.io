@@ -1,7 +1,6 @@
 import { Inter } from "next/font/google"
 import { ThemeProvider } from "@/components/ThemeProvider"
 import { Background } from "@/components/Background"
-import { CustomCursor } from "@/components/CustomCursor"
 import Script from 'next/script'
 import "./globals.css"
 
@@ -50,8 +49,7 @@ export default function RootLayout({
           enableSystem={false}
         >
           <Background />
-          <CustomCursor />
-          <main className="min-h-screen bg-white dark:bg-black md:cursor-none">
+          <main className="min-h-screen bg-white dark:bg-black">
             {children}
           </main>
         </ThemeProvider>

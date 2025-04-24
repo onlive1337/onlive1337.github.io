@@ -25,30 +25,6 @@
               opacity 700ms ease-in-out;
 }
 
-@media (min-width: 768px) {
-  * {
-    cursor: none !important;
-  }
-  
-  a, button, input, [role="button"], 
-  [type="button"], [type="submit"], 
-  [type="reset"], [onclick], select {
-    cursor: none !important;
-  }
-  
-  *:hover {
-    cursor: none !important;
-  }
-  
-  p, h1, h2, h3, h4, h5, h6, span, div {
-    cursor: none !important;
-  }
-  
-  ::selection {
-    @apply bg-gray-400/30 text-current;
-  }
-}
-
 @media (max-width: 767px) {
   body {
     scrollbar-width: none;

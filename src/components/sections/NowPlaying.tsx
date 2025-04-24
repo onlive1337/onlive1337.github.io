@@ -1,6 +1,8 @@
+"use client"
 import { useEffect, useState, memo } from 'react';
 import Image from 'next/image';
 import { Music, Volume2 } from 'lucide-react';
+import { fetchFromAPI } from '@/utils/api';
 
 interface NowPlayingData {
   name: string;
@@ -52,26 +54,28 @@ const ExplicitBadge = memo(function ExplicitBadge() {
 export function NowPlaying() {
   const [data, setData] = useState<NowPlayingData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<boolean>(false);
   const [currentTime, setCurrentTime] = useState(0);
+  
+  const fetchNowPlaying = async () => {
+    try {
+      setError(false);
+      const trackData = await fetchFromAPI<NowPlayingData>('statsfm');
+      setData(trackData);
+      if (trackData) {
+        setCurrentTime(trackData.progressMs);
+      }
+    } catch (err) {
+      console.error('Failed to fetch current track:', err);
+      setError(true);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchNowPlaying = async () => {
-      try {
-        const response = await fetch('https://portfolio-api-taupe-theta.vercel.app/api/statsfm');
-        if (!response.ok) throw new Error('Failed to fetch');
-        const data = await response.json();
-        setData(data);
-        setCurrentTime(data.progressMs);
-      } catch (error) {
-        console.error('Failed to fetch now playing:', error);
-        setData(null);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     fetchNowPlaying();
-    const interval = setInterval(fetchNowPlaying, 10000);
+    const interval = setInterval(fetchNowPlaying, 30000);
     return () => clearInterval(interval);
   }, []);
 
@@ -108,12 +112,38 @@ export function NowPlaying() {
     );
   }
 
+  if (error) {
+    return (
+      <div>
+        <h2 className="mb-6 text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+          Now Playing
+          <Volume2 className="w-4 h-4 text-gray-400" />
+        </h2>
+        <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white/30 dark:bg-black/30 backdrop-blur-md">
+          <div className="flex items-center gap-4">
+            <div className="h-16 w-16 flex-shrink-0 bg-gray-100/50 dark:bg-gray-800/50 rounded-lg flex items-center justify-center">
+              <Music className="h-8 w-8 text-gray-400 dark:text-gray-500" />
+            </div>
+            <div>
+              <p className="font-medium text-gray-900 dark:text-white">
+                Data unavailable
+              </p>
+              <p className="text-gray-500 dark:text-gray-400 text-sm">
+                Music information couldn't be loaded
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (!data?.isPlaying) {
     return (
       <div>
         <h2 className="mb-6 text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
           Now Playing
-          <Volume2 className="w-4 h-4 text-green-500 animate-pulse" />
+          <Volume2 className="w-4 h-4 text-gray-400" />
         </h2>
         <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white/30 dark:bg-black/30 backdrop-blur-md">
           <div className="flex items-center gap-4">

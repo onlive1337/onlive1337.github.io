@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Gamepad2 } from 'lucide-react';
+import { fetchFromAPI } from '@/utils/api';
 
 interface GameData {
   name: string;
@@ -14,23 +15,24 @@ interface GameData {
 export function Gaming() {
   const [data, setData] = useState<GameData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<boolean>(false);
+
+  const fetchGaming = async () => {
+    try {
+      setError(false);
+      const gameData = await fetchFromAPI<GameData>('steam');
+      setData(gameData);
+    } catch (err) {
+      console.error('Failed to fetch Steam activity:', err);
+      setError(true);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchGaming = async () => {
-      try {
-        const response = await fetch('https://portfolio-api-taupe-theta.vercel.app/api/steam');
-        const data = await response.json();
-        setData(data);
-      } catch (error) {
-        console.error('Failed to fetch gaming data:', error);
-        setData(null);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     fetchGaming();
-    const interval = setInterval(fetchGaming, 60000);
+    const interval = setInterval(fetchGaming, 120000);
     return () => clearInterval(interval);
   }, []);
 
@@ -46,6 +48,31 @@ export function Gaming() {
             <div className="flex-1 space-y-3 py-1">
               <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded w-3/4" />
               <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded w-1/2" />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div>
+        <h2 className="mb-6 text-xl font-bold text-gray-900 dark:text-white">
+          Gaming
+        </h2>
+        <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white/30 dark:bg-black/30 backdrop-blur-md">
+          <div className="flex items-center gap-4">
+            <div className="h-16 w-16 flex-shrink-0 bg-gray-100/50 dark:bg-gray-800/50 rounded-lg flex items-center justify-center">
+              <Gamepad2 className="h-8 w-8 text-gray-400 dark:text-gray-500" />
+            </div>
+            <div>
+              <p className="font-medium text-gray-900 dark:text-white">
+                Data unavailable
+              </p>
+              <p className="text-gray-500 dark:text-gray-400">
+                Steam activity couldn't be loaded
+              </p>
             </div>
           </div>
         </div>
@@ -69,7 +96,7 @@ export function Gaming() {
                 Not Playing
               </p>
               <p className="text-gray-500 dark:text-gray-400">
-                No recent games
+                No recent activity
               </p>
             </div>
           </div>

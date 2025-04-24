@@ -1,6 +1,7 @@
 "use client"
-import { useState, useEffect } from 'react';
-import { MessageSquare } from 'lucide-react';
+import { useState, useEffect, useCallback } from 'react';
+import { MessageSquare, AlertCircle, Loader2 } from 'lucide-react';
+import { fetchFromAPI } from '@/utils/api';
 import type { Message, CreateMessageResponse } from '@/types';
 
 function formatDateTime(dateString: string) {
@@ -37,26 +38,28 @@ export function Messages() {
   const [isSending, setIsSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    fetchMessages();
-    const interval = setInterval(fetchMessages, 5000);
-    return () => clearInterval(interval);
-  }, []);
-
-  async function fetchMessages() {
+  const fetchMessages = useCallback(async () => {
     try {
-      const response = await fetch('https://portfolio-api-taupe-theta.vercel.app/api/messages');
-      if (!response.ok) throw new Error('Failed to fetch messages');
-      const data = await response.json();
-      setMessages(data);
       setError(null);
+      const data = await fetchFromAPI<Message[]>('messages');
+      if (data) {
+        setMessages(data);
+      } else {
+        setError('Unable to load messages');
+      }
     } catch (err) {
       console.error('Failed to fetch messages:', err);
-      setError('Failed to load messages. Please try again later.');
+      setError('Unable to load messages at this time');
     } finally {
       setIsLoading(false);
     }
-  }
+  }, []);
+
+  useEffect(() => {
+    fetchMessages();
+    const interval = setInterval(fetchMessages, 15000);
+    return () => clearInterval(interval);
+  }, [fetchMessages]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -72,7 +75,7 @@ export function Messages() {
         body: JSON.stringify({ content: newMessage }),
       });
 
-      const data: CreateMessageResponse = await response.json();
+      const data = await response.json() as CreateMessageResponse;
 
       if (!response.ok) {
         throw new Error(data.error || 'Failed to send message');
@@ -81,8 +84,9 @@ export function Messages() {
       await fetchMessages();
       setNewMessage('');
     } catch (err) {
-      console.error('Failed to send message:', err);
-      setError('Failed to send message. Please try again.');
+      const error = err as Error;
+      console.error('Failed to send message:', error);
+      setError(error.message || 'Failed to send message. Please try again later.');
     } finally {
       setIsSending(false);
     }
@@ -114,9 +118,19 @@ export function Messages() {
                       [&::-webkit-scrollbar-thumb]:rounded-full"
           >
             {isLoading ? (
-              <p className="text-gray-500">Loading messages...</p>
+              <div className="flex items-center justify-center h-full">
+                <Loader2 className="h-5 w-5 text-gray-500 animate-spin" />
+                <span className="ml-2 text-gray-500">Loading messages...</span>
+              </div>
+            ) : error && messages.length === 0 ? (
+              <div className="flex flex-col items-center justify-center h-full text-center">
+                <AlertCircle className="h-5 w-5 text-gray-500 mb-2" />
+                <p className="text-gray-500">Message data unavailable</p>
+              </div>
             ) : messages.length === 0 ? (
-              <p className="text-gray-500">No messages found_</p>
+              <p className="text-gray-500 text-center h-full flex items-center justify-center">
+                No messages found_
+              </p>
             ) : (
               <div className="space-y-1">
                 {messages.map((message) => (
@@ -146,18 +160,30 @@ export function Messages() {
               <button
                 type="submit"
                 disabled={isSending || !newMessage.trim()}
-                className="px-3 py-1 rounded bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-xs whitespace-nowrap"
+                className="px-3 py-1 rounded bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-xs whitespace-nowrap flex items-center gap-1"
               >
-                Send
+                {isSending ? (
+                  <>
+                    <Loader2 className="h-3 w-3 animate-spin" />
+                    <span>Sending...</span>
+                  </>
+                ) : (
+                  <span>Send</span>
+                )}
               </button>
             </div>
           </form>
 
-          {error && (
-            <p className="mt-2 text-red-500 text-xs">
+          {error && newMessage && (
+            <p className="mt-2 text-red-500 text-xs flex items-center gap-1">
+              <AlertCircle className="h-3 w-3" /> 
               Error: {error}
             </p>
           )}
+          
+          <p className="mt-2 text-gray-400 dark:text-gray-600 text-xs">
+            Characters remaining: {500 - newMessage.length}
+          </p>
         </div>
       </div>
     </div>

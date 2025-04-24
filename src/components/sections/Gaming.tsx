@@ -71,7 +71,7 @@ export function Gaming() {
                 Data unavailable
               </p>
               <p className="text-gray-500 dark:text-gray-400">
-                Steam activity couldn't be loaded
+                Steam activity couldn&apos;t be loaded
               </p>
             </div>
           </div>

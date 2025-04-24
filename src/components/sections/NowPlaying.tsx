@@ -129,7 +129,7 @@ export function NowPlaying() {
                 Data unavailable
               </p>
               <p className="text-gray-500 dark:text-gray-400 text-sm">
-                Music information couldn't be loaded
+                Music information couldn&apos;t be loaded
               </p>
             </div>
           </div>

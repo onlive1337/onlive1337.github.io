@@ -177,7 +177,7 @@ const HeroContent = memo(function HeroContent() {
   );
 });
 
-function HeroComponent() {
+export const Hero = memo(function Hero() {
   const [status, setStatus] = useState<Status | null>(null);
 
   const fetchStatus = useCallback(async () => {
@@ -218,4 +218,4 @@ function HeroComponent() {
       </div>
     </section>
   );
-}
+});

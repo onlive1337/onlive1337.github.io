@@ -1,5 +1,9 @@
 export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://portfolio-api-taupe-theta.vercel.app/api';
 
+interface PlayableMedia {
+  isPlaying: boolean;
+}
+
 export async function fetchFromAPI<T>(
   endpoint: string, 
   options?: RequestInit,
@@ -45,14 +49,14 @@ export async function fetchFromAPI<T>(
   }
 }
 
-export async function fetchMusicData<T>(timeout: number = 8000): Promise<T | null> {
+export async function fetchMusicData<T extends PlayableMedia>(timeout: number = 8000): Promise<T | null> {
   let data = await fetchFromAPI<T>('statsfm', undefined, timeout);
-  if (data && (data as any).isPlaying) {
+  if (data && data.isPlaying) {
     return data;
   }
   
   data = await fetchFromAPI<T>('yandex', undefined, timeout);
-  if (data && (data as any).isPlaying) {
+  if (data && data.isPlaying) {
     return data;
   }
   

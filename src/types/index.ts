@@ -21,3 +21,16 @@ export interface CreateMessageResponse {
   error?: string;
   data?: Message;
 }
+
+export interface YandexTrack {
+  name: string;
+  artists: string;
+  album: string;
+  albumImageUrl: string;
+  url: string;
+  isPlaying: boolean;
+  progressMs: number;
+  durationMs: number;
+  explicit: boolean;
+  platform: string;
+}

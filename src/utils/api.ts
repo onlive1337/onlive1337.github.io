@@ -45,6 +45,20 @@ export async function fetchFromAPI<T>(
   }
 }
 
+export async function fetchMusicData<T>(timeout: number = 8000): Promise<T | null> {
+  let data = await fetchFromAPI<T>('statsfm', undefined, timeout);
+  if (data && (data as any).isPlaying) {
+    return data;
+  }
+  
+  data = await fetchFromAPI<T>('yandex', undefined, timeout);
+  if (data && (data as any).isPlaying) {
+    return data;
+  }
+  
+  return data || null;
+}
+
 export function useInterval(callback: () => void, delay: number, immediate: boolean = true) {
   const savedCallback = React.useRef<(() => void) | null>(null);
   

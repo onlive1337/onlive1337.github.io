@@ -2,7 +2,7 @@
 import { useEffect, useState, memo } from 'react';
 import Image from 'next/image';
 import { Music, Volume2 } from 'lucide-react';
-import { fetchFromAPI } from '@/utils/api';
+import { fetchMusicData } from '@/utils/api';
 
 interface NowPlayingData {
   name: string;
@@ -14,6 +14,7 @@ interface NowPlayingData {
   progressMs: number;
   durationMs: number;
   explicit: boolean;
+  platform?: string;
 }
 
 const AlbumCover = memo(function AlbumCover({ 
@@ -60,7 +61,7 @@ export function NowPlaying() {
   const fetchNowPlaying = async () => {
     try {
       setError(false);
-      const trackData = await fetchFromAPI<NowPlayingData>('statsfm');
+      const trackData = await fetchMusicData<NowPlayingData>();
       setData(trackData);
       if (trackData) {
         setCurrentTime(trackData.progressMs);
@@ -155,7 +156,7 @@ export function NowPlaying() {
                 Not Playing
               </p>
               <p className="text-gray-500 dark:text-gray-400 text-sm">
-                Spotify is paused
+                Music is paused
               </p>
             </div>
           </div>
@@ -194,6 +195,14 @@ export function NowPlaying() {
             </p>
           </div>
         </div>
+
+        {data.platform && (
+          <div className="absolute top-2 right-2">
+            <span className="text-xs font-medium bg-gray-800/60 text-white px-2 py-0.5 rounded-full">
+              {data.platform}
+            </span>
+          </div>
+        )}
 
         <div className="absolute bottom-0 left-0 right-0">
           <div className="h-[2px] w-full bg-gray-200 dark:bg-[#1a1b1e]">

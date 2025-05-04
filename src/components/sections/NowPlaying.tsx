@@ -46,18 +46,6 @@ const AlbumCover = memo(function AlbumCover({
   );
 });
 
-const ExplicitBadge = memo(function ExplicitBadge() {
-  return (
-    <div className="relative group ml-2">
-      <span className="px-1.5 py-0.5 text-[10px] font-medium bg-gray-800 text-gray-400 rounded cursor-help">
-        E
-      </span>
-      <span className="absolute left-1/2 -translate-x-1/2 -bottom-6 px-2 py-1 text-[10px] font-medium bg-black text-white rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity">
-        Explicit
-      </span>
-    </div>
-  );
-});
 
 export function NowPlaying() {
   const [data, setData] = useState<NowPlayingData | null>(null);
@@ -191,11 +179,10 @@ export function NowPlaying() {
             <AlbumCover url={data.albumImageUrl} alt={data.album} />
           )}
           <div className="min-w-0 flex-1">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center">
               <h3 className="font-medium text-gray-900 dark:text-white text-base truncate group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors flex-1">
                 {data.name}
               </h3>
-              {data.explicit && <ExplicitBadge />}
             </div>
             <p className="text-gray-500 dark:text-gray-400 text-sm truncate mb-1">
               {data.artists}
@@ -212,6 +199,14 @@ export function NowPlaying() {
           <div className="absolute top-2 right-2">
             <span className="text-xs font-medium bg-gray-800/60 text-white px-2 py-0.5 rounded-full">
               {data.platform}
+            </span>
+          </div>
+        )}
+        
+        {data.explicit && (
+          <div className="absolute top-8 right-2">
+            <span className="text-xs font-medium bg-gray-800/60 text-gray-400 px-1.5 py-0.5 rounded-full">
+              E
             </span>
           </div>
         )}

@@ -17,6 +17,13 @@ interface NowPlayingData {
   platform?: string;
 }
 
+const formatTime = (ms: number): string => {
+  const totalSeconds = Math.floor(ms / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+};
+
 const AlbumCover = memo(function AlbumCover({ 
   url, 
   alt 
@@ -41,7 +48,7 @@ const AlbumCover = memo(function AlbumCover({
 
 const ExplicitBadge = memo(function ExplicitBadge() {
   return (
-    <div className="relative group">
+    <div className="relative group ml-2">
       <span className="px-1.5 py-0.5 text-[10px] font-medium bg-gray-800 text-gray-400 rounded cursor-help">
         E
       </span>
@@ -179,20 +186,25 @@ export function NowPlaying() {
         rel="noopener noreferrer"
         className="group block rounded-xl border border-gray-200 dark:border-gray-800 bg-white/30 dark:bg-black/30 backdrop-blur-md hover:bg-white/40 dark:hover:bg-black/40 transition-all overflow-hidden relative"
       >
-        <div className="flex items-center gap-4 p-4">
+        <div className="flex items-center gap-4 p-4 pb-6">
           {data.albumImageUrl && (
             <AlbumCover url={data.albumImageUrl} alt={data.album} />
           )}
           <div className="min-w-0 flex-1">
-            <div className="flex items-center justify-between gap-2">
-              <h3 className="font-medium text-gray-900 dark:text-white text-base truncate group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors">
+            <div className="flex items-center gap-2">
+              <h3 className="font-medium text-gray-900 dark:text-white text-base truncate group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors flex-1">
                 {data.name}
               </h3>
               {data.explicit && <ExplicitBadge />}
             </div>
-            <p className="text-gray-500 dark:text-gray-400 text-sm truncate">
+            <p className="text-gray-500 dark:text-gray-400 text-sm truncate mb-1">
               {data.artists}
             </p>
+            
+            <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 font-mono mt-1">
+              <span className="tabular-nums">{formatTime(currentTime)}</span>
+              <span className="tabular-nums">{formatTime(data.durationMs)}</span>
+            </div>
           </div>
         </div>
 

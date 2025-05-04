@@ -61,7 +61,7 @@ export function Gaming() {
         <h2 className="mb-6 text-xl font-bold text-gray-900 dark:text-white">
           Gaming
         </h2>
-        <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white/30 dark:bg-black/30 backdrop-blur-md">
+        <div className="p-4 pb-6 rounded-xl border border-gray-200 dark:border-gray-800 bg-white/30 dark:bg-black/30 backdrop-blur-md">
           <div className="flex items-center gap-4">
             <div className="h-16 w-16 flex-shrink-0 bg-gray-100/50 dark:bg-gray-800/50 rounded-lg flex items-center justify-center">
               <Gamepad2 className="h-8 w-8 text-gray-400 dark:text-gray-500" />
@@ -86,7 +86,7 @@ export function Gaming() {
         Gaming
       </h2>
       {!data ? (
-        <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white/30 dark:bg-black/30 backdrop-blur-md">
+        <div className="p-4 pb-6 rounded-xl border border-gray-200 dark:border-gray-800 bg-white/30 dark:bg-black/30 backdrop-blur-md">
           <div className="flex items-center gap-4">
             <div className="h-16 w-16 flex-shrink-0 bg-gray-100/50 dark:bg-gray-800/50 rounded-lg flex items-center justify-center">
               <Gamepad2 className="h-8 w-8 text-gray-400 dark:text-gray-500" />
@@ -108,7 +108,7 @@ export function Gaming() {
           rel="noopener noreferrer"
           className="group block rounded-xl border border-gray-200 dark:border-gray-800 bg-white/30 dark:bg-black/30 backdrop-blur-md hover:bg-white/40 dark:hover:bg-black/40 transition-all overflow-hidden"
         >
-          <div className="flex items-center gap-4 p-4">
+          <div className="flex items-center gap-4 p-4 pb-6">
             <div className="relative h-16 w-16 flex-shrink-0">
               <Image
                 src={data.imageUrl}
@@ -124,14 +124,20 @@ export function Gaming() {
               <h3 className="font-medium text-gray-900 dark:text-white truncate group-hover:text-blue-500 transition-colors">
                 {data.name}
               </h3>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
+              <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">
                 {data.isPlaying ? (
                   'Currently Playing'
                 ) : data.playTime2Weeks ? (
                   `${Math.round(data.playTime2Weeks / 60)} hours past 2 weeks`
                 ) : null}
               </p>
+              
+              <div className="mt-6"></div>
             </div>
+          </div>
+          
+          <div className="absolute bottom-0 left-0 right-0">
+            <div className="h-[2px] w-full bg-gray-200 dark:bg-[#1a1b1e]"></div>
           </div>
         </a>
       )}

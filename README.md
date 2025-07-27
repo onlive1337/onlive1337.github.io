@@ -73,6 +73,21 @@ yarn dev
 
 1. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
+2. 🐳 Run docker compose server:
+
+```yaml
+docker compose up -d --build
+```
+
+or 
+
+```yaml
+docker compose build --no-cache
+docker compose up -d
+```
+
+2.  Open [http://localhost](http://localhost) in your browser.
+
 ## 📦 Project Structure
 
 ```text

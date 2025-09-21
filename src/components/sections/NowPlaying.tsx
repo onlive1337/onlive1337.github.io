@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useState, memo } from 'react';
+import { useEffect, useState, memo, useRef } from 'react';
 import Image from 'next/image';
 import { Music, Volume2 } from 'lucide-react';
 import { fetchMusicData } from '@/utils/api';
@@ -52,6 +52,7 @@ export function NowPlaying() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<boolean>(false);
   const [currentTime, setCurrentTime] = useState(0);
+  const lastTrackIdRef = useRef<string | null>(null);
   
   const fetchNowPlaying = async () => {
     try {
@@ -59,7 +60,16 @@ export function NowPlaying() {
       const trackData = await fetchMusicData<NowPlayingData>();
       setData(trackData);
       if (trackData) {
-        setCurrentTime(trackData.progressMs);
+        const newId = `${trackData.name}|${trackData.artists}`;
+        const prevId = lastTrackIdRef.current;
+        const serverProgress = trackData.progressMs || 0;
+        const clamp = (v: number) => trackData.durationMs ? Math.min(v, trackData.durationMs) : v;
+        if (prevId !== newId) {
+          setCurrentTime(clamp(serverProgress));
+          lastTrackIdRef.current = newId;
+        } else if (serverProgress > 0) {
+          setCurrentTime(clamp(serverProgress));
+        }
       }
     } catch (err) {
       console.error('Failed to fetch current track:', err);
@@ -80,7 +90,7 @@ export function NowPlaying() {
 
     const interval = setInterval(() => {
       setCurrentTime(prev => {
-        if (prev >= (data.durationMs || 0)) return prev;
+        if (data.durationMs && prev >= data.durationMs) return prev;
         return prev + 1000;
       });
     }, 1000);
@@ -160,7 +170,7 @@ export function NowPlaying() {
     );
   }
 
-  const progress = (currentTime / data.durationMs) * 100;
+  const progress = data.durationMs ? (currentTime / data.durationMs) * 100 : 0;
 
   return (
     <div>
@@ -190,7 +200,7 @@ export function NowPlaying() {
             
             <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 font-mono mt-1">
               <span className="tabular-nums">{formatTime(currentTime)}</span>
-              <span className="tabular-nums">{formatTime(data.durationMs)}</span>
+              <span className="tabular-nums">{data.durationMs ? formatTime(data.durationMs) : '—:—'}</span>
             </div>
           </div>
         </div>

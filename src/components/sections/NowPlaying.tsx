@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useState, memo, useRef } from 'react';
+import { useEffect, useState, memo } from 'react';
 import Image from 'next/image';
 import { Music, Volume2 } from 'lucide-react';
 import { fetchMusicData } from '@/utils/api';
@@ -11,20 +11,10 @@ interface NowPlayingData {
   albumImageUrl: string;
   url: string;
   isPlaying: boolean;
-  progressMs: number;
-  durationMs: number;
-  explicit: boolean;
   platform?: string;
 }
 
-const formatTime = (ms: number): string => {
-  const totalSeconds = Math.floor(ms / 1000);
-  const minutes = Math.floor(totalSeconds / 60);
-  const seconds = totalSeconds % 60;
-  return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-};
-
-const AlbumCover = memo(function AlbumCover({ 
+const AlbumCover = memo(function AlbumCover({
   url, 
   alt 
 }: { 
@@ -46,31 +36,16 @@ const AlbumCover = memo(function AlbumCover({
   );
 });
 
-
 export function NowPlaying() {
   const [data, setData] = useState<NowPlayingData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<boolean>(false);
-  const [currentTime, setCurrentTime] = useState(0);
-  const lastTrackIdRef = useRef<string | null>(null);
-  
+
   const fetchNowPlaying = async () => {
     try {
       setError(false);
       const trackData = await fetchMusicData<NowPlayingData>();
       setData(trackData);
-      if (trackData) {
-        const newId = `${trackData.name}|${trackData.artists}`;
-        const prevId = lastTrackIdRef.current;
-        const serverProgress = trackData.progressMs || 0;
-        const clamp = (v: number) => trackData.durationMs ? Math.min(v, trackData.durationMs) : v;
-        if (prevId !== newId) {
-          setCurrentTime(clamp(serverProgress));
-          lastTrackIdRef.current = newId;
-        } else if (serverProgress > 0) {
-          setCurrentTime(clamp(serverProgress));
-        }
-      }
     } catch (err) {
       console.error('Failed to fetch current track:', err);
       setError(true);
@@ -84,19 +59,6 @@ export function NowPlaying() {
     const interval = setInterval(fetchNowPlaying, 30000);
     return () => clearInterval(interval);
   }, []);
-
-  useEffect(() => {
-    if (!data?.isPlaying) return;
-
-    const interval = setInterval(() => {
-      setCurrentTime(prev => {
-        if (data.durationMs && prev >= data.durationMs) return prev;
-        return prev + 1000;
-      });
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [data?.isPlaying, data?.durationMs]);
 
   if (isLoading) {
     return (
@@ -170,8 +132,6 @@ export function NowPlaying() {
     );
   }
 
-  const progress = data.durationMs ? (currentTime / data.durationMs) * 100 : 0;
-
   return (
     <div>
       <h2 className="mb-6 text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
@@ -184,7 +144,7 @@ export function NowPlaying() {
         rel="noopener noreferrer"
         className="group block rounded-xl border border-gray-200 dark:border-gray-800 bg-white/30 dark:bg-black/30 backdrop-blur-md hover:bg-white/40 dark:hover:bg-black/40 transition-all overflow-hidden relative"
       >
-        <div className="flex items-center gap-4 p-4 pb-6">
+        <div className="flex items-center gap-4 p-4">
           {data.albumImageUrl && (
             <AlbumCover url={data.albumImageUrl} alt={data.album} />
           )}
@@ -197,11 +157,6 @@ export function NowPlaying() {
             <p className="text-gray-500 dark:text-gray-400 text-sm truncate mb-1">
               {data.artists}
             </p>
-            
-            <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 font-mono mt-1">
-              <span className="tabular-nums">{formatTime(currentTime)}</span>
-              <span className="tabular-nums">{data.durationMs ? formatTime(data.durationMs) : '—:—'}</span>
-            </div>
           </div>
         </div>
 
@@ -212,23 +167,6 @@ export function NowPlaying() {
             </span>
           </div>
         )}
-        
-        {data.explicit && (
-          <div className="absolute top-8 right-2">
-            <span className="text-xs font-medium bg-gray-800/60 text-gray-400 px-1.5 py-0.5 rounded-full">
-              E
-            </span>
-          </div>
-        )}
-
-        <div className="absolute bottom-0 left-0 right-0">
-          <div className="h-[2px] w-full bg-gray-200 dark:bg-[#1a1b1e]">
-            <div 
-              className="h-full bg-green-500 transition-all duration-1000"
-              style={{ width: `${Math.min(progress, 100)}%` }}
-            />
-          </div>
-        </div>
       </a>
     </div>
   );

@@ -1,3 +1,5 @@
+import React from "react";
+
 export default function Telegram(props: React.SVGProps<SVGSVGElement>) {
     return (
       <svg viewBox="0 0 24 24" fill="currentColor" {...props}>

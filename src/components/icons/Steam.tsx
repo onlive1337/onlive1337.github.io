@@ -1,3 +1,5 @@
+import React from "react";
+
 export default function Steam(props: React.SVGProps<SVGSVGElement>) {
     return (
       <svg viewBox="0 0 31.273 31.273" fill="currentColor" {...props}>

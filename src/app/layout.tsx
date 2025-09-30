@@ -3,6 +3,7 @@ import { ThemeProvider } from "@/components/ThemeProvider"
 import { Background } from "@/components/Background"
 import Script from 'next/script'
 import "./globals.css"
+import React from "react";
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -40,7 +41,7 @@ export default function RootLayout({
               window.addEventListener('load', removeLoadingClass);
             })();
           `}
-        </Script>
+        </Script><title></title>
       </head>
       <body className={inter.className}>
         <ThemeProvider

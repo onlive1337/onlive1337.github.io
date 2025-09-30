@@ -1,3 +1,5 @@
+import React from "react";
+
 export function Discord(props: React.SVGProps<SVGSVGElement>) {
     return (
       <svg viewBox="0 0 24 24" {...props}>

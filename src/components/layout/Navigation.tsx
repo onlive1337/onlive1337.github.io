@@ -2,7 +2,7 @@
 import Link from "next/link"
 import { memo } from "react"
 import dynamic from 'next/dynamic'
-import { InitialFadeIn } from '../../utils/Animations';
+import { InitialFadeIn } from '@/utils/Animations';
 
 const ThemeToggle = dynamic(() => import('./ThemeToggle').then(mod => mod.ThemeToggle), {
   ssr: false,

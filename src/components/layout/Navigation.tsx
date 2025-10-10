@@ -10,9 +10,10 @@ const ThemeToggle = dynamic(() => import('./ThemeToggle').then(mod => mod.ThemeT
 })
 
 const navigation = [
-  { name: "Socials", href: "#socials" },
-  { name: "Technologies", href: "#technologies" },
-  { name: "Portfolio", href: "#portfolio" }
+    { name: "Socials", href: "#socials" },
+    { name: "Technologies", href: "#technologies" },
+    { name: "Portfolio", href: "#portfolio" },
+    { name: "Resume", href: "/resume" },
 ] as const;
 
 const NavLinks = memo(() => (

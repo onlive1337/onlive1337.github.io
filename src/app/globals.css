@@ -1,16 +1,38 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --animate-wave: wave 20s linear infinite;
+  --animate-wave-reverse: wave-reverse 25s linear infinite;
+}
+
+@keyframes wave {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-100%); }
+}
+
+@keyframes wave-reverse {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(0%); }
+}
 
 @layer base {
   :root {
     color-scheme: light;
+  }
+
+  html {
     background-color: white;
   }
 
-  .dark {
+  html.dark {
     color-scheme: dark;
     background-color: black;
+  }
+
+  body {
+    background-color: inherit;
   }
 }
 

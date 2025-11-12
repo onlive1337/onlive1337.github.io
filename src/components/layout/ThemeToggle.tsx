@@ -21,14 +21,14 @@ export function ThemeToggle() {
     >
       <div className="relative h-5 w-5 overflow-hidden">
         <Sun 
-          className={`absolute h-5 w-5 transform transition-all duration-300 ease-spring text-white
+          className={`absolute h-5 w-5 transform transition-all duration-300 ease-spring text-yellow-500 dark:text-yellow-400
             ${theme === 'dark' 
               ? 'translate-y-0 rotate-0 opacity-100' 
               : 'translate-y-full rotate-90 opacity-0'
             }`}
         />
         <Moon 
-          className={`absolute h-5 w-5 transform transition-all duration-300 ease-spring text-black
+          className={`absolute h-5 w-5 transform transition-all duration-300 ease-spring text-gray-700 dark:text-gray-300
             ${theme === 'dark' 
               ? '-translate-y-full -rotate-90 opacity-0' 
               : 'translate-y-0 rotate-0 opacity-100'

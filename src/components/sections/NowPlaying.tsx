@@ -1,24 +1,14 @@
 "use client"
-import { useEffect, useState, memo } from 'react';
+import { memo } from 'react';
 import Image from 'next/image';
 import { Music, Volume2 } from 'lucide-react';
-import { fetchMusicData } from '@/utils/api';
-
-interface NowPlayingData {
-  name: string;
-  artists: string;
-  album: string;
-  albumImageUrl: string;
-  url: string;
-  isPlaying: boolean;
-  platform?: string;
-}
+import { useMusic } from '@/hooks/use-music';
 
 const AlbumCover = memo(function AlbumCover({
-  url, 
-  alt 
-}: { 
-  url: string; 
+  url,
+  alt
+}: {
+  url: string;
   alt: string;
 }) {
   return (
@@ -37,28 +27,7 @@ const AlbumCover = memo(function AlbumCover({
 });
 
 export function NowPlaying() {
-  const [data, setData] = useState<NowPlayingData | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<boolean>(false);
-
-  const fetchNowPlaying = async () => {
-    try {
-      setError(false);
-      const trackData = await fetchMusicData<NowPlayingData>();
-      setData(trackData);
-    } catch (err) {
-      console.error('Failed to fetch current track:', err);
-      setError(true);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchNowPlaying();
-    const interval = setInterval(fetchNowPlaying, 30000);
-    return () => clearInterval(interval);
-  }, []);
+  const { music: data, isLoading, isError: error } = useMusic();
 
   if (isLoading) {
     return (
@@ -146,7 +115,7 @@ export function NowPlaying() {
       >
         <div className="flex items-center gap-4 p-4">
           {data.albumImageUrl && (
-            <AlbumCover url={data.albumImageUrl} alt={data.album} />
+            <AlbumCover url={data.albumImageUrl} alt={data.album || 'Album Art'} />
           )}
           <div className="min-w-0 flex-1">
             <div className="flex items-center">

@@ -5,51 +5,37 @@ interface PlayableMedia {
 }
 
 export async function fetchFromAPI<T>(
-  endpoint: string, 
-  options?: RequestInit,
-  timeout: number = 8000
+  endpoint: string,
+  options?: RequestInit
 ): Promise<T | null> {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), timeout);
-  
   try {
     const response = await fetch(`${API_BASE_URL}/${endpoint}`, {
       ...options,
-      signal: controller.signal,
       headers: {
         'Content-Type': 'application/json',
         ...options?.headers,
       },
     });
 
-    clearTimeout(timeoutId);
-    
     if (!response.ok) {
       console.warn(`API error (${endpoint}): ${response.status}`);
-      return null;
+      throw new Error(`API error: ${response.status}`);
     }
-    
+
     const contentType = response.headers.get('content-type');
     if (!contentType || !contentType.includes('application/json')) {
       console.warn(`API returned non-JSON (${endpoint}): ${contentType}`);
       return null;
     }
-    
+
     return await response.json() as T;
   } catch (error) {
-    clearTimeout(timeoutId);
-    
-    if (error instanceof DOMException && error.name === 'AbortError') {
-      console.warn(`Request timeout for ${endpoint}`);
-    } else {
-      console.error(`Request error for ${endpoint}:`, error);
-    }
-    
-    return null;
+    console.error(`Request error for ${endpoint}:`, error);
+    throw error;
   }
 }
 
-export async function fetchMusicData<T extends PlayableMedia>(timeout: number = 8000): Promise<T | null> {
+export async function fetchMusicData<T extends PlayableMedia>(): Promise<T | null> {
   type LastFmTrack = {
     name: string;
     artist: string;
@@ -60,7 +46,7 @@ export async function fetchMusicData<T extends PlayableMedia>(timeout: number = 
   };
   type LastFmResponse = { tracks: LastFmTrack[] };
 
-  const resp = await fetchFromAPI<LastFmResponse>('lastfm', undefined, timeout);
+  const resp = await fetchFromAPI<LastFmResponse>('lastfm');
   if (!resp || !Array.isArray(resp.tracks) || resp.tracks.length === 0) {
     return null;
   }

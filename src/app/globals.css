@@ -43,8 +43,7 @@
               border-color 700ms ease-in-out,
               color 700ms ease-in-out,
               fill 700ms ease-in-out,
-              stroke 700ms ease-in-out,
-              opacity 700ms ease-in-out;
+              stroke 700ms ease-in-out;
 }
 
 @media (max-width: 767px) {

@@ -1,5 +1,6 @@
 'use client';
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
+import { motion } from 'framer-motion';
 import { cn } from '@/utils/cn';
 
 interface AnimationProps {
@@ -8,80 +9,43 @@ interface AnimationProps {
   delay?: number;
 }
 
-export function InitialFadeIn({ 
-  children, 
-  className, 
-  delay = 0 
+export function InitialFadeIn({
+  children,
+  className,
+  delay = 0
 }: AnimationProps) {
-  const [isVisible, setIsVisible] = useState(false);
-  
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsVisible(true);
-    }, delay);
-    
-    return () => clearTimeout(timer);
-  }, [delay]);
-
   return (
-    <div
-      className={cn(
-        'transition-all duration-1000 ease-out',
-        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4',
-        className
-      )}
+    <motion.div
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{
+        duration: 1,
+        delay: delay / 1000,
+        ease: "easeOut"
+      }}
+      className={cn('will-change-transform will-change-opacity', className)}
     >
       {children}
-    </div>
+    </motion.div>
   );
 }
 
-export function ScrollFadeIn({ 
-  children, 
-  className 
+export function ScrollFadeIn({
+  children,
+  className
 }: Omit<AnimationProps, 'delay'>) {
-  const [isVisible, setIsVisible] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const currentRef = ref.current;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          if (currentRef) {
-            observer.unobserve(currentRef);
-          }
-        }
-      },
-      {
-        threshold: 0.2,
-        rootMargin: '-50px'
-      }
-    );
-
-    if (currentRef) {
-      observer.observe(currentRef);
-    }
-
-    return () => {
-      if (currentRef) {
-        observer.unobserve(currentRef);
-      }
-    };
-  }, []);
-
   return (
-    <div
-      ref={ref}
-      className={cn(
-        'transition-all duration-1000 ease-out will-change-transform will-change-opacity',
-        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8',
-        className
-      )}
+    <motion.div
+      initial={{ opacity: 0, y: 32 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{
+        duration: 1,
+        ease: "easeOut"
+      }}
+      className={cn('will-change-transform will-change-opacity', className)}
     >
       {children}
-    </div>
+    </motion.div>
   );
 }

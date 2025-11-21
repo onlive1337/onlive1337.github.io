@@ -1,40 +1,10 @@
 "use client"
-import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Gamepad2 } from 'lucide-react';
-import { fetchFromAPI } from '@/utils/api';
-
-interface GameData {
-  name: string;
-  gameId: string;
-  imageUrl: string;
-  isPlaying: boolean;
-  playTime2Weeks?: number;
-}
+import { useSteam } from '@/hooks/use-steam';
 
 export function Gaming() {
-  const [data, setData] = useState<GameData | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<boolean>(false);
-
-  const fetchGaming = async () => {
-    try {
-      setError(false);
-      const gameData = await fetchFromAPI<GameData>('steam');
-      setData(gameData);
-    } catch (err) {
-      console.error('Failed to fetch Steam activity:', err);
-      setError(true);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchGaming();
-    const interval = setInterval(fetchGaming, 120000);
-    return () => clearInterval(interval);
-  }, []);
+  const { game: data, isLoading, isError: error } = useSteam();
 
   if (isLoading) {
     return (

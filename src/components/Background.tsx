@@ -7,7 +7,8 @@ export function Background() {
   const [mounted, setMounted] = useState(false);
  
   useEffect(() => {
-    setMounted(true);
+    const raf = requestAnimationFrame(() => setMounted(true));
+    return () => cancelAnimationFrame(raf);
   }, []);
 
   if (!mounted) return null;

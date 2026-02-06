@@ -79,7 +79,6 @@ html.js-loading * {
 }
 
 html, body {
-  min-height: 100vh;
   min-height: 100dvh;
   background-color: inherit;
   contain: content;
@@ -98,20 +97,6 @@ body {
 
 [data-theme="dark"] {
   --overscroll: #000000;
-}
-
-@layer components {
-  .interactive-hover {
-    @apply transition-all duration-300 ease-out;
-  }
-  
-  .interactive-hover:hover {
-    @apply scale-105;
-  }
-  
-  .interactive-hover:active {
-    @apply scale-95;
-  }
 }
 
 input, textarea {

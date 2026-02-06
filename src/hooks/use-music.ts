@@ -11,7 +11,20 @@ interface PlayableMedia {
     platform?: string;
 }
 
-const fetcher = (url: string) => fetchFromAPI<any>(url);
+interface Track {
+    name: string;
+    artist: string;
+    album: string;
+    albumImageUrl: string;
+    url: string;
+    isNowPlaying?: boolean;
+}
+
+interface LastFMResponse {
+    tracks?: Track[];
+}
+
+const fetcher = (url: string) => fetchFromAPI<LastFMResponse>(url);
 
 export function useMusic() {
     const { data, error, isLoading } = useSWR('lastfm', fetcher, {
@@ -24,7 +37,7 @@ export function useMusic() {
         const tracks = data.tracks;
         if (!Array.isArray(tracks) || tracks.length === 0) return null;
 
-        const now = tracks.find((t: any) => t.isNowPlaying) || tracks[0];
+        const now = tracks.find((t) => t.isNowPlaying) || tracks[0];
 
         return {
             name: now.name,

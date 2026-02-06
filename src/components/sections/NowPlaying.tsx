@@ -1,23 +1,67 @@
 "use client"
-import { memo } from 'react';
+import { memo, useState, useEffect } from 'react';
 import Image from 'next/image';
 import { Music, Volume2 } from 'lucide-react';
 import { useMusic } from '@/hooks/use-music';
 
 const AlbumCover = memo(function AlbumCover({
-  url,
-  alt
+  alt,
+  trackName,
+  artistName
 }: {
-  url: string;
   alt: string;
+  trackName?: string;
+  artistName?: string;
 }) {
+  const [appleMusicUrl, setAppleMusicUrl] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (!trackName || !artistName) {
+      setAppleMusicUrl(null);
+      setIsLoading(false);
+      return;
+    }
+
+    const fetchAppleMusicCover = async () => {
+      setIsLoading(true);
+      try {
+        const query = encodeURIComponent(`${trackName} ${artistName}`);
+        const response = await fetch(`https://itunes.apple.com/search?term=${query}&entity=song&limit=1`);
+        const data = await response.json();
+        
+        if (data.results && data.results[0]) {
+          const artwork = data.results[0].artworkUrl100.replace('100x100bb', '300x300bb');
+          setAppleMusicUrl(artwork);
+        } else {
+          setAppleMusicUrl(null);
+        }
+      } catch (err) {
+        console.error('Failed to fetch Apple Music cover:', err);
+        setAppleMusicUrl(null);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    void fetchAppleMusicCover();
+  }, [trackName, artistName]);
+
+  if (isLoading || !appleMusicUrl) {
+    return (
+      <div className="relative h-16 w-16 shrink-0 bg-gray-100/50 dark:bg-gray-800/50 rounded-lg flex items-center justify-center border border-gray-200/50 dark:border-gray-700/50">
+        <Music className={`h-8 w-8 text-gray-400 dark:text-gray-500 ${isLoading ? 'animate-pulse' : ''}`} />
+      </div>
+    );
+  }
+
   return (
-    <div className="relative h-16 w-16 flex-shrink-0">
+    <div className="relative h-16 w-16 shrink-0">
       <Image
-        src={url}
+        src={appleMusicUrl}
         alt={alt}
         width={300}
-        height={140}
+        height={300}
         className="rounded-lg object-cover absolute inset-0 w-full h-full"
         quality={75}
         sizes="64px"
@@ -58,7 +102,7 @@ export function NowPlaying() {
         </h2>
         <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white/30 dark:bg-black/30 backdrop-blur-md">
           <div className="flex items-center gap-4">
-            <div className="h-16 w-16 flex-shrink-0 bg-gray-100/50 dark:bg-gray-800/50 rounded-lg flex items-center justify-center">
+            <div className="h-16 w-16 shrink-0 bg-gray-100/50 dark:bg-gray-800/50 rounded-lg flex items-center justify-center">
               <Music className="h-8 w-8 text-gray-400 dark:text-gray-500" />
             </div>
             <div>
@@ -84,7 +128,7 @@ export function NowPlaying() {
         </h2>
         <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white/30 dark:bg-black/30 backdrop-blur-md">
           <div className="flex items-center gap-4">
-            <div className="h-16 w-16 flex-shrink-0 bg-gray-100/50 dark:bg-gray-800/50 rounded-lg flex items-center justify-center">
+            <div className="h-16 w-16 shrink-0 bg-gray-100/50 dark:bg-gray-800/50 rounded-lg flex items-center justify-center">
               <Music className="h-8 w-8 text-gray-400 dark:text-gray-500" />
             </div>
             <div>
@@ -114,9 +158,11 @@ export function NowPlaying() {
         className="group block rounded-xl border border-gray-200 dark:border-gray-800 bg-white/30 dark:bg-black/30 backdrop-blur-md hover:bg-white/40 dark:hover:bg-black/40 transition-all overflow-hidden relative"
       >
         <div className="flex items-center gap-4 p-4">
-          {data.albumImageUrl && (
-            <AlbumCover url={data.albumImageUrl} alt={data.album || 'Album Art'} />
-          )}
+          <AlbumCover 
+            alt={data.album || 'Album Art'} 
+            trackName={data.name}
+            artistName={data.artists}
+          />
           <div className="min-w-0 flex-1">
             <div className="flex items-center">
               <h3 className="font-medium text-gray-900 dark:text-white text-base truncate group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors flex-1">

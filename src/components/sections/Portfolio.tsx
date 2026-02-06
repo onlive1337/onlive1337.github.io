@@ -49,7 +49,7 @@ export function Portfolio() {
   };
 
   useEffect(() => {
-    fetchRepos();
+    void fetchRepos();
   }, []);
 
   return (

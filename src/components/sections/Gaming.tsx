@@ -33,7 +33,7 @@ export function Gaming() {
         </h2>
         <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white/30 dark:bg-black/30 backdrop-blur-md w-full">
           <div className="flex items-center gap-4">
-            <div className="h-16 w-16 flex-shrink-0 bg-gray-100/50 dark:bg-gray-800/50 rounded-lg flex items-center justify-center">
+            <div className="h-16 w-16 shrink-0 bg-gray-100/50 dark:bg-gray-800/50 rounded-lg flex items-center justify-center">
               <Gamepad2 className="h-8 w-8 text-gray-400 dark:text-gray-500" />
             </div>
             <div>
@@ -58,7 +58,7 @@ export function Gaming() {
       {!data ? (
         <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white/30 dark:bg-black/30 backdrop-blur-md w-full">
           <div className="flex items-center gap-4">
-            <div className="h-16 w-16 flex-shrink-0 bg-gray-100/50 dark:bg-gray-800/50 rounded-lg flex items-center justify-center">
+            <div className="h-16 w-16 shrink-0 bg-gray-100/50 dark:bg-gray-800/50 rounded-lg flex items-center justify-center">
               <Gamepad2 className="h-8 w-8 text-gray-400 dark:text-gray-500" />
             </div>
             <div>
@@ -79,7 +79,7 @@ export function Gaming() {
           className="group block rounded-xl border border-gray-200 dark:border-gray-800 bg-white/30 dark:bg-black/30 backdrop-blur-md hover:bg-white/40 dark:hover:bg-black/40 transition-all overflow-hidden w-full"
         >
           <div className="flex items-center gap-4 p-4">
-            <div className="relative h-16 w-16 flex-shrink-0">
+            <div className="relative h-16 w-16 shrink-0">
               <Image
                 src={data.imageUrl}
                 alt={data.name}

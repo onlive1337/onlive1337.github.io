@@ -1,7 +1,7 @@
 "use client"
-import { Github } from "lucide-react"
 import dynamic from 'next/dynamic'
 
+const Github = dynamic(() => import('../icons/Github'))
 const Steam = dynamic(() => import('../icons/Steam'))
 const Discord = dynamic(() => import('../icons/Discord'))
 const Telegram = dynamic(() => import('../icons/Telegram'))

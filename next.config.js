@@ -13,6 +13,11 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'cdn.cloudflare.steamstatic.com',
         pathname: '/steam/**'
+      },
+      {
+        protocol: 'https',
+        hostname: 'is*.mzstatic.com',
+        pathname: '/**'
       }
     ]
   },

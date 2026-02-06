@@ -36,7 +36,7 @@ export function Analytics() {
   }, []);
 
   useEffect(() => {
-    updateAnalytics();
+    void updateAnalytics();
   }, [updateAnalytics]);
 
   if (loading) {

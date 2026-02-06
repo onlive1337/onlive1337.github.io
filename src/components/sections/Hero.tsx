@@ -178,9 +178,16 @@ export const Hero = memo(function Hero() {
   }, []);
 
   useEffect(() => {
-    fetchStatus();
-    const interval = setInterval(fetchStatus, 60000);
-    return () => clearInterval(interval);
+    const raf = requestAnimationFrame(() => {
+      void fetchStatus();
+    });
+    const interval = setInterval(() => {
+      void fetchStatus();
+    }, 60000);
+    return () => {
+      cancelAnimationFrame(raf);
+      clearInterval(interval);
+    };
   }, [fetchStatus]);
 
   return (

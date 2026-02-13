@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, memo } from "react";
 import Link from "next/link";
 import { fetchFromAPI } from "@/utils/api";
 import { GithubRepo } from "@/types";
@@ -25,12 +25,12 @@ const getTopicColor = (topic: string) => {
   return colors[topic.toLowerCase()] || "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300";
 };
 
-export function Portfolio() {
+export const Portfolio = memo(function Portfolio() {
   const [repos, setRepos] = useState<GithubRepo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<boolean>(false);
 
-  const fetchRepos = async () => {
+  const fetchRepos = useCallback(async () => {
     try {
       setIsLoading(true);
       setError(false);
@@ -46,11 +46,11 @@ export function Portfolio() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     void fetchRepos();
-  }, []);
+  }, [fetchRepos]);
 
   return (
     <section id="portfolio" className="py-16">
@@ -132,4 +132,4 @@ export function Portfolio() {
       </div>
     </section>
   );
-}
+});

@@ -1,8 +1,10 @@
 "use client"
-import { memo, useState, useEffect } from 'react';
+import { memo, useState, useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import { Music, Volume2 } from 'lucide-react';
 import { useMusic } from '@/hooks/use-music';
+
+const coverCache = new Map<string, string>();
 
 const AlbumCover = memo(function AlbumCover({
   alt,
@@ -15,6 +17,45 @@ const AlbumCover = memo(function AlbumCover({
 }) {
   const [appleMusicUrl, setAppleMusicUrl] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const abortControllerRef = useRef<AbortController | null>(null);
+
+  const fetchCover = useCallback(async (track: string, artist: string) => {
+    const cacheKey = `${track}-${artist}`;
+
+    if (coverCache.has(cacheKey)) {
+      setAppleMusicUrl(coverCache.get(cacheKey)!);
+      setIsLoading(false);
+      return;
+    }
+
+    abortControllerRef.current?.abort();
+    abortControllerRef.current = new AbortController();
+
+    setIsLoading(true);
+    try {
+      const query = encodeURIComponent(`${track} ${artist}`);
+      const response = await fetch(
+        `https://itunes.apple.com/search?term=${query}&entity=song&limit=1`,
+        { signal: abortControllerRef.current.signal }
+      );
+      const data = await response.json();
+
+      if (data.results && data.results[0]) {
+        const artwork = data.results[0].artworkUrl100.replace('100x100bb', '300x300bb');
+        coverCache.set(cacheKey, artwork);
+        setAppleMusicUrl(artwork);
+      } else {
+        setAppleMusicUrl(null);
+      }
+    } catch (err) {
+      if (err instanceof Error && err.name !== 'AbortError') {
+        console.error('Failed to fetch Apple Music cover:', err);
+      }
+      setAppleMusicUrl(null);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
     if (!trackName || !artistName) {
@@ -23,29 +64,12 @@ const AlbumCover = memo(function AlbumCover({
       return;
     }
 
-    const fetchAppleMusicCover = async () => {
-      setIsLoading(true);
-      try {
-        const query = encodeURIComponent(`${trackName} ${artistName}`);
-        const response = await fetch(`https://itunes.apple.com/search?term=${query}&entity=song&limit=1`);
-        const data = await response.json();
-        
-        if (data.results && data.results[0]) {
-          const artwork = data.results[0].artworkUrl100.replace('100x100bb', '300x300bb');
-          setAppleMusicUrl(artwork);
-        } else {
-          setAppleMusicUrl(null);
-        }
-      } catch (err) {
-        console.error('Failed to fetch Apple Music cover:', err);
-        setAppleMusicUrl(null);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    void fetchCover(trackName, artistName);
 
-    void fetchAppleMusicCover();
-  }, [trackName, artistName]);
+    return () => {
+      abortControllerRef.current?.abort();
+    };
+  }, [trackName, artistName, fetchCover]);
 
   if (isLoading || !appleMusicUrl) {
     return (
@@ -70,7 +94,7 @@ const AlbumCover = memo(function AlbumCover({
   );
 });
 
-export function NowPlaying() {
+export const NowPlaying = memo(function NowPlaying() {
   const { music: data, isLoading, isError: error } = useMusic();
 
   if (isLoading) {
@@ -185,4 +209,4 @@ export function NowPlaying() {
       </a>
     </div>
   );
-}
+});

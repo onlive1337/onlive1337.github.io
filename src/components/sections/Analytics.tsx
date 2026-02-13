@@ -1,10 +1,10 @@
 "use client"
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, memo } from 'react';
 import { Terminal, Loader2 } from 'lucide-react';
-import { fetchFromAPI } from '@/utils/api';
+import { fetchFromAPI, API_BASE_URL } from '@/utils/api';
 import type { AnalyticsData } from '@/types/analytics';
 
-export function Analytics() {
+export const Analytics = memo(function Analytics() {
   const [data, setData] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<boolean>(false);
@@ -13,7 +13,7 @@ export function Analytics() {
     try {
       setError(false);
       
-      await fetch('https://portfolio-api-taupe-theta.vercel.app/api/analytics', { 
+      await fetch(`${API_BASE_URL}/analytics`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -113,4 +113,4 @@ export function Analytics() {
       </div>
     </div>
   );
-}
+});

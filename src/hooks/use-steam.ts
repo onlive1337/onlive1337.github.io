@@ -16,6 +16,10 @@ export function useSteam() {
         refreshInterval: 60000,
         dedupingInterval: 30000,
         fallbackData: null,
+        shouldRetryOnError: true,
+        errorRetryCount: 3,
+        errorRetryInterval: 10000,
+        revalidateOnFocus: false,
     });
 
     return {

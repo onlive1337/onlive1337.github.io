@@ -1,21 +1,28 @@
-import { memo, useEffect, useState } from 'react';
+import { memo, useEffect, useState, useCallback, useRef } from 'react';
+
+const BIRTH_DATE = new Date('2007-06-30').getTime();
+const MS_PER_YEAR = 1000 * 60 * 60 * 24 * 365.25;
 
 export const PreciseAge = memo(function PreciseAge() {
- const [age, setAge] = useState('');
+ const [age, setAge] = useState(() => {
+   const diff = (Date.now() - BIRTH_DATE) / MS_PER_YEAR;
+   return diff.toFixed(7);
+ });
+ const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+ const calculateAge = useCallback(() => {
+   const diff = (Date.now() - BIRTH_DATE) / MS_PER_YEAR;
+   setAge(diff.toFixed(7));
+ }, []);
 
  useEffect(() => {
-   const calculateAge = () => {
-     const birthDate = new Date('2007-06-30');
-     const now = new Date();
-     const diff = (now.getTime() - birthDate.getTime()) / (1000 * 60 * 60 * 24 * 365.25);
-     setAge(diff.toFixed(7));
+   intervalRef.current = setInterval(calculateAge, 250);
+   return () => {
+     if (intervalRef.current) {
+       clearInterval(intervalRef.current);
+     }
    };
-
-   calculateAge();
-   const interval = setInterval(calculateAge, 100);
-
-   return () => clearInterval(interval);
- }, []);
+ }, [calculateAge]);
 
  return (
    <span className="font-mono bg-gradient-to-r from-blue-500 to-purple-500 text-transparent bg-clip-text">

@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, memo } from 'react';
 
 const technologies = {
   languages: [
@@ -30,7 +30,7 @@ const technologies = {
   ]
 };
 
-export function Technologies() {
+export const Technologies = memo(function Technologies() {
   const [isVisible, setIsVisible] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const ref = useRef<HTMLElement>(null);
@@ -113,4 +113,4 @@ export function Technologies() {
       </div>
     </section>
   );
-}
+});

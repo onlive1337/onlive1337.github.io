@@ -31,6 +31,10 @@ export function useMusic() {
         refreshInterval: 10000,
         dedupingInterval: 5000,
         fallbackData: null,
+        shouldRetryOnError: true,
+        errorRetryCount: 3,
+        errorRetryInterval: 5000,
+        revalidateOnFocus: false,
     });
 
     const musicData: PlayableMedia | null = data?.tracks ? (() => {

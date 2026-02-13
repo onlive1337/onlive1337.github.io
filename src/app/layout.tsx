@@ -22,7 +22,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning className="js-loading">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <Script id="prevent-flash" strategy="beforeInteractive">
           {`
@@ -42,7 +42,7 @@ export default function RootLayout({
               window.addEventListener('load', removeLoadingClass);
             })();
           `}
-        </Script><title></title>
+        </Script>
       </head>
       <body className={inter.className}>
         <ThemeProvider

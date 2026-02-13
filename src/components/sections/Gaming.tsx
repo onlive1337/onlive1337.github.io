@@ -1,9 +1,10 @@
 "use client"
+import { memo } from 'react';
 import Image from 'next/image';
 import { Gamepad2 } from 'lucide-react';
 import { useSteam } from '@/hooks/use-steam';
 
-export function Gaming() {
+export const Gaming = memo(function Gaming() {
   const { game: data, isLoading, isError: error } = useSteam();
 
   if (isLoading) {
@@ -107,4 +108,4 @@ export function Gaming() {
       )}
     </div>
   );
-}
+});

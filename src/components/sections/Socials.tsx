@@ -1,4 +1,5 @@
 "use client"
+import { memo } from 'react'
 import dynamic from 'next/dynamic'
 
 const Github = dynamic(() => import('../icons/Github'))
@@ -33,7 +34,7 @@ const socials = [
   },
 ] as const;
 
-export function Socials() {
+export const Socials = memo(function Socials() {
   return (
     <section id="socials" className="py-16">
       <div className="container mx-auto px-4">
@@ -61,4 +62,4 @@ export function Socials() {
       </div>
     </section>
   )
-}
+});

@@ -72,6 +72,22 @@ export const Gaming = memo(function Gaming() {
             </div>
           </div>
         </div>
+      ) : !data.imageUrl || !data.name || !data.gameId ? (
+        <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white/30 dark:bg-black/30 backdrop-blur-md w-full">
+          <div className="flex items-center gap-4">
+            <div className="h-16 w-16 shrink-0 bg-gray-100/50 dark:bg-gray-800/50 rounded-lg flex items-center justify-center">
+              <Gamepad2 className="h-8 w-8 text-gray-400 dark:text-gray-500" />
+            </div>
+            <div>
+              <p className="font-medium text-gray-900 dark:text-white">
+                Not Playing
+              </p>
+              <p className="text-gray-500 dark:text-gray-400">
+                No recent activity
+              </p>
+            </div>
+          </div>
+        </div>
       ) : (
         <a
           href={`https://store.steampowered.com/app/${data.gameId}`}

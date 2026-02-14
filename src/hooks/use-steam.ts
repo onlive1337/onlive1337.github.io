@@ -1,21 +1,22 @@
 import useSWR from 'swr';
-import { fetchFromAPI } from '@/utils/api';
+import { fetchFromAPIWithMeta, FetchResult } from '@/utils/api';
+import { SteamData } from '@/types';
 
-interface GameData {
-    name: string;
-    gameId: string;
-    imageUrl: string;
-    isPlaying: boolean;
-    playTime2Weeks?: number;
+interface SteamState {
+    game: SteamData | null;
+    isLoading: boolean;
+    isError: Error | undefined;
 }
 
-const fetcher = (url: string) => fetchFromAPI<GameData>(url);
+const fetcher = async (url: string): Promise<FetchResult<SteamData>> => {
+    return fetchFromAPIWithMeta<SteamData>(url);
+};
 
-export function useSteam() {
+export function useSteam(): SteamState {
     const { data, error, isLoading } = useSWR('steam', fetcher, {
         refreshInterval: 60000,
         dedupingInterval: 30000,
-        fallbackData: null,
+        fallbackData: undefined,
         shouldRetryOnError: true,
         errorRetryCount: 3,
         errorRetryInterval: 10000,
@@ -23,8 +24,8 @@ export function useSteam() {
     });
 
     return {
-        game: data,
+        game: data?.data ?? null,
         isLoading,
-        isError: error
+        isError: error || (data?.error ? new Error(data.error) : undefined)
     };
 }

@@ -9,14 +9,19 @@ interface FetchOptions extends RequestInit {
   retries?: number;
 }
 
+export interface FetchResult<T> {
+  data: T | null;
+  error?: string;
+}
+
 async function delay(ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-export async function fetchFromAPI<T>(
+export async function fetchFromAPIWithMeta<T>(
   endpoint: string,
   options?: FetchOptions
-): Promise<T | null> {
+): Promise<FetchResult<T>> {
   const url = `${API_BASE_URL}/${endpoint}`;
   const { timeout = DEFAULT_TIMEOUT, retries = MAX_RETRIES, ...fetchInit } = options || {};
 
@@ -38,29 +43,44 @@ export async function fetchFromAPI<T>(
 
       clearTimeout(timeoutId);
 
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        console.warn(`API returned non-JSON (${endpoint}): ${contentType}`);
+        if (attempt < retries) {
+          await delay(RETRY_DELAY * (attempt + 1));
+          continue;
+        }
+        return { data: null, error: 'Invalid response format' };
+      }
+
+      const data = await response.json();
+
+      if (data && typeof data === 'object' && 'error' in data && !response.ok) {
+        lastError = new Error(data.error || `API error: ${response.status}`);
+        if (attempt < retries) {
+          await delay(RETRY_DELAY * (attempt + 1));
+          continue;
+        }
+        return { data: null, error: data.error };
+      }
+
       if (!response.ok) {
         lastError = new Error(`API error: ${response.status}`);
         if (attempt < retries) {
           await delay(RETRY_DELAY * (attempt + 1));
           continue;
         }
-        throw lastError;
+        return { data: null, error: `HTTP ${response.status}` };
       }
 
-      const contentType = response.headers.get('content-type');
-      if (!contentType || !contentType.includes('application/json')) {
-        console.warn(`API returned non-JSON (${endpoint}): ${contentType}`);
-        return null;
-      }
-
-      return await response.json() as T;
+      return { data: data as T };
     } catch (error) {
       clearTimeout(timeoutId);
       lastError = error as Error;
 
       if (error instanceof Error && error.name === 'AbortError') {
         console.warn(`Request timeout for ${endpoint}`);
-      } else if (!(error instanceof Error && error.message.startsWith('API error:'))) {
+      } else {
         console.error(`Request error for ${endpoint} (attempt ${attempt + 1}):`, error);
       }
 
@@ -70,5 +90,18 @@ export async function fetchFromAPI<T>(
     }
   }
 
-  throw lastError || new Error(`Failed to fetch ${endpoint}`);
+  return { data: null, error: lastError?.message || 'Unknown error' };
+}
+
+export async function fetchFromAPI<T>(
+  endpoint: string,
+  options?: FetchOptions
+): Promise<T | null> {
+  const result = await fetchFromAPIWithMeta<T>(endpoint, options);
+
+  if (result.error) {
+    console.error(`API Error (${endpoint}):`, result.error);
+  }
+
+  return result.data;
 }

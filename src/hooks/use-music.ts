@@ -1,5 +1,6 @@
 import useSWR from 'swr';
-import { fetchFromAPI } from '@/utils/api';
+import { fetchFromAPIWithMeta, FetchResult } from '@/utils/api';
+import { LastFMData, Track } from '@/types';
 
 interface PlayableMedia {
     isPlaying: boolean;
@@ -11,37 +12,32 @@ interface PlayableMedia {
     platform?: string;
 }
 
-interface Track {
-    name: string;
-    artist: string;
-    album: string;
-    albumImageUrl: string;
-    url: string;
-    isNowPlaying?: boolean;
+interface MusicState {
+    music: PlayableMedia | null;
+    isLoading: boolean;
+    isError: Error | undefined;
 }
 
-interface LastFMResponse {
-    tracks?: Track[];
-}
+const fetcher = async (url: string): Promise<FetchResult<LastFMData>> => {
+    return fetchFromAPIWithMeta<LastFMData>(url);
+};
 
-const fetcher = (url: string) => fetchFromAPI<LastFMResponse>(url);
-
-export function useMusic() {
+export function useMusic(): MusicState {
     const { data, error, isLoading } = useSWR('lastfm', fetcher, {
         refreshInterval: 10000,
         dedupingInterval: 5000,
-        fallbackData: null,
+        fallbackData: undefined,
         shouldRetryOnError: true,
         errorRetryCount: 3,
         errorRetryInterval: 5000,
         revalidateOnFocus: false,
     });
 
-    const musicData: PlayableMedia | null = data?.tracks ? (() => {
-        const tracks = data.tracks;
+    const musicData: PlayableMedia | null = data?.data?.tracks ? (() => {
+        const tracks = data.data.tracks;
         if (!Array.isArray(tracks) || tracks.length === 0) return null;
 
-        const now = tracks.find((t) => t.isNowPlaying) || tracks[0];
+        const now = tracks.find((t: Track) => t.isNowPlaying) || tracks[0];
 
         return {
             name: now.name,
@@ -57,6 +53,6 @@ export function useMusic() {
     return {
         music: musicData,
         isLoading,
-        isError: error
+        isError: error || (data?.error ? new Error(data.error) : undefined)
     };
 }

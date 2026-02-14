@@ -2,7 +2,7 @@
 import { useEffect, useState, useCallback, memo } from 'react';
 import { Terminal, Loader2 } from 'lucide-react';
 import { fetchFromAPI, API_BASE_URL } from '@/utils/api';
-import type { AnalyticsData } from '@/types/analytics';
+import type { AnalyticsData } from '@/types';
 
 export const Analytics = memo(function Analytics() {
   const [data, setData] = useState<AnalyticsData | null>(null);

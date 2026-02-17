@@ -123,36 +123,43 @@ export default function Resume() {
                                 <h2 style={{ fontSize: '1rem', fontWeight: 'bold', color: '#111827', marginBottom: '0.75rem', paddingBottom: '0.5rem', borderBottom: '2px solid #d1d5db' }}>
                                     Skills
                                 </h2>
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
-                                    {[
-                                        { name: 'HTML/CSS', level: 90 },
-                                        { name: 'React/Vue', level: 75 },
-                                        { name: 'Bootstrap', level: 80 },
-                                        { name: 'Git/GitHub', level: 85 },
-                                        { name: 'JavaScript', level: 70 },
-                                        { name: 'Web Optimization', level: 85 },
-                                        { name: 'Responsive Design', level: 80 },
-                                        { name: 'Teamwork', level: 70 },
-                                        { name: 'Cross-Browser', level: 85 },
-                                        { name: 'TypeScript', level: 40 },
-                                    ].map((skill) => (
-                                        <div key={skill.name}>
-                                            <div style={{ fontSize: '0.75rem', fontWeight: '500', color: '#374151', marginBottom: '0.25rem' }}>
-                                                {skill.name}
-                                            </div>
-                                            <div style={{ width: '100%', backgroundColor: '#e5e7eb', borderRadius: '9999px', height: '6px' }}>
-                                                <div
-                                                    style={{
-                                                        backgroundColor: '#1f2937',
-                                                        height: '6px',
-                                                        borderRadius: '9999px',
-                                                        width: `${skill.level}%`
-                                                    }}
-                                                />
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
+                                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                                    <tbody>
+                                        {[
+                                            { name: 'HTML/CSS', level: 90 },
+                                            { name: 'React/Vue', level: 75 },
+                                            { name: 'Bootstrap', level: 80 },
+                                            { name: 'Git/GitHub', level: 85 },
+                                            { name: 'JavaScript', level: 70 },
+                                            { name: 'Web Optimization', level: 85 },
+                                            { name: 'Responsive Design', level: 80 },
+                                            { name: 'Teamwork', level: 70 },
+                                            { name: 'Cross-Browser', level: 85 },
+                                            { name: 'TypeScript', level: 40 },
+                                        ].map((skill) => (
+                                            <tr key={skill.name}>
+                                                <td style={{ paddingBottom: '8px', verticalAlign: 'top' }}>
+                                                    <div style={{ fontSize: '12px', fontWeight: '500', color: '#374151', marginBottom: '4px' }}>
+                                                        {skill.name}
+                                                    </div>
+                                                    <div style={{ width: '100%', backgroundColor: '#e5e7eb', borderRadius: '9999px', height: '6px', position: 'relative' }}>
+                                                        <div
+                                                            style={{
+                                                                backgroundColor: '#1f2937',
+                                                                height: '6px',
+                                                                borderRadius: '9999px',
+                                                                width: `${skill.level}%`,
+                                                                position: 'absolute',
+                                                                top: 0,
+                                                                left: 0
+                                                            }}
+                                                        />
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
 

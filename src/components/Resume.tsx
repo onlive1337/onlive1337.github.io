@@ -1,25 +1,28 @@
 "use client"
-import { Download, Mail, ArrowLeft, Loader2 } from 'lucide-react';
+import { Download, ArrowLeft, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { useRef, useState, useEffect } from 'react';
 
 export default function Resume() {
     const resumeRef = useRef<HTMLDivElement>(null);
     const [isGenerating, setIsGenerating] = useState(false);
-    const [html2pdf, setHtml2pdf] = useState<typeof import('html2pdf.js').default | null>(null);
+    const [isHtml2pdfReady, setIsHtml2pdfReady] = useState(false);
 
     useEffect(() => {
-        import('html2pdf.js').then((module) => {
-            setHtml2pdf(() => module.default);
+        import('html2pdf.js').then(() => {
+            setIsHtml2pdfReady(true);
         });
     }, []);
 
     const handleDownloadPDF = async () => {
-        if (!resumeRef.current || !html2pdf) return;
+        if (!resumeRef.current || !isHtml2pdfReady) return;
 
         setIsGenerating(true);
 
         try {
+            const html2pdfModule = await import('html2pdf.js');
+            const html2pdf = html2pdfModule.default || html2pdfModule;
+
             const element = resumeRef.current;
 
             const opt = {
@@ -62,7 +65,7 @@ export default function Resume() {
 
                     <button
                         onClick={handleDownloadPDF}
-                        disabled={isGenerating || !html2pdf}
+                        disabled={isGenerating || !isHtml2pdfReady}
                         className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         {isGenerating ? (
@@ -82,39 +85,45 @@ export default function Resume() {
                 {/* Resume Content */}
                 <div
                     ref={resumeRef}
-                    className="bg-white shadow-lg"
-                    style={{ width: '210mm', minHeight: '297mm', margin: '0 auto' }}
+                    className="shadow-lg"
+                    style={{
+                        width: '210mm',
+                        minHeight: '297mm',
+                        margin: '0 auto',
+                        backgroundColor: '#ffffff',
+                        color: '#111827'
+                    }}
                 >
                     {/* Header */}
-                    <div className="border-b-4 border-gray-800 p-8">
-                        <h1 className="text-4xl font-bold text-gray-900 mb-2">
+                    <div style={{ borderBottom: '4px solid #1f2937', padding: '2rem' }}>
+                        <h1 style={{ fontSize: '2.25rem', fontWeight: 'bold', color: '#111827', marginBottom: '0.5rem' }}>
                             Bobur Xamidov
                         </h1>
-                        <p className="text-xl text-gray-600">
+                        <p style={{ fontSize: '1.25rem', color: '#4b5563' }}>
                             Front-End Developer
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-3 gap-6 p-8">
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '1.5rem', padding: '2rem' }}>
                         {/* Left Column */}
-                        <div className="col-span-1 space-y-6">
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                             {/* Personal Info */}
                             <div>
-                                <h2 className="text-base font-bold text-gray-900 mb-3 pb-2 border-b-2 border-gray-300">
+                                <h2 style={{ fontSize: '1rem', fontWeight: 'bold', color: '#111827', marginBottom: '0.75rem', paddingBottom: '0.5rem', borderBottom: '2px solid #d1d5db' }}>
                                     Personal Info
                                 </h2>
-                                <div className="flex items-start gap-2 text-xs text-gray-700">
-                                    <Mail className="w-3 h-3 mt-0.5 flex-shrink-0" />
-                                    <span className="break-all">onswix@gmail.com</span>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.75rem', color: '#374151' }}>
+                                    <span style={{ fontSize: '0.875rem' }}>✉</span>
+                                    <span style={{ wordBreak: 'break-all' }}>onswix@gmail.com</span>
                                 </div>
                             </div>
 
                             {/* Skills */}
                             <div>
-                                <h2 className="text-base font-bold text-gray-900 mb-3 pb-2 border-b-2 border-gray-300">
+                                <h2 style={{ fontSize: '1rem', fontWeight: 'bold', color: '#111827', marginBottom: '0.75rem', paddingBottom: '0.5rem', borderBottom: '2px solid #d1d5db' }}>
                                     Skills
                                 </h2>
-                                <div className="space-y-2.5">
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
                                     {[
                                         { name: 'HTML/CSS', level: 90 },
                                         { name: 'React/Vue', level: 75 },
@@ -128,13 +137,17 @@ export default function Resume() {
                                         { name: 'TypeScript', level: 40 },
                                     ].map((skill) => (
                                         <div key={skill.name}>
-                                            <div className="text-xs font-medium text-gray-700 mb-1">
+                                            <div style={{ fontSize: '0.75rem', fontWeight: '500', color: '#374151', marginBottom: '0.25rem' }}>
                                                 {skill.name}
                                             </div>
-                                            <div className="w-full bg-gray-200 rounded-full h-1.5">
+                                            <div style={{ width: '100%', backgroundColor: '#e5e7eb', borderRadius: '9999px', height: '6px' }}>
                                                 <div
-                                                    className="bg-gray-800 h-1.5 rounded-full"
-                                                    style={{ width: `${skill.level}%` }}
+                                                    style={{
+                                                        backgroundColor: '#1f2937',
+                                                        height: '6px',
+                                                        borderRadius: '9999px',
+                                                        width: `${skill.level}%`
+                                                    }}
                                                 />
                                             </div>
                                         </div>
@@ -144,64 +157,64 @@ export default function Resume() {
                         </div>
 
                         {/* Right Column */}
-                        <div className="col-span-2 space-y-6">
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                             {/* Summary */}
                             <div>
-                                <h2 className="text-base font-bold text-gray-900 mb-3 pb-2 border-b-2 border-gray-300">
+                                <h2 style={{ fontSize: '1rem', fontWeight: 'bold', color: '#111827', marginBottom: '0.75rem', paddingBottom: '0.5rem', borderBottom: '2px solid #d1d5db' }}>
                                     Summary
                                 </h2>
-                                <p className="text-xs text-gray-700 leading-relaxed text-justify">
+                                <p style={{ fontSize: '0.75rem', color: '#374151', lineHeight: '1.625', textAlign: 'justify' }}>
                                     Dynamic Front-end Developer with over a year of experience in creating engaging and responsive web applications, dedicated to enhancing user experiences through innovative solutions. Proficiency in JavaScript and React, coupled with a strong focus on responsive design, enables the delivery of visually appealing and functional interfaces. Actively involved in open-source projects, demonstrating a commitment to collaborative development and continuous improvement. Eager to contribute to a creative team environment that values innovation and autonomy, while tackling complex challenges and advancing technical skills in impact projects.
                                 </p>
                             </div>
 
                             {/* Work Experience */}
                             <div>
-                                <h2 className="text-base font-bold text-gray-900 mb-3 pb-2 border-b-2 border-gray-300">
+                                <h2 style={{ fontSize: '1rem', fontWeight: 'bold', color: '#111827', marginBottom: '0.75rem', paddingBottom: '0.5rem', borderBottom: '2px solid #d1d5db' }}>
                                     Work Experience
                                 </h2>
 
                                 {/* Job 1 */}
-                                <div className="mb-4">
-                                    <h3 className="text-sm font-semibold text-gray-900">
+                                <div style={{ marginBottom: '1rem' }}>
+                                    <h3 style={{ fontSize: '0.875rem', fontWeight: '600', color: '#111827' }}>
                                         Front-End Developer, IT Academy (Part-Time)
                                     </h3>
-                                    <p className="text-xs text-gray-500 mb-2">
+                                    <p style={{ fontSize: '0.75rem', color: '#6b7280', marginBottom: '0.5rem' }}>
                                         August 2024 - August 2025
                                     </p>
-                                    <ul className="list-disc list-inside space-y-0.5 text-xs text-gray-700 ml-2">
-                                        <li>Created custom UI components and implemented layouts using HTML5, CSS3, and JavaScript.</li>
-                                        <li>Participated in code reviews, feature planning, and design reviews.</li>
-                                        <li>Developed front-end user interfaces for several complex web applications with HTML, CSS, and JavaScript.</li>
-                                    </ul>
+                                    <div style={{ fontSize: '0.75rem', color: '#374151', marginLeft: '0.5rem' }}>
+                                        <p style={{ marginBottom: '0.125rem' }}>• Created custom UI components and implemented layouts using HTML5, CSS3, and JavaScript.</p>
+                                        <p style={{ marginBottom: '0.125rem' }}>• Participated in code reviews, feature planning, and design reviews.</p>
+                                        <p style={{ marginBottom: '0.125rem' }}>• Developed front-end user interfaces for several complex web applications with HTML, CSS, and JavaScript.</p>
+                                    </div>
                                 </div>
 
                                 {/* Job 2 */}
                                 <div>
-                                    <h3 className="text-sm font-semibold text-gray-900">
+                                    <h3 style={{ fontSize: '0.875rem', fontWeight: '600', color: '#111827' }}>
                                         System Administrator, PROWEB
                                     </h3>
-                                    <p className="text-xs text-gray-500 mb-2">
-                                        August 2025 - Present
+                                    <p style={{ fontSize: '0.75rem', color: '#6b7280', marginBottom: '0.5rem' }}>
+                                        August 2025 - February 2026
                                     </p>
-                                    <ul className="list-disc list-inside space-y-0.5 text-xs text-gray-700 ml-2">
-                                        <li>Experienced in implementing, configuring and troubleshooting a variety of hardware and software systems.</li>
-                                        <li>Provided 24/7 technical support for all computer systems and networks.</li>
-                                        <li>Performed system patches and upgrades in a timely manner.</li>
-                                    </ul>
+                                    <div style={{ fontSize: '0.75rem', color: '#374151', marginLeft: '0.5rem' }}>
+                                        <p style={{ marginBottom: '0.125rem' }}>• Experienced in implementing, configuring and troubleshooting a variety of hardware and software systems.</p>
+                                        <p style={{ marginBottom: '0.125rem' }}>• Provided 24/7 technical support for all computer systems and networks.</p>
+                                        <p style={{ marginBottom: '0.125rem' }}>• Performed system patches and upgrades in a timely manner.</p>
+                                    </div>
                                 </div>
                             </div>
 
                             {/* Education */}
                             <div>
-                                <h2 className="text-base font-bold text-gray-900 mb-3 pb-2 border-b-2 border-gray-300">
+                                <h2 style={{ fontSize: '1rem', fontWeight: 'bold', color: '#111827', marginBottom: '0.75rem', paddingBottom: '0.5rem', borderBottom: '2px solid #d1d5db' }}>
                                     Education
                                 </h2>
                                 <div>
-                                    <h3 className="text-sm font-semibold text-gray-900">
+                                    <h3 style={{ fontSize: '0.875rem', fontWeight: '600', color: '#111827' }}>
                                         Bachelor, ITPU (Software Engineer)
                                     </h3>
-                                    <p className="text-xs text-gray-500">
+                                    <p style={{ fontSize: '0.75rem', color: '#6b7280' }}>
                                         September 2025 - Present
                                     </p>
                                 </div>

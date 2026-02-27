@@ -222,7 +222,7 @@ export default function Resume() {
                                         Bachelor, ITPU (Software Engineer)
                                     </h3>
                                     <p style={{ fontSize: '0.75rem', color: '#6b7280' }}>
-                                        September 2025 - Present
+                                        September 2025 - 2029
                                     </p>
                                 </div>
                             </div>

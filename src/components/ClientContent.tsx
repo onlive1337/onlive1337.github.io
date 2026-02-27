@@ -5,7 +5,7 @@ import { InitialFadeIn, ScrollFadeIn } from '@/utils/Animations'
 
 const Technologies = dynamic(
   () => import('@/components/sections/Technologies').then(mod => mod.Technologies),
-  { 
+  {
     ssr: false,
     loading: () => <div className="h-96 opacity-0" />
   }
@@ -13,7 +13,7 @@ const Technologies = dynamic(
 
 const Portfolio = dynamic(
   () => import('@/components/sections/Portfolio').then(mod => mod.Portfolio),
-  { 
+  {
     ssr: false,
     loading: () => <div className="h-96" />
   }
@@ -26,7 +26,7 @@ const Socials = dynamic(
 
 const NowPlaying = dynamic(
   () => import('@/components/sections/NowPlaying').then(mod => mod.NowPlaying),
-  { 
+  {
     ssr: false,
     loading: () => <div className="h-40" />
   }
@@ -34,12 +34,19 @@ const NowPlaying = dynamic(
 
 const Gaming = dynamic(
   () => import('@/components/sections/Gaming').then(mod => mod.Gaming),
-  { 
+  {
     ssr: false,
     loading: () => <div className="h-40" />
   }
 );
 
+const Experience = dynamic(
+  () => import('@/components/sections/Experience').then(mod => mod.Experience),
+  {
+    ssr: false,
+    loading: () => <div className="h-96" />
+  }
+);
 
 const Analytics = dynamic(
   () => import('@/components/sections/Analytics').then(mod => mod.Analytics),
@@ -58,6 +65,12 @@ export function ClientContent() {
       <div className="space-y-32">
         <Suspense>
           <Technologies />
+        </Suspense>
+
+        <Suspense>
+          <ScrollFadeIn>
+            <Experience />
+          </ScrollFadeIn>
         </Suspense>
 
         <Suspense>

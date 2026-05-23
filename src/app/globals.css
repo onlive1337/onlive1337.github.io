@@ -98,6 +98,18 @@
   body {
     background-color: inherit;
   }
+
+  md-ripple {
+    --md-ripple-hover-color: var(--md-sys-color-primary);
+    --md-ripple-pressed-color: var(--md-sys-color-primary);
+    --md-ripple-hover-opacity: 0.08;
+    --md-ripple-pressed-opacity: 0.12;
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    overflow: hidden;
+    pointer-events: none;
+  }
 }
 
 *, 

@@ -1,115 +1,89 @@
 "use client";
-import { useEffect, useRef, useState, memo } from 'react';
+import { memo } from 'react';
+import { motion } from 'framer-motion';
+import { Ripple } from "@/components/ui/Ripple";
 
 const technologies = {
-  languages: [
-    { name: "TypeScript", color: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300" },
-    { name: "JavaScript", color: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300" },
-    { name: "Python", color: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300" }
-  ],
-  frontend: [
-    { name: "React", color: "bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-300" },
-    { name: "Next.js", color: "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300" },
-    { name: "TailwindCSS", color: "bg-sky-100 text-sky-800 dark:bg-sky-900 dark:text-sky-300" },
-    { name: "Redux", color: "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300" }
-  ],
-  backend: [
-    { name: "Node.js", color: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-300" },
-    { name: "Express", color: "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300" },
-    { name: "FastAPI", color: "bg-teal-100 text-teal-800 dark:bg-teal-900 dark:text-teal-300" },
-  ],
-  databases: [
-    { name: "PostgreSQL", color: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300" },
-    { name: "MongoDB", color: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300" },
-  ],
-  tools: [
-    { name: "Git", color: "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300" },
-    { name: "Docker", color: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300" },
-    { name: "VS Code", color: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300" },
-    { name: "Figma", color: "bg-violet-100 text-violet-800 dark:bg-violet-900 dark:text-violet-300" }
-  ]
+  languages: {
+    items: ["TypeScript", "JavaScript", "Python"],
+    chipStyle: "bg-md-primary-container text-md-on-primary-container border-md-primary/10",
+  },
+  frontend: {
+    items: ["React", "Next.js", "TailwindCSS", "Redux"],
+    chipStyle: "bg-md-secondary-container text-md-on-secondary-container border-md-secondary/10",
+  },
+  backend: {
+    items: ["Node.js", "Express", "FastAPI"],
+    chipStyle: "bg-md-tertiary-container text-md-on-tertiary-container border-md-tertiary/10",
+  },
+  databases: {
+    items: ["PostgreSQL", "MongoDB"],
+    chipStyle: "bg-md-primary-container/80 text-md-on-primary-container border-md-primary/10",
+  },
+  tools: {
+    items: ["Git", "Docker", "VS Code", "Figma"],
+    chipStyle: "bg-md-surface-variant text-md-on-surface-variant border-md-outline-variant/30",
+  }
+} as const;
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15
+    }
+  }
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 30, scale: 0.95 },
+  visible: {
+    opacity: 1, 
+    y: 0, 
+    scale: 1,
+    transition: { type: "spring" as const, stiffness: 100, damping: 15 }
+  }
 };
 
 export const Technologies = memo(function Technologies() {
-  const [isVisible, setIsVisible] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
-  const ref = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoaded(true);
-    }, 600);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  useEffect(() => {
-    if (!isLoaded) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
-      },
-      {
-        threshold: 0.1,
-        rootMargin: '-50px',
-      }
-    );
-
-    const currentRef = ref.current;
-    if (currentRef) {
-      observer.observe(currentRef);
-    }
-
-    return () => {
-      if (currentRef) {
-        observer.unobserve(currentRef);
-      }
-    };
-  }, [isLoaded]);
-
-  if (!isLoaded) {
-    return <div className="h-96 opacity-0" />;
-  }
-
   return (
-    <section
-      ref={ref}
-      id="technologies"
-      className="py-16 mt-32 transition-all duration-1000 ease-out"
-      style={{
-        opacity: isVisible ? 1 : 0,
-        transform: isVisible ? 'translateY(0)' : 'translateY(50px)',
-      }}
-    >
-      <div className="container mx-auto px-4">
-        <h2 className="mb-12 text-center text-3xl font-bold text-gray-900 dark:text-white">
+    <section id="technologies" className="py-16 scroll-mt-24">
+      <div className="container mx-auto px-4 max-w-5xl">
+        <h2 className="mb-10 text-center text-3xl font-extrabold tracking-tight font-display text-md-on-background">
           Technologies
         </h2>
-        <div className="grid gap-6 grid-cols-1">
-          {Object.entries(technologies).map(([category, items]) => (
-            <div
+        
+        <motion.div 
+          className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-center"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+        >
+          {Object.entries(technologies).map(([category, { items, chipStyle }]) => (
+            <motion.div
               key={category}
-              className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition-all hover:shadow-md dark:border-gray-800 dark:bg-black/40 dark:hover:bg-black/60"
+              variants={cardVariants}
+              className="rounded-[28px] border border-md-outline-variant/30 bg-md-surface-container-low p-6 shadow-sm hover:shadow-md hover:scale-[1.02] transition-all duration-300 relative overflow-hidden select-none"
             >
-              <h3 className="mb-4 text-xl font-semibold capitalize text-gray-900 dark:text-white">
+              <Ripple />
+              <h3 className="mb-5 text-lg font-bold capitalize font-display text-md-on-surface tracking-wide">
                 {category}
               </h3>
-              <div className="flex flex-wrap gap-2">
-                {items.map((item) => (
+              <div className="flex flex-wrap gap-2.5">
+                {items.map((name) => (
                   <span
-                    key={item.name}
-                    className={`rounded px-3 py-1 text-sm font-medium ${item.color}`}
+                    key={name}
+                    className={`rounded-full border px-3.5 py-1.5 text-xs font-semibold select-none shadow-sm transition-all duration-200 hover:brightness-95 dark:hover:brightness-110 active:scale-95 ${chipStyle}`}
                   >
-                    {item.name}
+                    {name}
                   </span>
                 ))}
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

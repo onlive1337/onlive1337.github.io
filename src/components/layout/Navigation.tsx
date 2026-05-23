@@ -1,119 +1,159 @@
 "use client"
 import Link from "next/link"
-import React, { memo, useState, useCallback, useEffect } from "react"
-import dynamic from 'next/dynamic'
-import { Menu, X } from 'lucide-react'
-import { InitialFadeIn } from '@/utils/Animations';
-
-const ThemeToggle = dynamic(() => import('./ThemeToggle').then(mod => mod.ThemeToggle), {
-  ssr: false,
-  loading: () => <div className="w-8 h-8" />
-})
+import { usePathname, useRouter } from "next/navigation"
+import React, { memo, useState, useEffect, useCallback } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import { Share2, Cpu, Briefcase, FolderGit2, FileText } from 'lucide-react'
+import { ThemeToggle } from './ThemeToggle'
+import { Ripple } from "@/components/ui/Ripple"
 
 const navigation = [
-  { name: "Socials", href: "#socials" },
-  { name: "Technologies", href: "#technologies" },
-  { name: "Experience", href: "#experience" },
-  { name: "Portfolio", href: "#portfolio" },
-  { name: "Resume", href: "/resume" },
+  { name: "Socials", href: "/#socials", hash: "#socials", icon: Share2 },
+  { name: "Technologies", href: "/#technologies", hash: "#technologies", icon: Cpu },
+  { name: "Experience", href: "/#experience", hash: "#experience", icon: Briefcase },
+  { name: "Portfolio", href: "/#portfolio", hash: "#portfolio", icon: FolderGit2 },
+  { name: "Resume", href: "/resume", hash: "/resume", icon: FileText },
 ] as const;
 
-const NavLinks = memo(() => (
-  <>
-    {navigation.map((item, index) => (
-      <InitialFadeIn key={item.name} delay={100 + index * 100}>
-        <Link
-          href={item.href}
-          className="text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors"
-        >
-          {item.name}
-        </Link>
-      </InitialFadeIn>
-    ))}
-  </>
-));
-
-NavLinks.displayName = 'NavLinks';
-
 function NavigationComponent() {
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const pathname = usePathname();
+  const router = useRouter();
+  const isResumePage = pathname === '/resume';
+  const [activeSection, setActiveSection] = useState<string>('');
 
-  const toggleMenu = useCallback(() => {
-    setMobileOpen(prev => !prev);
-  }, []);
-
-  const handleNavClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    setMobileOpen(false);
-
-    if (href.startsWith('#')) {
-      e.preventDefault();
-      const id = href.slice(1);
-
-      requestAnimationFrame(() => {
-        const el = document.getElementById(id);
-        if (el) {
-          el.scrollIntoView({ behavior: 'smooth' });
-        }
-      });
-    }
-  }, []);
-
+  // Track active section via Intersection Observer when on homepage
   useEffect(() => {
-    const onResize = () => {
-      if (window.innerWidth >= 640) setMobileOpen(false);
-    };
-    window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
-  }, []);
+    if (isResumePage) {
+      setActiveSection('/resume');
+      return;
+    }
 
+    const sections = ['socials', 'technologies', 'experience', 'portfolio'];
+    const observers = sections.map((id) => {
+      const el = document.getElementById(id);
+      if (!el) return null;
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              setActiveSection(`#${id}`);
+            }
+          });
+        },
+        { threshold: 0.3, rootMargin: '-20% 0px -40% 0px' }
+      );
+
+      observer.observe(el);
+      return { el, observer };
+    });
+
+    return () => {
+      observers.forEach((obs) => {
+        if (obs) obs.observer.unobserve(obs.el);
+      });
+    };
+  }, [isResumePage]);
+
+  const handleNavClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>, item: typeof navigation[number]) => {
+    if (item.hash === '/resume') return;
+
+    if (!isResumePage) {
+      e.preventDefault();
+      const id = item.hash.slice(1);
+      const el = document.getElementById(id);
+      if (el) {
+        setActiveSection(item.hash);
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  }, [isResumePage]);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-gray-200 dark:border-gray-800 bg-white/75 dark:bg-black supports-backdrop-filter:bg-white/75 supports-backdrop-filter:dark:bg-black/75 backdrop-blur-xl">
-      <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:justify-center">
-        {/* Mobile: burger button (left) */}
-        <button
-          onClick={toggleMenu}
-          className="inline-flex items-center justify-center rounded-lg p-2 text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors sm:hidden"
-          aria-label="Toggle menu"
-          aria-expanded={mobileOpen}
-        >
-          {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
+    <>
+      {/* Desktop Floating Pill Header */}
+      <header className="fixed top-6 left-1/2 -translate-x-1/2 z-50 hidden sm:flex h-14 max-w-2xl w-[90%] items-center justify-between px-6 rounded-full border border-md-outline-variant/30 bg-md-surface-container/80 backdrop-blur-lg shadow-md transition-all duration-300">
+        <nav className="flex items-center gap-2 w-full justify-between">
+          <div className="flex items-center gap-1.5">
+            {navigation.map((item) => {
+              const isActive = isResumePage 
+                ? item.hash === '/resume' 
+                : activeSection === item.hash;
 
-        {/* Desktop links */}
-        <div className="hidden sm:flex items-center justify-center gap-4 sm:gap-8">
-          <NavLinks />
-          <InitialFadeIn delay={400}>
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  onClick={(e) => handleNavClick(e, item)}
+                  className={`relative px-4 py-2 text-xs font-semibold select-none rounded-full transition-colors duration-300 ${
+                    isActive ? "text-md-on-primary-container" : "text-md-on-surface-variant hover:text-md-on-surface"
+                  }`}
+                >
+                  <Ripple />
+                  {isActive && (
+                    <motion.span
+                      layoutId="active-nav-pill-desktop"
+                      className="absolute inset-0 bg-md-primary-container rounded-full -z-10"
+                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                    />
+                  )}
+                  {item.name}
+                </Link>
+              );
+            })}
+          </div>
+          <div className="flex items-center">
             <ThemeToggle />
-          </InitialFadeIn>
-        </div>
+          </div>
+        </nav>
+      </header>
 
-        {/* Mobile: theme toggle (right) */}
-        <div className="sm:hidden">
-          <ThemeToggle />
-        </div>
-      </nav>
+      {/* Mobile M3 Bottom Navigation Bar */}
+      <nav className="fixed bottom-0 left-0 right-0 z-50 flex sm:hidden h-20 border-t border-md-outline-variant/20 bg-md-surface-container/90 backdrop-blur-md shadow-lg pb-safe select-none">
+        {navigation.map((item) => {
+          const Icon = item.icon;
+          const isActive = isResumePage 
+            ? item.hash === '/resume' 
+            : activeSection === item.hash;
 
-      {/* Mobile dropdown menu */}
-      <div
-        className={`sm:hidden overflow-hidden transition-all duration-300 ease-in-out ${
-          mobileOpen ? 'max-h-80 border-t border-gray-200 dark:border-gray-800' : 'max-h-0'
-        }`}
-      >
-        <div className="flex flex-col gap-1 px-4 py-3 bg-white/95 dark:bg-black/95 backdrop-blur-xl">
-          {navigation.map((item) => (
+          return (
             <Link
               key={item.name}
               href={item.href}
-              onClick={(e) => handleNavClick(e, item.href)}
-              className="rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white transition-colors"
+              onClick={(e) => handleNavClick(e, item)}
+              className="flex flex-col items-center justify-center flex-1 h-full py-1 text-center relative"
             >
-              {item.name}
+              <Ripple />
+              {/* Icon Container with active pill background */}
+              <div className="relative flex items-center justify-center h-8 w-14 rounded-full transition-colors duration-300 text-md-on-surface-variant">
+                {isActive && (
+                  <motion.span
+                    layoutId="active-nav-pill-mobile"
+                    className="absolute inset-0 bg-md-secondary-container rounded-full"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
+                <Icon className={`relative z-10 h-5 w-5 transition-transform duration-300 ${
+                  isActive ? "text-md-on-secondary-container scale-105" : "text-md-on-surface-variant"
+                }`} />
+              </div>
+              {/* Text Label */}
+              <span className={`mt-1 text-[10px] tracking-wide transition-all duration-300 ${
+                isActive ? "text-md-on-surface font-bold" : "text-md-on-surface-variant font-medium"
+              }`}>
+                {item.name}
+              </span>
             </Link>
-          ))}
+          );
+        })}
+        {/* Floating Mobile Theme Toggle (We put it in the bottom right corner or bottom nav) */}
+        <div className="absolute right-4 bottom-24 bg-md-surface-container-high/90 border border-md-outline-variant/30 rounded-full shadow-lg h-12 w-12 flex items-center justify-center backdrop-blur-md">
+          <ThemeToggle />
         </div>
-      </div>
-    </header>
+      </nav>
+      {/* Spacer to prevent bottom content cutoff on mobile */}
+      <div className="block sm:hidden h-20 w-full" />
+    </>
   );
 }
 

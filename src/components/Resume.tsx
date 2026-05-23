@@ -2,6 +2,7 @@
 import { Download, ArrowLeft, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { useRef, useState, useEffect } from 'react';
+import { Ripple } from "@/components/ui/Ripple";
 
 export default function Resume() {
     const resumeRef = useRef<HTMLDivElement>(null);
@@ -51,14 +52,15 @@ export default function Resume() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 px-4">
+        <div className="min-h-screen bg-md-background py-8 px-4 transition-colors duration-400">
             <div className="max-w-4xl mx-auto">
                 {/* Header Actions */}
-                <div className="mb-6 flex justify-between items-center">
+                <div className="mb-8 flex justify-between items-center select-none">
                     <Link
                         href="/"
-                        className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+                        className="group relative flex items-center gap-2 text-sm font-bold text-md-on-background-variant hover:text-md-primary transition-colors py-2.5 px-4 rounded-full hover:bg-md-primary/10 overflow-hidden"
                     >
+                        <Ripple />
                         <ArrowLeft className="w-4 h-4" />
                         <span>Back to Portfolio</span>
                     </Link>
@@ -66,8 +68,9 @@ export default function Resume() {
                     <button
                         onClick={handleDownloadPDF}
                         disabled={isGenerating || !isHtml2pdfReady}
-                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="relative flex items-center gap-2 px-6 py-2.5 bg-md-primary text-md-on-primary rounded-full hover:bg-md-primary/95 transition-all select-none shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed font-semibold text-sm overflow-hidden"
                     >
+                        <Ripple />
                         {isGenerating ? (
                             <>
                                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -82,10 +85,10 @@ export default function Resume() {
                     </button>
                 </div>
 
-                {/* Resume Content */}
+                {/* Resume Content (Keep A4 layout settings unchanged for html2pdf) */}
                 <div
                     ref={resumeRef}
-                    className="shadow-lg"
+                    className="shadow-xl rounded-[4px]"
                     style={{
                         width: '210mm',
                         minHeight: '297mm',

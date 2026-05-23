@@ -3,6 +3,7 @@ import { memo, useState, useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import { Music, Volume2 } from 'lucide-react';
 import { useMusic } from '@/hooks/use-music';
+import { Ripple } from "@/components/ui/Ripple";
 
 const coverCache = new Map<string, string>();
 
@@ -73,23 +74,33 @@ const AlbumCover = memo(function AlbumCover({
 
   if (isLoading || !appleMusicUrl) {
     return (
-      <div className="relative h-16 w-16 shrink-0 bg-gray-100/50 dark:bg-gray-800/50 rounded-lg flex items-center justify-center border border-gray-200/50 dark:border-gray-700/50">
-        <Music className={`h-8 w-8 text-gray-400 dark:text-gray-500 ${isLoading ? 'animate-pulse' : ''}`} />
+      <div className="relative h-16 w-16 shrink-0 bg-md-surface-variant rounded-[16px] flex items-center justify-center border border-md-outline-variant/30">
+        <Music className={`h-8 w-8 text-md-on-surface-variant ${isLoading ? 'animate-pulse' : ''}`} />
       </div>
     );
   }
 
   return (
-    <div className="relative h-16 w-16 shrink-0">
+    <div className="relative h-16 w-16 shrink-0 shadow-md rounded-[16px] overflow-hidden">
       <Image
         src={appleMusicUrl}
         alt={alt}
         width={300}
         height={300}
-        className="rounded-lg object-cover absolute inset-0 w-full h-full"
-        quality={75}
+        className="object-cover absolute inset-0 w-full h-full hover:scale-105 transition-transform duration-300"
+        quality={80}
         sizes="64px"
       />
+    </div>
+  );
+});
+
+const PlayingBars = memo(function PlayingBars() {
+  return (
+    <div className="flex items-end gap-[3px] h-4 w-5 select-none pointer-events-none">
+      <span className="w-[3.5px] bg-md-primary rounded-full animate-bar-1" />
+      <span className="w-[3.5px] bg-md-primary rounded-full animate-bar-2" />
+      <span className="w-[3.5px] bg-md-primary rounded-full animate-bar-3" />
     </div>
   );
 });
@@ -99,17 +110,17 @@ export const NowPlaying = memo(function NowPlaying() {
 
   if (isLoading) {
     return (
-      <div>
-        <h2 className="mb-6 text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+      <div className="space-y-4">
+        <h2 className="text-xl font-bold font-display text-md-on-background flex items-center gap-2.5">
           Now Playing
-          <Volume2 className="w-4 h-4 text-green-500 animate-pulse" />
+          <Volume2 className="w-5 h-5 text-md-primary animate-pulse" />
         </h2>
-        <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white/30 dark:bg-black/30 backdrop-blur-md">
+        <div className="p-4 rounded-[28px] border border-md-outline-variant/20 bg-md-surface-container-low shadow-sm">
           <div className="animate-pulse flex items-center gap-4">
-            <div className="h-16 w-16 bg-gray-200 dark:bg-gray-800 rounded-lg" />
-            <div className="flex-1">
-              <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded w-3/4 mb-2" />
-              <div className="h-3 bg-gray-200 dark:bg-gray-800 rounded w-1/2" />
+            <div className="h-16 w-16 bg-md-surface-variant rounded-[16px]" />
+            <div className="flex-1 space-y-2">
+              <div className="h-4 bg-md-surface-variant rounded-full w-3/4" />
+              <div className="h-3 bg-md-surface-variant rounded-full w-1/2" />
             </div>
           </div>
         </div>
@@ -119,21 +130,21 @@ export const NowPlaying = memo(function NowPlaying() {
 
   if (error) {
     return (
-      <div>
-        <h2 className="mb-6 text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+      <div className="space-y-4">
+        <h2 className="text-xl font-bold font-display text-md-on-background flex items-center gap-2.5">
           Now Playing
-          <Volume2 className="w-4 h-4 text-gray-400" />
+          <Volume2 className="w-5 h-5 text-md-outline" />
         </h2>
-        <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white/30 dark:bg-black/30 backdrop-blur-md">
+        <div className="p-4 rounded-[28px] border border-md-outline-variant/20 bg-md-surface-container-low shadow-sm select-none">
           <div className="flex items-center gap-4">
-            <div className="h-16 w-16 shrink-0 bg-gray-100/50 dark:bg-gray-800/50 rounded-lg flex items-center justify-center">
-              <Music className="h-8 w-8 text-gray-400 dark:text-gray-500" />
+            <div className="h-16 w-16 shrink-0 bg-md-surface-variant rounded-[16px] flex items-center justify-center border border-md-outline-variant/30">
+              <Music className="h-8 w-8 text-md-on-surface-variant" />
             </div>
             <div>
-              <p className="font-medium text-gray-900 dark:text-white">
+              <p className="font-bold text-md-on-surface text-base">
                 Data unavailable
               </p>
-              <p className="text-gray-500 dark:text-gray-400 text-sm">
+              <p className="text-md-on-surface-variant text-sm font-semibold">
                 Music information couldn&apos;t be loaded
               </p>
             </div>
@@ -145,21 +156,21 @@ export const NowPlaying = memo(function NowPlaying() {
 
   if (!data?.isPlaying) {
     return (
-      <div>
-        <h2 className="mb-6 text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+      <div className="space-y-4">
+        <h2 className="text-xl font-bold font-display text-md-on-background flex items-center gap-2.5">
           Now Playing
-          <Volume2 className="w-4 h-4 text-gray-400" />
+          <Volume2 className="w-5 h-5 text-md-outline" />
         </h2>
-        <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white/30 dark:bg-black/30 backdrop-blur-md">
+        <div className="p-4 rounded-[28px] border border-md-outline-variant/20 bg-md-surface-container-low shadow-sm select-none">
           <div className="flex items-center gap-4">
-            <div className="h-16 w-16 shrink-0 bg-gray-100/50 dark:bg-gray-800/50 rounded-lg flex items-center justify-center">
-              <Music className="h-8 w-8 text-gray-400 dark:text-gray-500" />
+            <div className="h-16 w-16 shrink-0 bg-md-surface-variant rounded-[16px] flex items-center justify-center border border-md-outline-variant/30">
+              <Music className="h-8 w-8 text-md-on-surface-variant" />
             </div>
             <div>
-              <p className="font-medium text-gray-900 dark:text-white">
+              <p className="font-bold text-md-on-surface text-base">
                 Not Playing
               </p>
-              <p className="text-gray-500 dark:text-gray-400 text-sm">
+              <p className="text-md-on-surface-variant text-sm font-semibold">
                 Music is paused
               </p>
             </div>
@@ -170,38 +181,40 @@ export const NowPlaying = memo(function NowPlaying() {
   }
 
   return (
-    <div>
-      <h2 className="mb-6 text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+    <div className="space-y-4">
+      <h2 className="text-xl font-bold font-display text-md-on-background flex items-center gap-2.5">
         Now Playing
-        <Volume2 className="w-4 h-4 text-green-500 animate-pulse" />
+        <Volume2 className="w-5 h-5 text-md-primary animate-pulse" />
       </h2>
       <a
         href={data.url}
         target="_blank"
         rel="noopener noreferrer"
-        className="group block rounded-xl border border-gray-200 dark:border-gray-800 bg-white/30 dark:bg-black/30 backdrop-blur-md hover:bg-white/40 dark:hover:bg-black/40 transition-all overflow-hidden relative"
+        className="group block rounded-[28px] border border-md-outline-variant/30 bg-md-surface-container-low hover:bg-md-primary/5 hover:border-md-primary/30 transition-all duration-300 overflow-hidden relative shadow-sm hover:shadow-md"
       >
+        <Ripple />
         <div className="flex items-center gap-4 p-4">
           <AlbumCover 
             alt={data.album || 'Album Art'} 
             trackName={data.name}
             artistName={data.artists}
           />
-          <div className="min-w-0 flex-1">
-            <div className="flex items-center">
-              <h3 className="font-medium text-gray-900 dark:text-white text-base truncate group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors flex-1">
+          <div className="min-w-0 flex-1 space-y-0.5">
+            <div className="flex items-center gap-2">
+              <h3 className="font-bold text-md-on-surface text-base truncate group-hover:text-md-primary transition-colors flex-1 font-display">
                 {data.name}
               </h3>
+              <PlayingBars />
             </div>
-            <p className="text-gray-500 dark:text-gray-400 text-sm truncate mb-1">
+            <p className="text-md-on-surface-variant font-medium text-sm truncate">
               {data.artists}
             </p>
           </div>
         </div>
 
         {data.platform && (
-          <div className="absolute top-2 right-2">
-            <span className="text-xs font-medium bg-gray-800/60 text-white px-2 py-0.5 rounded-full">
+          <div className="absolute top-2.5 right-2.5 select-none">
+            <span className="text-[10px] font-bold bg-md-primary-container text-md-on-primary-container px-2.5 py-1 rounded-full uppercase tracking-wider shadow-sm">
               {data.platform}
             </span>
           </div>

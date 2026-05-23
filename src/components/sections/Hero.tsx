@@ -2,15 +2,16 @@
 import Image from "next/image"
 import { memo, useEffect, useState, useCallback, useRef } from "react"
 import { createPortal } from 'react-dom'
+import { motion, AnimatePresence } from 'framer-motion'
 import { InitialFadeIn } from '@/utils/Animations'
 import { PreciseAge } from '@/components/PreciseAge'
 import { fetchFromAPI } from '@/utils/api'
 
 const statusColors = {
-  online: 'bg-green-500',
-  idle: 'bg-yellow-500',
-  dnd: 'bg-red-500',
-  offline: 'bg-gray-500'
+  online: 'bg-emerald-500',
+  idle: 'bg-amber-500',
+  dnd: 'bg-rose-500',
+  offline: 'bg-md-outline'
 } as const;
 
 const statusMessages = {
@@ -26,15 +27,15 @@ type Status = {
 
 const Avatar = memo(function Avatar() {
   return (
-    <div className="relative h-40 w-40 overflow-hidden rounded-full ring-2 ring-gray-200 dark:ring-gray-800">
+    <div className="relative h-40 w-40 overflow-hidden rounded-[38px] hover:rounded-[24px] transition-all duration-500 cubic-bezier(0.2, 0, 0, 1) border-4 border-md-primary/10 hover:border-md-primary/30 shadow-md">
       <Image
         src="/avatar.avif"
         alt="Avatar"
         width={160}
         height={160}
-        quality={75}
+        quality={80}
         priority
-        className="object-cover"
+        className="object-cover transition-transform duration-500 hover:scale-105"
         sizes="160px"
       />
     </div>
@@ -53,21 +54,25 @@ const StatusTooltip = memo(function StatusTooltip({
   if (!position) return null;
   
   return createPortal(
-    <div 
-      className="fixed z-50 transition-all duration-200 ease-in-out"
-      style={{
-        top: `${position.y + 15}px`,
-        left: position.x,
-        opacity: show ? 1 : 0,
-        transform: `translateY(${show ? 0 : -10}px)`,
-        pointerEvents: 'none',
-        visibility: show ? 'visible' : 'hidden'
-      }}
-    >
-      <div className="bg-black/75 backdrop-blur-sm text-white text-sm py-1 px-3 rounded-lg whitespace-nowrap">
-        {message}
-      </div>
-    </div>,
+    <AnimatePresence>
+      {show && (
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.9, y: 5 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.9, y: 5 }}
+          className="fixed z-50 pointer-events-none"
+          style={{
+            top: `${position.y + 12}px`,
+            left: position.x - 60, // center-ish alignment
+          }}
+          transition={{ duration: 0.2, ease: [0.2, 0, 0, 1] }}
+        >
+          <div className="bg-md-inverse-surface text-md-inverse-on-surface text-xs font-semibold py-1.5 px-3.5 rounded-lg shadow-lg whitespace-nowrap tracking-wide border border-md-outline-variant/20">
+            {message}
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>,
     document.body
   );
 });
@@ -83,7 +88,7 @@ const StatusIndicator = memo(function StatusIndicator({ status }: { status: Stat
       const isMobile = window.innerWidth < 768;
       
       setPosition({
-        x: isMobile ? (window.innerWidth / 2 - 75) : (rect.left + (rect.width / 2) - 50),
+        x: isMobile ? (window.innerWidth / 2) : (rect.left + (rect.width / 2)),
         y: rect.bottom + window.scrollY
       });
     }
@@ -111,14 +116,14 @@ const StatusIndicator = memo(function StatusIndicator({ status }: { status: Stat
 
   const handleInteraction = () => {
     updatePosition();
-    setShowTooltip(!showTooltip);
+    setShowTooltip(prev => !prev);
   };
 
   return (
     <>
       <div 
         ref={indicatorRef}
-        className={`absolute bottom-1 right-1 h-8 w-8 rounded-full ${statusColors[status.status]} ring-4 ring-white dark:ring-black cursor-help`}
+        className={`absolute bottom-1.5 right-1.5 h-8 w-8 rounded-full ${statusColors[status.status]} border-4 border-md-background shadow-md cursor-help transition-all duration-300 hover:scale-110 active:scale-95`}
         onClick={(e) => {
           e.stopPropagation();
           handleInteraction();
@@ -141,20 +146,22 @@ const StatusIndicator = memo(function StatusIndicator({ status }: { status: Stat
 const HeroContent = memo(function HeroContent() {
   return (
     <div className="text-center space-y-4">
-      <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white">
+      <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight font-display text-md-on-background">
         onlive
       </h1>
-      <p className="text-xl md:text-2xl text-gray-700 dark:text-gray-300">
+      <p className="text-xl md:text-2xl font-semibold tracking-wide text-md-primary">
         Full Stack Developer
       </p>
-      <div className="flex flex-col items-center gap-1 text-gray-600 dark:text-gray-400">
-        <div className="flex items-center gap-2 flex-wrap justify-center">
+      <div className="flex flex-col items-center gap-1.5 text-md-on-background-variant">
+        <div className="flex items-center gap-2.5 flex-wrap justify-center font-medium">
           <span>smol femboy dev</span>
-          <span className="text-xl">🦊</span>
+          <span className="text-xl animate-pulse">🦊</span>
           <span>from</span>
-          <span className="text-xl">🇺🇿</span>
+          <span className="text-xl hover:scale-115 transition-transform duration-200 cursor-default">🇺🇿</span>
         </div>
-        <span className="font-mono text-sm">({<PreciseAge />} y.o)</span>
+        <span className="font-mono text-sm opacity-80 select-none bg-md-secondary-container text-md-on-secondary-container px-3 py-0.5 rounded-full">
+          {<PreciseAge />} y.o
+        </span>
       </div>
     </div>
   );
@@ -195,7 +202,7 @@ export const Hero = memo(function Hero() {
       <div className="container mx-auto px-4">
         <div className="flex flex-col items-center gap-8">
           <InitialFadeIn delay={200}>
-            <div className="relative">
+            <div className="relative select-none">
               <Avatar />
               {status && <StatusIndicator status={status} />}
             </div>

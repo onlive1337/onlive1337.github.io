@@ -155,14 +155,12 @@ html.js-loading * {
 html, body {
   min-height: 100dvh;
   background-color: inherit;
-  contain: content;
 }
 
 body {
   @apply text-md-on-background font-sans;
   overscroll-behavior: none;
   -webkit-tap-highlight-color: transparent;
-  contain: content;
 }
 
 :root {

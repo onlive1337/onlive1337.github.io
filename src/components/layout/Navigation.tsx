@@ -1,6 +1,6 @@
 "use client"
 import Link from "next/link"
-import { usePathname, useRouter } from "next/navigation"
+import { usePathname } from "next/navigation"
 import React, { memo, useState, useEffect, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Share2, Cpu, Briefcase, FolderGit2, FileText } from 'lucide-react'
@@ -17,9 +17,31 @@ const navigation = [
 
 function NavigationComponent() {
   const pathname = usePathname();
-  const router = useRouter();
   const isResumePage = pathname === '/resume';
   const [activeSection, setActiveSection] = useState<string>('');
+
+  const [isMobileVisible, setIsMobileVisible] = useState(true);
+  const lastScrollY = React.useRef(0);
+
+  useEffect(() => {
+    lastScrollY.current = window.scrollY;
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      const scrollDelta = currentScrollY - lastScrollY.current;
+
+      if (scrollDelta > 5 && currentScrollY > 60) {
+        setIsMobileVisible(false);
+      } else if (scrollDelta < -5 || currentScrollY <= 60) {
+        setIsMobileVisible(true);
+      }
+
+      lastScrollY.current = currentScrollY;
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   // Track active section via Intersection Observer when on homepage
   useEffect(() => {
@@ -109,7 +131,12 @@ function NavigationComponent() {
       </header>
 
       {/* Mobile M3 Bottom Navigation Bar */}
-      <nav className="fixed bottom-0 left-0 right-0 z-50 flex sm:hidden h-20 border-t border-md-outline-variant/20 bg-md-surface-container/90 backdrop-blur-md shadow-lg pb-safe select-none">
+      <motion.nav
+        initial={{ y: 0 }}
+        animate={{ y: isMobileVisible ? 0 : "200%" }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
+        className="fixed bottom-0 left-0 right-0 z-50 flex sm:hidden h-20 border-t border-md-outline-variant/20 bg-md-surface-container/90 backdrop-blur-md shadow-lg pb-safe select-none"
+      >
         {navigation.map((item) => {
           const Icon = item.icon;
           const isActive = isResumePage 
@@ -150,9 +177,7 @@ function NavigationComponent() {
         <div className="absolute right-4 bottom-24 bg-md-surface-container-high/90 border border-md-outline-variant/30 rounded-full shadow-lg h-12 w-12 flex items-center justify-center backdrop-blur-md">
           <ThemeToggle />
         </div>
-      </nav>
-      {/* Spacer to prevent bottom content cutoff on mobile */}
-      <div className="block sm:hidden h-20 w-full" />
+      </motion.nav>
     </>
   );
 }

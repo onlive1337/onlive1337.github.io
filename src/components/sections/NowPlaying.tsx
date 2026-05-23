@@ -97,7 +97,7 @@ const AlbumCover = memo(function AlbumCover({
 
 const PlayingBars = memo(function PlayingBars() {
   return (
-    <div className="flex items-end gap-[3px] h-4 w-5 select-none pointer-events-none">
+    <div className="flex items-end gap-[3px] h-4 w-5 shrink-0 select-none pointer-events-none">
       <span className="w-[3.5px] bg-md-primary rounded-full animate-bar-1" />
       <span className="w-[3.5px] bg-md-primary rounded-full animate-bar-2" />
       <span className="w-[3.5px] bg-md-primary rounded-full animate-bar-3" />
@@ -204,11 +204,13 @@ export const NowPlaying = memo(function NowPlaying() {
               <h3 className="font-bold text-md-on-surface text-base truncate group-hover:text-md-primary transition-colors flex-1 font-display">
                 {data.name}
               </h3>
+            </div>
+            <div className="flex items-center gap-2">
+              <p className="text-md-on-surface-variant font-medium text-sm truncate flex-1">
+                {data.artists}
+              </p>
               <PlayingBars />
             </div>
-            <p className="text-md-on-surface-variant font-medium text-sm truncate">
-              {data.artists}
-            </p>
           </div>
         </div>
 

@@ -25,7 +25,7 @@ export const PreciseAge = memo(function PreciseAge() {
  }, [calculateAge]);
 
  return (
-   <span className="font-mono bg-gradient-to-r from-blue-500 to-purple-500 text-transparent bg-clip-text">
+   <span className="font-mono bg-linear-to-r from-md-primary to-md-tertiary text-transparent bg-clip-text font-semibold">
      {age}
    </span>
  );

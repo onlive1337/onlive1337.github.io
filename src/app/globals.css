@@ -5,6 +5,70 @@
 @theme {
   --animate-wave: wave 20s linear infinite;
   --animate-wave-reverse: wave-reverse 25s linear infinite;
+
+  /* Material You 3 Color Tokens */
+  --color-md-primary: var(--md-sys-color-primary);
+  --color-md-on-primary: var(--md-sys-color-on-primary);
+  --color-md-primary-container: var(--md-sys-color-primary-container);
+  --color-md-on-primary-container: var(--md-sys-color-on-primary-container);
+  --color-md-secondary: var(--md-sys-color-secondary);
+  --color-md-on-secondary: var(--md-sys-color-on-secondary);
+  --color-md-secondary-container: var(--md-sys-color-secondary-container);
+  --color-md-on-secondary-container: var(--md-sys-color-on-secondary-container);
+  --color-md-tertiary: var(--md-sys-color-tertiary);
+  --color-md-on-tertiary: var(--md-sys-color-on-tertiary);
+  --color-md-tertiary-container: var(--md-sys-color-tertiary-container);
+  --color-md-on-tertiary-container: var(--md-sys-color-on-tertiary-container);
+  --color-md-error: var(--md-sys-color-error);
+  --color-md-on-error: var(--md-sys-color-on-error);
+  --color-md-error-container: var(--md-sys-color-error-container);
+  --color-md-on-error-container: var(--md-sys-color-on-error-container);
+  --color-md-background: var(--md-sys-color-background);
+  --color-md-on-background: var(--md-sys-color-on-background);
+  --color-md-surface: var(--md-sys-color-surface);
+  --color-md-on-surface: var(--md-sys-color-on-surface);
+  --color-md-surface-variant: var(--md-sys-color-surface-variant);
+  --color-md-on-surface-variant: var(--md-sys-color-on-surface-variant);
+  --color-md-outline: var(--md-sys-color-outline);
+  --color-md-outline-variant: var(--md-sys-color-outline-variant);
+  --color-md-shadow: var(--md-sys-color-shadow);
+  --color-md-scrim: var(--md-sys-color-scrim);
+  --color-md-inverse-surface: var(--md-sys-color-inverse-surface);
+  --color-md-inverse-on-surface: var(--md-sys-color-inverse-on-surface);
+  --color-md-inverse-primary: var(--md-sys-color-inverse-primary);
+
+  /* Fonts */
+  --font-sans: var(--font-inter), sans-serif;
+  --font-display: var(--font-outfit), sans-serif;
+
+  --animate-ripple: ripple 600ms cubic-bezier(0.2, 0, 0, 1);
+  --animate-bar-1: bar-1 0.8s infinite ease-in-out alternate;
+  --animate-bar-2: bar-2 1.2s infinite ease-in-out alternate;
+  --animate-bar-3: bar-3 0.9s infinite ease-in-out alternate;
+
+  @keyframes ripple {
+    from {
+      transform: scale(0);
+      opacity: 0.35;
+    }
+    to {
+      transform: scale(1);
+      opacity: 0;
+    }
+  }
+
+  @keyframes bar-1 {
+    0% { height: 20%; }
+    100% { height: 100%; }
+  }
+  @keyframes bar-2 {
+    0% { height: 40%; }
+    100% { height: 100%; }
+  }
+  @keyframes bar-3 {
+    0% { height: 10%; }
+    100% { height: 100%; }
+  }
 }
 
 @keyframes wave {
@@ -23,16 +87,28 @@
   }
 
   html {
-    background-color: white;
+    background-color: var(--md-sys-color-background, white);
   }
 
   html.dark {
     color-scheme: dark;
-    background-color: black;
+    background-color: var(--md-sys-color-background, black);
   }
 
   body {
     background-color: inherit;
+  }
+
+  md-ripple {
+    --md-ripple-hover-color: var(--md-sys-color-primary);
+    --md-ripple-pressed-color: var(--md-sys-color-primary);
+    --md-ripple-hover-opacity: 0.08;
+    --md-ripple-pressed-opacity: 0.12;
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    overflow: hidden;
+    pointer-events: none;
   }
 }
 
@@ -40,8 +116,8 @@
 *::before, 
 *::after {
   transition-property: background-color, border-color, color, fill, stroke;
-  transition-duration: 700ms;
-  transition-timing-function: ease-in-out;
+  transition-duration: 400ms;
+  transition-timing-function: cubic-bezier(0.2, 0, 0, 1); /* Material 3 Standard Easing */
 }
 
 @media (max-width: 767px) {
@@ -64,11 +140,11 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-gray-400/30 rounded-full hover:bg-gray-400/50 transition-colors;
+    @apply bg-md-outline-variant/30 rounded-full hover:bg-md-outline-variant/50 transition-colors;
   }
 
   .dark ::-webkit-scrollbar-thumb {
-    @apply bg-gray-600/30 hover:bg-gray-600/50;
+    @apply bg-md-outline-variant/30 hover:bg-md-outline-variant/50;
   }
 }
 
@@ -79,14 +155,12 @@ html.js-loading * {
 html, body {
   min-height: 100dvh;
   background-color: inherit;
-  contain: content;
 }
 
 body {
-  @apply text-black dark:text-white;
+  @apply text-md-on-background font-sans;
   overscroll-behavior: none;
   -webkit-tap-highlight-color: transparent;
-  contain: content;
 }
 
 :root {

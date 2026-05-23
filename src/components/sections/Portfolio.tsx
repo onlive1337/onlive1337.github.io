@@ -1,29 +1,10 @@
 "use client"
 import { useState, useEffect, useCallback, memo } from "react";
 import Link from "next/link";
+import { Star, GitFork, BookOpen } from "lucide-react";
 import { fetchFromAPI } from "@/utils/api";
 import { GithubRepo } from "@/types";
-
-const getTopicColor = (topic: string) => {
-  const colors: { [key: string]: string } = {
-    typescript: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
-    javascript: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300",
-    python: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
-    react: "bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-300",
-    nextjs: "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300",
-    tailwindcss: "bg-sky-100 text-sky-800 dark:bg-sky-900 dark:text-sky-300",
-    node: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-300",
-    express: "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300",
-    mongodb: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
-    postgresql: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
-    redis: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300",
-    docker: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
-    git: "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300",
-    vscode: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
-  };
-  
-  return colors[topic.toLowerCase()] || "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300";
-};
+import { Ripple } from "@/components/ui/Ripple";
 
 export const Portfolio = memo(function Portfolio() {
   const [repos, setRepos] = useState<GithubRepo[]>([]);
@@ -53,41 +34,42 @@ export const Portfolio = memo(function Portfolio() {
   }, [fetchRepos]);
 
   return (
-    <section id="portfolio" className="py-16">
-      <div className="container mx-auto px-4">
-        <h2 className="mb-8 text-center text-3xl font-bold text-gray-900 dark:text-white">
+    <section id="portfolio" className="py-16 scroll-mt-24">
+      <div className="container mx-auto px-4 max-w-4xl">
+        <h2 className="mb-10 text-center text-3xl font-extrabold tracking-tight font-display text-md-on-background">
           Portfolio
         </h2>
         
         {isLoading ? (
-          <div className="space-y-4">
+          <div className="space-y-6">
             {[1, 2, 3].map((i) => (
               <div 
                 key={i}
-                className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-black/40"
+                className="rounded-[28px] border border-md-outline-variant/30 bg-md-surface-container-low p-6 shadow-sm"
               >
-                <div className="animate-pulse">
-                  <div className="h-6 bg-gray-200 dark:bg-gray-800 rounded w-1/4 mb-4" />
-                  <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded w-full mb-4" />
-                  <div className="flex flex-wrap gap-2 mb-4">
+                <div className="animate-pulse space-y-4">
+                  <div className="h-6 bg-md-surface-variant rounded-full w-1/4" />
+                  <div className="h-4 bg-md-surface-variant rounded-full w-full" />
+                  <div className="h-4 bg-md-surface-variant rounded-full w-3/4" />
+                  <div className="flex flex-wrap gap-2 pt-2">
                     {[1, 2, 3].map((j) => (
-                      <div key={j} className="h-6 w-16 bg-gray-200 dark:bg-gray-800 rounded" />
+                      <div key={j} className="h-6 w-16 bg-md-surface-variant rounded-full" />
                     ))}
                   </div>
-                  <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded w-1/6" />
+                  <div className="h-4 bg-md-surface-variant rounded-full w-1/6 pt-2" />
                 </div>
               </div>
             ))}
           </div>
         ) : error ? (
-          <div className="rounded-xl border border-gray-200 bg-white p-8 shadow-sm dark:border-gray-800 dark:bg-black/40 text-center">
-            <p className="text-gray-600 dark:text-gray-400">
+          <div className="rounded-[28px] border border-md-outline-variant/30 bg-md-surface-container-low p-8 shadow-sm text-center">
+            <p className="text-md-on-surface-variant font-medium">
               Unable to load repositories data at this time.
             </p>
           </div>
         ) : repos.length === 0 ? (
-          <div className="rounded-xl border border-gray-200 bg-white p-8 shadow-sm dark:border-gray-800 dark:bg-black/40 text-center">
-            <p className="text-gray-600 dark:text-gray-400">No repositories available</p>
+          <div className="rounded-[28px] border border-md-outline-variant/30 bg-md-surface-container-low p-8 shadow-sm text-center">
+            <p className="text-md-on-surface-variant font-medium">No repositories available</p>
           </div>
         ) : (
           <div className="flex flex-col gap-6">
@@ -97,33 +79,45 @@ export const Portfolio = memo(function Portfolio() {
                 href={repo.html_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition-all hover:shadow-md dark:border-gray-800 dark:bg-black/40 dark:hover:bg-black/60"
+                className="group rounded-[28px] border border-md-outline-variant/30 bg-md-surface-container-low p-6 shadow-sm hover:shadow-md hover:scale-[1.01] transition-all duration-300 relative overflow-hidden select-none flex flex-col justify-between"
               >
-                <div className="mb-4">
-                  <h3 className="text-xl font-semibold text-gray-900 group-hover:text-blue-500 dark:text-white">
-                    {repo.name}
-                  </h3>
+                <Ripple />
+                <div>
+                  <div className="flex items-center gap-2.5 mb-2.5 text-md-primary">
+                    <BookOpen className="w-5 h-5" />
+                    <h3 className="text-xl font-bold font-display text-md-on-surface group-hover:text-md-primary transition-colors duration-200">
+                      {repo.name}
+                    </h3>
+                  </div>
                   {repo.description && (
-                    <p className="mt-2 text-gray-600 dark:text-gray-400">
+                    <p className="mt-2 text-sm leading-relaxed text-md-on-surface-variant">
                       {repo.description}
                     </p>
                   )}
                 </div>
 
-                <div className="mb-4 flex flex-wrap gap-2">
+                <div className="mt-5 mb-4 flex flex-wrap gap-2">
                   {repo.topics.map((topic) => (
                     <span
                       key={topic}
-                      className={`rounded px-2.5 py-0.5 text-xs font-medium ${getTopicColor(topic)}`}
+                      className="rounded-full border border-md-outline-variant/20 px-3 py-1 text-xs font-semibold bg-md-secondary-container/60 text-md-on-secondary-container select-none shadow-sm transition-transform duration-200 hover:scale-102"
                     >
                       {topic}
                     </span>
                   ))}
                 </div>
 
-                <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
-                  {repo.language && <span>{repo.language}</span>}
-                  <span>★ {repo.stargazers_count}</span>
+                <div className="flex items-center gap-5 text-xs font-semibold text-md-on-surface-variant pt-2 border-t border-md-outline-variant/10">
+                  {repo.language && (
+                    <span className="flex items-center gap-1.5">
+                      <span className="w-2.5 h-2.5 rounded-full bg-md-primary" />
+                      {repo.language}
+                    </span>
+                  )}
+                  <span className="flex items-center gap-1">
+                    <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500/20" />
+                    {repo.stargazers_count}
+                  </span>
                 </div>
               </Link>
             ))}

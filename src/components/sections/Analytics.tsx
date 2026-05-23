@@ -39,21 +39,25 @@ export const Analytics = memo(function Analytics() {
     void updateAnalytics();
   }, [updateAnalytics]);
 
+  const TerminalHeader = () => (
+    <div className="flex items-center justify-between px-5 py-3 bg-md-surface-container-high border-b border-md-outline-variant/30 text-md-on-surface-variant select-none">
+      <div className="flex items-center gap-2.5">
+        <Terminal className="h-4 w-4 text-md-primary" />
+        <span className="text-xs font-bold font-display uppercase tracking-wider">Terminal</span>
+      </div>
+      <span className="text-[10px] font-bold opacity-60 uppercase tracking-widest">stats.sh</span>
+    </div>
+  );
+
   if (loading) {
     return (
-      <div className="container mx-auto px-4 pb-8">
-        <div className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-black overflow-hidden">
-          <div className="flex items-center justify-between px-4 py-2 bg-gray-50 dark:bg-gray-900/50 border-b border-gray-200 dark:border-gray-800">
-            <div className="flex items-center gap-2">
-              <Terminal className="h-4 w-4 text-gray-500 dark:text-gray-400" />
-              <span className="text-gray-500 dark:text-gray-400 text-sm">Terminal</span>
-            </div>
-            <span className="text-xs text-gray-500">stats</span>
-          </div>
-          <div className="p-4 font-mono text-sm">
-            <div className="flex items-center gap-2">
-              <Loader2 className="h-4 w-4 text-gray-500 animate-spin" />
-              <span className="text-gray-500">Loading statistics...</span>
+      <div className="container mx-auto px-4 pb-8 max-w-4xl">
+        <div className="rounded-[28px] border border-md-outline-variant/30 bg-md-surface-container-low overflow-hidden shadow-sm">
+          <TerminalHeader />
+          <div className="p-5 font-mono text-xs sm:text-sm select-none">
+            <div className="flex items-center gap-2.5 text-md-on-surface-variant font-medium">
+              <Loader2 className="h-4 w-4 text-md-primary animate-spin" />
+              <span>Fetching remote statistics...</span>
             </div>
           </div>
         </div>
@@ -63,18 +67,13 @@ export const Analytics = memo(function Analytics() {
 
   if (error) {
     return (
-      <div className="container mx-auto px-4 pb-8">
-        <div className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-black overflow-hidden">
-          <div className="flex items-center justify-between px-4 py-2 bg-gray-50 dark:bg-gray-900/50 border-b border-gray-200 dark:border-gray-800">
-            <div className="flex items-center gap-2">
-              <Terminal className="h-4 w-4 text-gray-500 dark:text-gray-400" />
-              <span className="text-gray-500 dark:text-gray-400 text-sm">Terminal</span>
-            </div>
-            <span className="text-xs text-gray-500">stats</span>
-          </div>
-          <div className="p-4 font-mono text-sm">
-            <div className="space-y-2">
-              <p className="text-gray-500">Analytics data unavailable</p>
+      <div className="container mx-auto px-4 pb-8 max-w-4xl">
+        <div className="rounded-[28px] border border-md-outline-variant/30 bg-md-surface-container-low overflow-hidden shadow-sm">
+          <TerminalHeader />
+          <div className="p-5 font-mono text-xs sm:text-sm select-none">
+            <div className="text-md-error font-medium">
+              <p>Error: Analytics service returned an invalid response.</p>
+              <p className="opacity-70 mt-1">Please try refreshing the page.</p>
             </div>
           </div>
         </div>
@@ -83,29 +82,23 @@ export const Analytics = memo(function Analytics() {
   }
 
   return (
-    <div className="container mx-auto px-4 pb-8">
-      <div className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-black overflow-hidden">
-        <div className="flex items-center justify-between px-4 py-2 bg-gray-50 dark:bg-gray-900/50 border-b border-gray-200 dark:border-gray-800">
-          <div className="flex items-center gap-2">
-            <Terminal className="h-4 w-4 text-gray-500 dark:text-gray-400" />
-            <span className="text-gray-500 dark:text-gray-400 text-sm">Terminal</span>
-          </div>
-          <span className="text-xs text-gray-500">stats</span>
-        </div>
-        <div className="p-4 font-mono text-sm">
-          <div className="space-y-2">
-            <div className="flex items-center text-gray-600 dark:text-gray-400">
-              <span className="text-green-600 dark:text-green-500">$</span>
+    <div className="container mx-auto px-4 pb-8 max-w-4xl">
+      <div className="rounded-[28px] border border-md-outline-variant/30 bg-md-surface-container-low overflow-hidden shadow-sm hover:shadow-md transition-all duration-300">
+        <TerminalHeader />
+        <div className="p-5 font-mono text-xs sm:text-sm">
+          <div className="space-y-3">
+            <div className="flex items-center text-md-on-surface-variant font-semibold select-none">
+              <span className="text-emerald-500 font-bold">$</span>
               <span className="ml-2">stats --get-analytics</span>
             </div>
-            <div className="pl-4 space-y-1">
+            <div className="pl-4 space-y-1.5 font-medium border-l-2 border-md-outline-variant/20">
               <p>
-                <span className="text-blue-600 dark:text-blue-400">total_views:</span> 
-                <span className="ml-2 text-gray-600 dark:text-gray-300">{data?.views?.toLocaleString() ?? 0}</span>
+                <span className="text-md-primary">total_views:</span> 
+                <span className="ml-2 text-md-on-surface">{data?.views?.toLocaleString() ?? 0}</span>
               </p>
               <p>
-                <span className="text-green-600 dark:text-green-400">unique_visitors:</span> 
-                <span className="ml-2 text-gray-600 dark:text-gray-300">{data?.unique_visitors?.toLocaleString() ?? 0}</span>
+                <span className="text-md-secondary">unique_visitors:</span> 
+                <span className="ml-2 text-md-on-surface">{data?.unique_visitors?.toLocaleString() ?? 0}</span>
               </p>
             </div>
           </div>

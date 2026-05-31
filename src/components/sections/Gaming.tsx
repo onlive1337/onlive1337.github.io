@@ -11,11 +11,11 @@ export const Gaming = memo(function Gaming() {
   if (isLoading) {
     return (
       <div className="space-y-4">
-        <h2 className="text-xl font-bold font-display text-md-on-background flex items-center gap-2.5">
+        <h2 className="text-xl type-title text-md-on-background flex items-center gap-2.5">
           Gaming Activity
           <Gamepad2 className="w-5 h-5 text-md-primary animate-pulse" />
         </h2>
-        <div className="p-4 rounded-[28px] border border-md-outline-variant/20 bg-md-surface-container-low shadow-sm w-full">
+        <div className="p-4 rounded-m3-xl border border-md-outline-variant/20 bg-md-surface-container shadow-sm w-full">
           <div className="animate-pulse flex space-x-4">
             <div className="h-16 w-16 bg-md-surface-variant rounded-[16px]" />
             <div className="flex-1 space-y-3 py-1">
@@ -31,11 +31,11 @@ export const Gaming = memo(function Gaming() {
   if (error) {
     return (
       <div className="space-y-4">
-        <h2 className="text-xl font-bold font-display text-md-on-background flex items-center gap-2.5">
+        <h2 className="text-xl type-title text-md-on-background flex items-center gap-2.5">
           Gaming Activity
           <Gamepad2 className="w-5 h-5 text-md-outline" />
         </h2>
-        <div className="p-4 rounded-[28px] border border-md-outline-variant/20 bg-md-surface-container-low shadow-sm w-full select-none">
+        <div className="p-4 rounded-m3-xl border border-md-outline-variant/20 bg-md-surface-container shadow-sm w-full select-none">
           <div className="flex items-center gap-4">
             <div className="h-16 w-16 shrink-0 bg-md-surface-variant rounded-[16px] flex items-center justify-center border border-md-outline-variant/30">
               <Gamepad2 className="h-8 w-8 text-md-on-surface-variant" />
@@ -59,11 +59,11 @@ export const Gaming = memo(function Gaming() {
   if (isInactive) {
     return (
       <div className="space-y-4">
-        <h2 className="text-xl font-bold font-display text-md-on-background flex items-center gap-2.5">
+        <h2 className="text-xl type-title text-md-on-background flex items-center gap-2.5">
           Gaming Activity
           <Gamepad2 className="w-5 h-5 text-md-outline" />
         </h2>
-        <div className="p-4 rounded-[28px] border border-md-outline-variant/20 bg-md-surface-container-low shadow-sm w-full select-none">
+        <div className="p-4 rounded-m3-xl border border-md-outline-variant/20 bg-md-surface-container shadow-sm w-full select-none">
           <div className="flex items-center gap-4">
             <div className="h-16 w-16 shrink-0 bg-md-surface-variant rounded-[16px] flex items-center justify-center border border-md-outline-variant/30">
               <Gamepad2 className="h-8 w-8 text-md-on-surface-variant" />
@@ -93,7 +93,7 @@ export const Gaming = memo(function Gaming() {
         href={`https://store.steampowered.com/app/${data.gameId}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="group block rounded-[28px] border border-md-outline-variant/30 bg-md-surface-container-low hover:bg-md-primary/5 hover:border-md-primary/30 transition-all duration-300 overflow-hidden w-full relative shadow-sm hover:shadow-md"
+        className="group block rounded-m3-xl hover:rounded-m3-2xl border border-md-outline-variant/30 bg-md-surface-container hover:bg-md-primary/5 hover:border-md-primary/30 shape-morph overflow-hidden w-full relative shadow-sm hover:shadow-lg"
       >
         <Ripple />
         <div className="flex items-center gap-4 p-4">

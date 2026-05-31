@@ -34,9 +34,27 @@ export const m3ColorKeys = [
 
 export type M3ColorKey = typeof m3ColorKeys[number];
 
-/**
- * Generates an M3 scheme from a seed hex color and updates CSS variables on the document element.
- */
+const surfaceTones = {
+  light: {
+    'surface-dim': 87,
+    'surface-bright': 98,
+    'surface-container-lowest': 100,
+    'surface-container-low': 96,
+    'surface-container': 94,
+    'surface-container-high': 92,
+    'surface-container-highest': 90,
+  },
+  dark: {
+    'surface-dim': 6,
+    'surface-bright': 24,
+    'surface-container-lowest': 4,
+    'surface-container-low': 10,
+    'surface-container': 12,
+    'surface-container-high': 17,
+    'surface-container-highest': 22,
+  },
+} as const;
+
 export function applyM3Theme(seedColorHex: string, isDark: boolean) {
   if (typeof window === 'undefined') return;
 
@@ -48,16 +66,21 @@ export function applyM3Theme(seedColorHex: string, isDark: boolean) {
     const root = document.documentElement;
 
     m3ColorKeys.forEach((key) => {
-      // Get ARGB color integer
       const colorValue = scheme[key];
       if (typeof colorValue === 'number') {
         const hex = hexFromArgb(colorValue);
-        // Inject as CSS Custom Property
-        // Transform camelCase keys to kebab-case
         const kebabKey = key.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
         root.style.setProperty(`--md-sys-color-${kebabKey}`, hex);
       }
     });
+
+    const neutral = theme.palettes.neutral;
+    const tones = isDark ? surfaceTones.dark : surfaceTones.light;
+    (Object.entries(tones) as [string, number][]).forEach(([role, tone]) => {
+      root.style.setProperty(`--md-sys-color-${role}`, hexFromArgb(neutral.tone(tone)));
+    });
+
+    root.style.setProperty('--md-sys-color-surface-tint', hexFromArgb(scheme.primary));
   } catch (error) {
     console.error('Failed to apply M3 Theme:', error);
   }

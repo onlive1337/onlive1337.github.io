@@ -33,7 +33,7 @@ export const Experience = memo(function Experience() {
     return (
         <section id="experience" className="py-16 scroll-mt-24">
             <div className="container mx-auto px-4 max-w-4xl">
-                <h2 className="mb-12 text-center text-3xl font-extrabold tracking-tight font-display text-md-on-background">
+                <h2 className="mb-12 text-center type-headline text-md-on-background">
                     Experience
                 </h2>
 
@@ -49,7 +49,7 @@ export const Experience = memo(function Experience() {
 
                         <div className="relative">
                             {/* M3 styled timeline line */}
-                            <div className="absolute left-4.5 sm:left-6.5 top-2 bottom-2 w-[2px] bg-md-outline-variant/30" />
+                            <div className="absolute left-4.5 sm:left-6.5 top-2 bottom-2 w-0.5 bg-md-outline-variant/30" />
 
                             <div className="flex flex-col gap-6">
                                 {jobs.map((job, index) => (
@@ -59,11 +59,11 @@ export const Experience = memo(function Experience() {
                                             className={`absolute left-3 sm:left-5 top-7 w-3.5 h-3.5 rounded-full ${job.nodeColor} ring-4 ring-md-background z-10 shadow-sm`}
                                         />
 
-                                        <div className="rounded-[28px] border border-md-outline-variant/30 bg-md-surface-container-low p-6 shadow-sm hover:shadow-md hover:scale-[1.01] transition-all duration-300 relative overflow-hidden select-none">
+                                        <div className="rounded-m3-xl hover:rounded-m3-2xl border border-md-outline-variant/30 bg-md-surface-container p-6 shadow-sm hover:shadow-lg hover:scale-[1.01] shape-morph relative overflow-hidden select-none">
                                             <Ripple />
                                             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2.5">
                                                 <div className="space-y-1">
-                                                    <h4 className="text-lg font-bold font-display text-md-on-surface">
+                                                    <h4 className="text-lg type-title text-md-on-surface">
                                                         {job.title}
                                                     </h4>
                                                     <div className="flex items-center flex-wrap gap-2 text-xs">
@@ -98,7 +98,7 @@ export const Experience = memo(function Experience() {
                             Education
                         </h3>
 
-                        <div className="rounded-[28px] border border-md-outline-variant/30 bg-md-surface-container-low p-6 shadow-sm hover:shadow-md hover:scale-[1.01] transition-all duration-300 relative overflow-hidden select-none">
+                        <div className="rounded-m3-xl hover:rounded-m3-2xl border border-md-outline-variant/30 bg-md-surface-container p-6 shadow-sm hover:shadow-lg hover:scale-[1.01] shape-morph relative overflow-hidden select-none">
                             <Ripple />
                             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2.5">
                                 <div className="space-y-1">

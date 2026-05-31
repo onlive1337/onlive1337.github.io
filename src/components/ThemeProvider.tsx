@@ -3,7 +3,7 @@ import { ThemeProvider as NextThemesProvider, useTheme } from 'next-themes'
 import { ReactNode, useEffect } from 'react'
 import { applyM3Theme } from '@/utils/m3-theme'
 
-export const DEFAULT_SEED_COLOR = '#6750A4'; // Premium violet M3 seed color
+export const DEFAULT_SEED_COLOR = '#8E4EC6';
 
 interface ThemeProviderProps {
   children: ReactNode;

@@ -43,7 +43,7 @@ export const Socials = memo(function Socials() {
   return (
     <section id="socials" className="py-16">
       <div className="container mx-auto px-4 max-w-4xl">
-        <h2 className="mb-10 text-center text-3xl font-extrabold tracking-tight font-display text-md-on-background">
+        <h2 className="mb-10 text-center type-headline text-md-on-background">
           Connect with me
         </h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 justify-center">
@@ -53,7 +53,7 @@ export const Socials = memo(function Socials() {
               href={social.url}
               target="_blank"
               rel="noopener noreferrer"
-              className={`group flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-3 px-5 py-4 rounded-[24px] border border-md-outline-variant bg-md-surface-container-low transition-all duration-300 relative overflow-hidden shadow-sm hover:shadow-md hover:scale-[1.03] select-none ${social.brandBg}`}
+              className={`group flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-3 px-5 py-4 rounded-m3-lg hover:rounded-m3-2xl border border-md-outline-variant bg-md-surface-container shape-morph relative overflow-hidden shadow-sm hover:shadow-lg hover:scale-[1.04] select-none ${social.brandBg}`}
             >
               <Ripple />
               <social.icon 

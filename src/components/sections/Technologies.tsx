@@ -50,7 +50,7 @@ export const Technologies = memo(function Technologies() {
   return (
     <section id="technologies" className="py-16 scroll-mt-24">
       <div className="container mx-auto px-4 max-w-5xl">
-        <h2 className="mb-10 text-center text-3xl font-extrabold tracking-tight font-display text-md-on-background">
+        <h2 className="mb-10 text-center type-headline text-md-on-background">
           Technologies
         </h2>
         
@@ -65,10 +65,10 @@ export const Technologies = memo(function Technologies() {
             <motion.div
               key={category}
               variants={cardVariants}
-              className="rounded-[28px] border border-md-outline-variant/30 bg-md-surface-container-low p-6 shadow-sm hover:shadow-md hover:scale-[1.02] transition-all duration-300 relative overflow-hidden select-none"
+              className="rounded-m3-xl hover:rounded-m3-2xl border border-md-outline-variant/30 bg-md-surface-container p-6 shadow-sm hover:shadow-lg hover:scale-[1.02] shape-morph relative overflow-hidden select-none"
             >
               <Ripple />
-              <h3 className="mb-5 text-lg font-bold capitalize font-display text-md-on-surface tracking-wide">
+              <h3 className="mb-5 text-lg type-title capitalize text-md-on-surface">
                 {category}
               </h3>
               <div className="flex flex-wrap gap-2.5">

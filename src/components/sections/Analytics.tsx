@@ -52,7 +52,7 @@ export const Analytics = memo(function Analytics() {
   if (loading) {
     return (
       <div className="container mx-auto px-4 pb-8 max-w-4xl">
-        <div className="rounded-[28px] border border-md-outline-variant/30 bg-md-surface-container-low overflow-hidden shadow-sm">
+        <div className="rounded-m3-xl border border-md-outline-variant/30 bg-md-surface-container overflow-hidden shadow-sm">
           <TerminalHeader />
           <div className="p-5 font-mono text-xs sm:text-sm select-none">
             <div className="flex items-center gap-2.5 text-md-on-surface-variant font-medium">
@@ -68,7 +68,7 @@ export const Analytics = memo(function Analytics() {
   if (error) {
     return (
       <div className="container mx-auto px-4 pb-8 max-w-4xl">
-        <div className="rounded-[28px] border border-md-outline-variant/30 bg-md-surface-container-low overflow-hidden shadow-sm">
+        <div className="rounded-m3-xl border border-md-outline-variant/30 bg-md-surface-container overflow-hidden shadow-sm">
           <TerminalHeader />
           <div className="p-5 font-mono text-xs sm:text-sm select-none">
             <div className="text-md-error font-medium">
@@ -83,7 +83,7 @@ export const Analytics = memo(function Analytics() {
 
   return (
     <div className="container mx-auto px-4 pb-8 max-w-4xl">
-      <div className="rounded-[28px] border border-md-outline-variant/30 bg-md-surface-container-low overflow-hidden shadow-sm hover:shadow-md transition-all duration-300">
+      <div className="rounded-m3-xl border border-md-outline-variant/30 bg-md-surface-container overflow-hidden shadow-sm hover:shadow-md transition-all duration-300">
         <TerminalHeader />
         <div className="p-5 font-mono text-xs sm:text-sm">
           <div className="space-y-3">

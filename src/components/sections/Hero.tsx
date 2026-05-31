@@ -27,7 +27,7 @@ type Status = {
 
 const Avatar = memo(function Avatar() {
   return (
-    <div className="relative h-40 w-40 overflow-hidden rounded-[38px] hover:rounded-[24px] transition-all duration-500 cubic-bezier(0.2, 0, 0, 1) border-4 border-md-primary/10 hover:border-md-primary/30 shadow-md">
+    <div className="relative h-40 w-40 overflow-hidden rounded-m3-2xl hover:rounded-m3-lg hover:scale-[1.03] shape-morph border-4 border-md-primary/10 hover:border-md-primary/30 shadow-lg">
       <Image
         src="/avatar.avif"
         alt="Avatar"
@@ -146,7 +146,7 @@ const StatusIndicator = memo(function StatusIndicator({ status }: { status: Stat
 const HeroContent = memo(function HeroContent() {
   return (
     <div className="text-center space-y-4">
-      <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight font-display text-md-on-background">
+      <h1 className="type-display text-md-on-background">
         onlive
       </h1>
       <p className="text-xl md:text-2xl font-semibold tracking-wide text-md-primary">

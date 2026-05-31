@@ -2,7 +2,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import React, { memo, useState, useEffect, useCallback } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion } from "framer-motion"
 import { Share2, Cpu, Briefcase, FolderGit2, FileText } from 'lucide-react'
 import { ThemeToggle } from './ThemeToggle'
 import { Ripple } from "@/components/ui/Ripple"
@@ -43,12 +43,8 @@ function NavigationComponent() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Track active section via Intersection Observer when on homepage
   useEffect(() => {
-    if (isResumePage) {
-      setActiveSection('/resume');
-      return;
-    }
+    if (isResumePage) return;
 
     const sections = ['socials', 'technologies', 'experience', 'portfolio'];
     const observers = sections.map((id) => {
@@ -111,12 +107,12 @@ function NavigationComponent() {
                     isActive ? "text-md-on-primary-container" : "text-md-on-surface-variant hover:text-md-on-surface"
                   }`}
                 >
-                  <Ripple />
+                  <Ripple color={isActive ? "var(--md-sys-color-on-primary-container)" : "var(--md-sys-color-on-surface)"} />
                   {isActive && (
                     <motion.span
                       layoutId="active-nav-pill-desktop"
                       className="absolute inset-0 bg-md-primary-container rounded-full -z-10"
-                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                      transition={{ type: "spring", stiffness: 420, damping: 26 }}
                     />
                   )}
                   {item.name}
@@ -150,7 +146,7 @@ function NavigationComponent() {
               onClick={(e) => handleNavClick(e, item)}
               className="flex flex-col items-center justify-center flex-1 h-full py-1 text-center relative"
             >
-              <Ripple />
+              <Ripple color="var(--md-sys-color-on-surface)" />
               {/* Icon Container with active pill background */}
               <div className="relative flex items-center justify-center h-8 w-14 rounded-full transition-colors duration-300 text-md-on-surface-variant">
                 {isActive && (

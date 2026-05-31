@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { Inter, Outfit } from "next/font/google"
+import { Inter, Roboto_Flex } from "next/font/google"
 import { ThemeProvider } from "@/components/ThemeProvider"
 import { Background } from "@/components/Background"
 import Script from 'next/script'
@@ -7,7 +7,7 @@ import "./globals.css"
 import React from "react";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" })
-const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" })
+const robotoFlex = Roboto_Flex({ subsets: ["latin"], variable: "--font-roboto-flex" })
 
 export const metadata: Metadata = {
   title: "onlive - Full Stack Developer",
@@ -45,7 +45,7 @@ export default function RootLayout({
           `}
         </Script>
       </head>
-      <body className={`${inter.variable} ${outfit.variable} antialiased`}>
+      <body className={`${inter.variable} ${robotoFlex.variable} antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"

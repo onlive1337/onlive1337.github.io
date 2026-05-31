@@ -37,9 +37,27 @@
   --color-md-inverse-on-surface: var(--md-sys-color-inverse-on-surface);
   --color-md-inverse-primary: var(--md-sys-color-inverse-primary);
 
+  /* Tonal surface roles (MD3E surface system) */
+  --color-md-surface-dim: var(--md-sys-color-surface-dim);
+  --color-md-surface-bright: var(--md-sys-color-surface-bright);
+  --color-md-surface-container-lowest: var(--md-sys-color-surface-container-lowest);
+  --color-md-surface-container-low: var(--md-sys-color-surface-container-low);
+  --color-md-surface-container: var(--md-sys-color-surface-container);
+  --color-md-surface-container-high: var(--md-sys-color-surface-container-high);
+  --color-md-surface-container-highest: var(--md-sys-color-surface-container-highest);
+  --color-md-surface-tint: var(--md-sys-color-surface-tint);
+
   /* Fonts */
   --font-sans: var(--font-inter), sans-serif;
-  --font-display: var(--font-outfit), sans-serif;
+  --font-display: var(--font-roboto-flex), var(--font-inter), sans-serif;
+
+  /* MD3 Expressive shape scale → rounded-m3-* utilities */
+  --radius-m3-xs: 4px;
+  --radius-m3-sm: 8px;
+  --radius-m3-md: 12px;
+  --radius-m3-lg: 16px;
+  --radius-m3-xl: 28px;
+  --radius-m3-2xl: 36px;
 
   --animate-ripple: ripple 600ms cubic-bezier(0.2, 0, 0, 1);
   --animate-bar-1: bar-1 0.8s infinite ease-in-out alternate;
@@ -84,6 +102,13 @@
 @layer base {
   :root {
     color-scheme: light;
+
+    /* MD3 Expressive motion easings. linear() springs fall back to an
+       overshooting cubic-bezier where unsupported (see @supports below). */
+    --ease-emphasized: cubic-bezier(0.2, 0, 0, 1);
+    --ease-emphasized-decel: cubic-bezier(0.05, 0.7, 0.1, 1);
+    --ease-spring: linear(0, 0.006, 0.025 2.8%, 0.101 6.1%, 0.539 18.9%, 0.721 25.3%, 0.849, 0.937 35.6%, 0.968, 0.991, 1.007, 1.017 43.3%, 1.022, 1.024, 1.021, 1.012 53.4%, 1.001 58.5%, 0.998 62.8%, 0.998 68.1%, 1 75.4%, 1);
+    --ease-spring-bounce: linear(0, 0.218 2.1%, 0.852 6.5%, 1.114, 1.296 10.7%, 1.346, 1.37 12.9%, 1.373, 1.364 14.5%, 1.332 16.1%, 1.176 19.9%, 1.085 23.1%, 1.046, 1.015, 0.998 30.8%, 0.99, 0.984, 0.984 36.9%, 0.997 43%, 1.003 49.1%, 1.001 56.9%, 1);
   }
 
   html {
@@ -172,5 +197,145 @@ body {
 }
 
 input, textarea {
-  @apply focus:outline-none focus:ring-2 focus:ring-blue-500/50 dark:focus:ring-blue-400/50;
+  @apply focus:outline-none focus:ring-2 focus:ring-md-primary/50;
+}
+
+/* linear() springs are Baseline Newly available (2023). Fall back to an
+   overshooting cubic-bezier where unsupported, so motion still feels lively. */
+@supports not (animation-timing-function: linear(0, 1)) {
+  :root {
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --ease-spring-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+}
+
+@layer components {
+  /* Expressive type scale (MD3E) — bold, emotive headings via Roboto Flex. */
+  .type-display {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(2.75rem, 7vw, 4.25rem);
+    line-height: 1.04;
+    letter-spacing: -0.02em;
+  }
+
+  .type-headline {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+  }
+
+  .type-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.005em;
+  }
+
+  /* Shape morph: corners relax on hover and tighten on press, driven by the
+     expressive spring. Pair with a base `rounded-*` value on the element. */
+  .shape-morph {
+    transition:
+      border-radius 0.5s var(--ease-spring),
+      transform 0.45s var(--ease-spring),
+      box-shadow 0.4s var(--ease-emphasized),
+      background-color 0.4s var(--ease-emphasized),
+      border-color 0.4s var(--ease-emphasized),
+      color 0.4s var(--ease-emphasized);
+  }
+}
+
+/* Expressive backdrop colour fields (Background.tsx). Soft radial blobs that
+   re-tint with the palette tokens and drift slowly. */
+.bg-blob {
+  position: absolute;
+  border-radius: 9999px;
+  opacity: 0.2;
+  will-change: transform;
+}
+
+.dark .bg-blob {
+  opacity: 0.28;
+}
+
+.bg-blob-1 {
+  width: 46rem;
+  height: 46rem;
+  top: -14rem;
+  left: -10rem;
+  background: radial-gradient(circle at center, color-mix(in srgb, var(--md-sys-color-primary) 60%, transparent), transparent 68%);
+  animation: blob-drift-1 26s var(--ease-emphasized) infinite alternate;
+}
+
+.bg-blob-2 {
+  width: 40rem;
+  height: 40rem;
+  top: 18%;
+  right: -12rem;
+  background: radial-gradient(circle at center, color-mix(in srgb, var(--md-sys-color-tertiary) 55%, transparent), transparent 68%);
+  animation: blob-drift-2 32s var(--ease-emphasized) infinite alternate;
+}
+
+.bg-blob-3 {
+  width: 38rem;
+  height: 38rem;
+  bottom: -14rem;
+  left: 22%;
+  background: radial-gradient(circle at center, color-mix(in srgb, var(--md-sys-color-secondary) 55%, transparent), transparent 68%);
+  animation: blob-drift-3 28s var(--ease-emphasized) infinite alternate;
+}
+
+@keyframes blob-drift-1 {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to   { transform: translate3d(6rem, 4rem, 0) scale(1.12); }
+}
+
+@keyframes blob-drift-2 {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to   { transform: translate3d(-5rem, 3rem, 0) scale(1.08); }
+}
+
+@keyframes blob-drift-3 {
+  from { transform: translate3d(0, 0, 0) scale(1.05); }
+  to   { transform: translate3d(4rem, -5rem, 0) scale(0.95); }
+}
+
+/* Theme switch via View Transitions API: expanding circular reveal from the
+   toggle button. Scoped to `html.theme-vt` so route navigations keep the
+   default crossfade. Gated behind no-preference for reduced-motion users. */
+@media (prefers-reduced-motion: no-preference) {
+  html.theme-vt::view-transition-old(root) {
+    animation: none;
+    z-index: 0;
+  }
+
+  html.theme-vt::view-transition-new(root) {
+    animation: vt-theme-reveal 0.5s var(--ease-emphasized);
+    z-index: 1;
+  }
+
+  @keyframes vt-theme-reveal {
+    from { clip-path: circle(0% at var(--vt-x, 50%) var(--vt-y, 50%)); }
+    to   { clip-path: circle(var(--vt-r, 150%) at var(--vt-x, 50%) var(--vt-y, 50%)); }
+  }
+}
+
+/* Respect reduced-motion: drop spring overshoot and transforms. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --ease-spring: ease-out;
+    --ease-spring-bounce: ease-out;
+  }
+
+  .shape-morph {
+    transition: box-shadow 0.2s ease;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
 }

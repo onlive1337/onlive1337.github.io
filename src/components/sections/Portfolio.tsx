@@ -1,7 +1,7 @@
 "use client"
 import { useState, useEffect, useCallback, memo } from "react";
 import Link from "next/link";
-import { Star, GitFork, BookOpen } from "lucide-react";
+import { Star, BookOpen } from "lucide-react";
 import { fetchFromAPI } from "@/utils/api";
 import { GithubRepo } from "@/types";
 import { Ripple } from "@/components/ui/Ripple";
@@ -36,7 +36,7 @@ export const Portfolio = memo(function Portfolio() {
   return (
     <section id="portfolio" className="py-16 scroll-mt-24">
       <div className="container mx-auto px-4 max-w-4xl">
-        <h2 className="mb-10 text-center text-3xl font-extrabold tracking-tight font-display text-md-on-background">
+        <h2 className="mb-10 text-center type-headline text-md-on-background">
           Portfolio
         </h2>
         
@@ -45,7 +45,7 @@ export const Portfolio = memo(function Portfolio() {
             {[1, 2, 3].map((i) => (
               <div 
                 key={i}
-                className="rounded-[28px] border border-md-outline-variant/30 bg-md-surface-container-low p-6 shadow-sm"
+                className="rounded-m3-xl border border-md-outline-variant/30 bg-md-surface-container p-6 shadow-sm"
               >
                 <div className="animate-pulse space-y-4">
                   <div className="h-6 bg-md-surface-variant rounded-full w-1/4" />
@@ -62,13 +62,13 @@ export const Portfolio = memo(function Portfolio() {
             ))}
           </div>
         ) : error ? (
-          <div className="rounded-[28px] border border-md-outline-variant/30 bg-md-surface-container-low p-8 shadow-sm text-center">
+          <div className="rounded-m3-xl border border-md-outline-variant/30 bg-md-surface-container p-8 shadow-sm text-center">
             <p className="text-md-on-surface-variant font-medium">
               Unable to load repositories data at this time.
             </p>
           </div>
         ) : repos.length === 0 ? (
-          <div className="rounded-[28px] border border-md-outline-variant/30 bg-md-surface-container-low p-8 shadow-sm text-center">
+          <div className="rounded-m3-xl border border-md-outline-variant/30 bg-md-surface-container p-8 shadow-sm text-center">
             <p className="text-md-on-surface-variant font-medium">No repositories available</p>
           </div>
         ) : (
@@ -79,13 +79,13 @@ export const Portfolio = memo(function Portfolio() {
                 href={repo.html_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group rounded-[28px] border border-md-outline-variant/30 bg-md-surface-container-low p-6 shadow-sm hover:shadow-md hover:scale-[1.01] transition-all duration-300 relative overflow-hidden select-none flex flex-col justify-between"
+                className="group rounded-m3-xl hover:rounded-m3-2xl border border-md-outline-variant/30 bg-md-surface-container p-6 shadow-sm hover:shadow-lg hover:scale-[1.01] shape-morph relative overflow-hidden select-none flex flex-col justify-between"
               >
                 <Ripple />
                 <div>
                   <div className="flex items-center gap-2.5 mb-2.5 text-md-primary">
                     <BookOpen className="w-5 h-5" />
-                    <h3 className="text-xl font-bold font-display text-md-on-surface group-hover:text-md-primary transition-colors duration-200">
+                    <h3 className="text-xl type-title text-md-on-surface group-hover:text-md-primary transition-colors duration-200">
                       {repo.name}
                     </h3>
                   </div>

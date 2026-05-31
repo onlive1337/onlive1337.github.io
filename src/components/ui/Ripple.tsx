@@ -1,16 +1,24 @@
 "use client";
-import { useEffect } from 'react';
+import { useEffect, type CSSProperties } from 'react';
 
-/**
- * Official Google Material Web `<md-ripple>` wrapper.
- * Lazily imports the web component definition on the client side only.
- */
-export function Ripple({ disabled = false }: { disabled?: boolean }) {
+export function Ripple({
+  disabled = false,
+  color,
+}: {
+  disabled?: boolean;
+  color?: string;
+}) {
   useEffect(() => {
-    // Dynamically register the custom element once on the client
     import('@material/web/ripple/ripple.js');
   }, []);
 
+  const style = color
+    ? ({
+        '--md-ripple-hover-color': color,
+        '--md-ripple-pressed-color': color,
+      } as CSSProperties)
+    : undefined;
+
   // @ts-expect-error — md-ripple is a custom element typed in custom-elements.d.ts
-  return <md-ripple aria-hidden="true" {...(disabled ? { disabled: true } : {})} />;
+  return <md-ripple aria-hidden="true" style={style} {...(disabled ? { disabled: true } : {})} />;
 }

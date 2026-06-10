@@ -301,10 +301,11 @@ input, textarea {
   to   { transform: translate3d(4rem, -5rem, 0) scale(0.95); }
 }
 
-/* Theme switch via View Transitions API: expanding circular reveal from the
-   toggle button. Scoped to `html.theme-vt` so route navigations keep the
-   default crossfade. Gated behind no-preference for reduced-motion users. */
 @media (prefers-reduced-motion: no-preference) {
+  html.theme-vt .bg-blob {
+    animation-play-state: paused;
+  }
+
   html.theme-vt::view-transition-old(root) {
     animation: none;
     z-index: 0;

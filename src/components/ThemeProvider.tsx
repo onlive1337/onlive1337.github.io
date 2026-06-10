@@ -1,6 +1,6 @@
 "use client"
 import { ThemeProvider as NextThemesProvider, useTheme } from 'next-themes'
-import { ReactNode, useEffect } from 'react'
+import { ReactNode, useLayoutEffect } from 'react'
 import { applyM3Theme } from '@/utils/m3-theme'
 
 export const DEFAULT_SEED_COLOR = '#8E4EC6';
@@ -15,7 +15,7 @@ interface ThemeProviderProps {
 function M3ThemeSync() {
   const { resolvedTheme } = useTheme();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const isDark = resolvedTheme === 'dark';
     applyM3Theme(DEFAULT_SEED_COLOR, isDark);
   }, [resolvedTheme]);
@@ -31,7 +31,7 @@ export function ThemeProvider({
     <NextThemesProvider 
       {...props}
       enableSystem={false}
-      disableTransitionOnChange={false}
+      disableTransitionOnChange={true}
     >
       <M3ThemeSync />
       {children}

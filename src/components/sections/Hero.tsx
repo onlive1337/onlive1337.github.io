@@ -153,11 +153,10 @@ const HeroContent = memo(function HeroContent() {
         Full Stack Developer
       </p>
       <div className="flex flex-col items-center gap-1.5 text-md-on-background-variant">
-        <div className="flex items-center gap-2.5 flex-wrap justify-center font-medium">
-          <span>smol femboy dev</span>
-          <span className="text-xl animate-pulse">🦊</span>
+        <div className="flex items-center gap-1.5 flex-wrap justify-center font-medium">
+          <span>tech enthusiast</span>
           <span>from</span>
-          <span className="text-xl hover:scale-115 transition-transform duration-200 cursor-default">🇺🇿</span>
+          <span className="text-xl cursor-default">🇺🇿</span>
         </div>
         <span className="font-mono text-sm opacity-80 select-none bg-md-secondary-container text-md-on-secondary-container px-3 py-0.5 rounded-full">
           {<PreciseAge />} y.o

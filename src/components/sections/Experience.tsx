@@ -5,6 +5,14 @@ import { Ripple } from "@/components/ui/Ripple";
 
 const jobs = [
     {
+        title: "Customer Tech Support Engineer",
+        company: "Uzum Bank",
+        type: "Full-Time",
+        period: "July 2026 — Present",
+        nodeColor: "bg-md-tertiary",
+        badgeStyle: "bg-md-tertiary-container text-md-on-tertiary-container",
+    },
+    {
         title: "System Administrator",
         company: "PROWEB",
         type: "Full-Time",

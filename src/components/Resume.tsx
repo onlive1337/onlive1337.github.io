@@ -128,39 +128,39 @@ export default function Resume() {
                                 </h2>
                                 <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                                     <tbody>
-                                        {[
-                                            { name: 'HTML/CSS', level: 90 },
-                                            { name: 'React/Vue', level: 75 },
-                                            { name: 'Bootstrap', level: 80 },
-                                            { name: 'Git/GitHub', level: 85 },
-                                            { name: 'JavaScript', level: 70 },
-                                            { name: 'Web Optimization', level: 85 },
-                                            { name: 'Responsive Design', level: 80 },
-                                            { name: 'Teamwork', level: 70 },
-                                            { name: 'Cross-Browser', level: 85 },
-                                            { name: 'TypeScript', level: 40 },
-                                        ].map((skill) => (
-                                            <tr key={skill.name}>
-                                                <td style={{ paddingBottom: '8px', verticalAlign: 'top' }}>
-                                                    <div style={{ fontSize: '12px', fontWeight: '500', color: '#374151', marginBottom: '4px' }}>
-                                                        {skill.name}
-                                                    </div>
-                                                    <div style={{ width: '100%', backgroundColor: '#e5e7eb', borderRadius: '9999px', height: '6px', position: 'relative' }}>
-                                                        <div
-                                                            style={{
-                                                                backgroundColor: '#1f2937',
-                                                                height: '6px',
-                                                                borderRadius: '9999px',
-                                                                width: `${skill.level}%`,
-                                                                position: 'absolute',
-                                                                top: 0,
-                                                                left: 0
-                                                            }}
-                                                        />
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        ))}
+                                    {[
+                                        { name: 'HTML/CSS', level: 90 },
+                                        { name: 'React/Vue', level: 75 },
+                                        { name: 'Bootstrap', level: 80 },
+                                        { name: 'Git/GitHub', level: 85 },
+                                        { name: 'JavaScript', level: 70 },
+                                        { name: 'Web Optimization', level: 85 },
+                                        { name: 'Responsive Design', level: 80 },
+                                        { name: 'Teamwork', level: 70 },
+                                        { name: 'Cross-Browser', level: 85 },
+                                        { name: 'TypeScript', level: 40 },
+                                    ].map((skill) => (
+                                        <tr key={skill.name}>
+                                            <td style={{ paddingBottom: '8px', verticalAlign: 'top' }}>
+                                                <div style={{ fontSize: '12px', fontWeight: '500', color: '#374151', marginBottom: '4px' }}>
+                                                    {skill.name}
+                                                </div>
+                                                <div style={{ width: '100%', backgroundColor: '#e5e7eb', borderRadius: '9999px', height: '6px', position: 'relative' }}>
+                                                    <div
+                                                        style={{
+                                                            backgroundColor: '#1f2937',
+                                                            height: '6px',
+                                                            borderRadius: '9999px',
+                                                            width: `${skill.level}%`,
+                                                            position: 'absolute',
+                                                            top: 0,
+                                                            left: 0
+                                                        }}
+                                                    />
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))}
                                     </tbody>
                                 </table>
                             </div>
@@ -211,6 +211,20 @@ export default function Resume() {
                                         <p style={{ marginBottom: '0.125rem' }}>• Experienced in implementing, configuring and troubleshooting a variety of hardware and software systems.</p>
                                         <p style={{ marginBottom: '0.125rem' }}>• Provided 24/7 technical support for all computer systems and networks.</p>
                                         <p style={{ marginBottom: '0.125rem' }}>• Performed system patches and upgrades in a timely manner.</p>
+                                    </div>
+                                </div>
+                                {/* Job 3 */}
+                                <div>
+                                    <h3 style={{ fontSize: '0.875rem', fontWeight: '600', color: '#111827' }}>
+                                        Customer Tech Support Engineer, Uzum Bank
+                                    </h3>
+                                    <p style={{ fontSize: '0.75rem', color: '#6b7280', marginBottom: '0.5rem' }}>
+                                        July 2026 - Present
+                                    </p>
+                                    <div style={{ fontSize: '0.75rem', color: '#374151', marginLeft: '0.5rem' }}>
+                                        <p style={{ marginBottom: '0.125rem' }}>• Provide technical support for customers, resolving application and system issues.</p>
+                                        <p style={{ marginBottom: '0.125rem' }}>• Analyze logs and monitoring data to diagnose and escalate incidents.</p>
+                                        <p style={{ marginBottom: '0.125rem' }}>• Work with SQL and monitoring tools (Grafana, Zabbix, Prometheus) to track system health.</p>
                                     </div>
                                 </div>
                             </div>

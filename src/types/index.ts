@@ -7,15 +7,6 @@ export interface GithubRepo {
   topics: string[];
 }
 
-export interface SpotifyData {
-  isPlaying: boolean;
-  title?: string;
-  artist?: string;
-  album?: string;
-  albumImageUrl?: string;
-  songUrl?: string;
-}
-
 export interface SteamData {
   isPlaying: boolean;
   name?: string;
@@ -41,7 +32,3 @@ export interface LastFMData {
   tracks?: Track[];
 }
 
-export interface AnalyticsData {
-  views: number;
-  unique_visitors: number;
-}

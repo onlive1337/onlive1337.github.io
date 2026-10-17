@@ -17,7 +17,7 @@ This is a **statically-exported** Next.js 16 / React 19 portfolio site (`output:
 
 ### Critical: there is no server runtime
 
-Because the site is a static export, **all "real-time" data (music, Steam, GitHub, analytics) is fetched client-side at runtime from a separate external API**, not from Next.js. That API base URL lives in `src/utils/api.ts` (`API_BASE_URL`, overridable with `NEXT_PUBLIC_API_URL`) and points to a separately-hosted service (`portfolio-api-*.vercel.app`). The Spotify/Steam secrets referenced in the README and in the GitHub Actions `build` env are consumed by **that** external API project, not by this repo — do not assume Next.js API routes or server components fetch them here.
+Because the site is a static export, **all "real-time" data (music, Steam, GitHub) is fetched client-side at runtime from a separate external API**, not from Next.js. That API base URL lives in `src/utils/api.ts` (`API_BASE_URL`, overridable with `NEXT_PUBLIC_API_URL`) and points to a separately-hosted service (`portfolio-api-*.vercel.app`). The Spotify/Steam secrets referenced in the README and in the GitHub Actions `build` env are consumed by **that** external API project, not by this repo — do not assume Next.js API routes or server components fetch them here.
 
 - `src/utils/api.ts` — `fetchFromAPIWithMeta` / `fetchFromAPI`: fetch wrapper with timeout, retries-with-backoff, and content-type validation. All external calls go through this.
 - `src/hooks/use-music.ts`, `src/hooks/use-steam.ts` — SWR hooks polling the external API (`refreshInterval`); they wrap the fetch wrapper and normalize the response shape.
@@ -26,7 +26,7 @@ Because the site is a static export, **all "real-time" data (music, Steam, GitHu
 
 The page is composed almost entirely of `next/dynamic` imports to control hydration and code-split:
 - `src/app/page.tsx` renders `Navigation` + `Hero` (`ssr: true`) and `ClientContent`.
-- `src/components/ClientContent.tsx` is `"use client"` and lazy-loads all the data-driven sections (`Technologies`, `Portfolio`, `Socials`, `NowPlaying`, `Gaming`, `Experience`, `Analytics`) with `ssr: false`, wrapped in `Suspense` and the fade-in animation helpers from `src/utils/Animations.tsx`.
+- `src/components/ClientContent.tsx` is `"use client"` and lazy-loads the sections (`Technologies`, `Portfolio`, `Socials`, `NowPlaying`, `Gaming`, `Experience`), wrapped in `Suspense` and the fade-in animation helpers from `src/utils/Animations.tsx`.
 - Sections live in `src/components/sections/`; layout chrome in `src/components/layout/`.
 - `/resume` (`src/app/resume/page.tsx` → `src/components/Resume.tsx`) is a separate page that uses `html2pdf.js` for PDF export.
 
@@ -42,6 +42,6 @@ Theming is **runtime CSS-variable injection**, not static Tailwind colors:
 - Import alias `@/*` → `src/*`.
 - `cn()` in `src/utils/cn.ts` (clsx + tailwind-merge) for conditional classNames.
 - Shared types in `src/types/index.ts`; web-component typings in `src/types/custom-elements.d.ts`.
-- Animations use `framer-motion`; smooth scrolling uses `lenis`.
+- Animations use `framer-motion`.
 
 > Note: `README.md` is outdated in places (says Next.js 13 / React 18 / server components / Discord/Spotify env vars in this repo). Trust the code and this file over the README for stack and data-flow details.

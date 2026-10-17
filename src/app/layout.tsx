@@ -7,7 +7,11 @@ import "./globals.css"
 import React from "react";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" })
-const robotoFlex = Roboto_Flex({ subsets: ["latin"], variable: "--font-roboto-flex" })
+const robotoFlex = Roboto_Flex({
+  subsets: ["latin"],
+  variable: "--font-roboto-flex",
+  axes: ["wdth", "GRAD", "opsz"],
+})
 
 export const metadata: Metadata = {
   title: "onlive - Full Stack Developer",
@@ -24,7 +28,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
+      <body className={`${inter.variable} ${robotoFlex.variable} antialiased`}>
         <Script id="prevent-flash" strategy="beforeInteractive">
           {`
             (function() {
@@ -44,8 +48,6 @@ export default function RootLayout({
             })();
           `}
         </Script>
-      </head>
-      <body className={`${inter.variable} ${robotoFlex.variable} antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"

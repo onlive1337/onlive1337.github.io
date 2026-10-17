@@ -3,12 +3,12 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import React, { memo, useState, useEffect, useCallback } from "react"
 import { motion } from "framer-motion"
-import { Share2, Cpu, Briefcase, FolderGit2, FileText } from 'lucide-react'
+import { User, Cpu, Briefcase, FolderGit2, FileText } from 'lucide-react'
 import { ThemeToggle } from './ThemeToggle'
 import { Ripple } from "@/components/ui/Ripple"
 
 const navigation = [
-  { name: "Socials", href: "/#socials", hash: "#socials", icon: Share2 },
+  { name: "About Me", href: "/#about", hash: "#about", icon: User },
   { name: "Technologies", href: "/#technologies", hash: "#technologies", icon: Cpu },
   { name: "Experience", href: "/#experience", hash: "#experience", icon: Briefcase },
   { name: "Portfolio", href: "/#portfolio", hash: "#portfolio", icon: FolderGit2 },
@@ -18,7 +18,7 @@ const navigation = [
 function NavigationComponent() {
   const pathname = usePathname();
   const isResumePage = pathname === '/resume';
-  const [activeSection, setActiveSection] = useState<string>('');
+  const [activeSection, setActiveSection] = useState<string>('#about');
 
   const [isMobileVisible, setIsMobileVisible] = useState(true);
   const lastScrollY = React.useRef(0);
@@ -36,6 +36,10 @@ function NavigationComponent() {
         setIsMobileVisible(true);
       }
 
+      if (currentScrollY < 180) {
+        setActiveSection('#about');
+      }
+
       lastScrollY.current = currentScrollY;
     };
 
@@ -46,30 +50,47 @@ function NavigationComponent() {
   useEffect(() => {
     if (isResumePage) return;
 
-    const sections = ['socials', 'technologies', 'experience', 'portfolio'];
-    const observers = sections.map((id) => {
-      const el = document.getElementById(id);
-      if (!el) return null;
+    const sectionIds = ['about', 'technologies', 'experience', 'portfolio'];
+    const observedElements = new Set<Element>();
 
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              setActiveSection(`#${id}`);
-            }
-          });
-        },
-        { threshold: 0.3, rootMargin: '-20% 0px -40% 0px' }
-      );
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(`#${entry.target.id}`);
+          }
+        });
+      },
+      { threshold: 0.25, rootMargin: '-15% 0px -45% 0px' }
+    );
 
-      observer.observe(el);
-      return { el, observer };
-    });
+    const observeAvailableSections = () => {
+      sectionIds.forEach((id) => {
+        const el = document.getElementById(id);
+        if (el && !observedElements.has(el)) {
+          observer.observe(el);
+          observedElements.add(el);
+        }
+      });
+      return observedElements.size === sectionIds.length;
+    };
+
+    if (!observeAvailableSections()) {
+      const mutationObserver = new MutationObserver(() => {
+        if (observeAvailableSections()) {
+          mutationObserver.disconnect();
+        }
+      });
+      mutationObserver.observe(document.body, { childList: true, subtree: true });
+
+      return () => {
+        mutationObserver.disconnect();
+        observer.disconnect();
+      };
+    }
 
     return () => {
-      observers.forEach((obs) => {
-        if (obs) obs.observer.unobserve(obs.el);
-      });
+      observer.disconnect();
     };
   }, [isResumePage]);
 
@@ -78,10 +99,14 @@ function NavigationComponent() {
 
     if (!isResumePage) {
       e.preventDefault();
+      setActiveSection(item.hash);
+      if (item.hash === '#about') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
       const id = item.hash.slice(1);
       const el = document.getElementById(id);
       if (el) {
-        setActiveSection(item.hash);
         el.scrollIntoView({ behavior: 'smooth' });
       }
     }
@@ -89,91 +114,108 @@ function NavigationComponent() {
 
   return (
     <>
-      {/* Desktop Floating Pill Header */}
-      <header className="fixed top-6 left-1/2 -translate-x-1/2 z-50 hidden sm:flex h-14 max-w-2xl w-[90%] items-center justify-between px-6 rounded-full border border-md-outline-variant/30 bg-md-surface-container/80 backdrop-blur-lg shadow-md transition-all duration-300">
-        <nav className="flex items-center gap-2 w-full justify-between">
-          <div className="flex items-center gap-1.5">
-            {navigation.map((item) => {
-              const isActive = isResumePage 
-                ? item.hash === '/resume' 
-                : activeSection === item.hash;
+      {/* Desktop MD3E Floating Toolbar + Split Action Button */}
+      <header className="fixed top-6 left-1/2 -translate-x-1/2 z-50 hidden sm:flex items-center gap-2.5">
+        <nav
+          aria-label="Primary navigation"
+          className="flex h-14 items-center gap-1 p-1.5 rounded-full bg-md-surface-container-highest/90 backdrop-blur-xl shadow-lg"
+        >
+          {navigation.map((item) => {
+            const isActive = isResumePage
+              ? item.hash === '/resume'
+              : activeSection === item.hash;
 
-              return (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  onClick={(e) => handleNavClick(e, item)}
-                  className={`relative px-4 py-2 text-xs font-semibold select-none rounded-full transition-colors duration-300 ${
-                    isActive ? "text-md-on-primary-container" : "text-md-on-surface-variant hover:text-md-on-surface"
-                  }`}
-                >
-                  <Ripple color={isActive ? "var(--md-sys-color-on-primary-container)" : "var(--md-sys-color-on-surface)"} />
-                  {isActive && (
-                    <motion.span
-                      layoutId="active-nav-pill-desktop"
-                      className="absolute inset-0 bg-md-primary-container rounded-full -z-10"
-                      transition={{ type: "spring", stiffness: 420, damping: 26 }}
-                    />
-                  )}
-                  {item.name}
-                </Link>
-              );
-            })}
-          </div>
-          <div className="flex items-center">
-            <ThemeToggle />
-          </div>
-        </nav>
-      </header>
-
-      {/* Mobile M3 Bottom Navigation Bar */}
-      <motion.nav
-        initial={{ y: 0 }}
-        animate={{ y: isMobileVisible ? 0 : "200%" }}
-        transition={{ duration: 0.3, ease: "easeInOut" }}
-        className="fixed bottom-0 left-0 right-0 z-50 flex sm:hidden h-20 border-t border-md-outline-variant/20 bg-md-surface-container/90 backdrop-blur-md shadow-lg pb-safe select-none"
-      >
-        {navigation.map((item) => {
-          const Icon = item.icon;
-          const isActive = isResumePage 
-            ? item.hash === '/resume' 
-            : activeSection === item.hash;
-
-          return (
-            <Link
-              key={item.name}
-              href={item.href}
-              onClick={(e) => handleNavClick(e, item)}
-              className="flex flex-col items-center justify-center flex-1 h-full py-1 text-center relative"
-            >
-              <Ripple color="var(--md-sys-color-on-surface)" />
-              {/* Icon Container with active pill background */}
-              <div className="relative flex items-center justify-center h-8 w-14 rounded-full transition-colors duration-300 text-md-on-surface-variant">
+            return (
+              <Link
+                key={item.name}
+                href={item.href}
+                onClick={(e) => handleNavClick(e, item)}
+                style={{
+                  fontVariationSettings: isActive
+                    ? "'wdth' 106, 'GRAD' 40, 'opsz' 16"
+                    : "'wdth' 100, 'GRAD' 0, 'opsz' 16",
+                }}
+                className={`relative px-4 py-2.5 text-xs font-display font-bold select-none rounded-[20px] shape-morph ${
+                  isActive
+                    ? "text-md-on-primary"
+                    : "text-md-on-surface-variant hover:text-md-on-surface active:rounded-m3-sm"
+                }`}
+              >
+                <Ripple color={isActive ? "var(--md-sys-color-on-primary)" : "var(--md-sys-color-on-surface)"} />
                 {isActive && (
                   <motion.span
-                    layoutId="active-nav-pill-mobile"
-                    className="absolute inset-0 bg-md-secondary-container rounded-full"
-                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                    layoutId="active-nav-pill-desktop"
+                    className="absolute inset-0 bg-md-primary rounded-[20px] -z-10 shadow-sm"
+                    transition={{ type: "spring", stiffness: 200, damping: 28, mass: 1 }}
                   />
                 )}
-                <Icon className={`relative z-10 h-5 w-5 transition-transform duration-300 ${
-                  isActive ? "text-md-on-secondary-container scale-105" : "text-md-on-surface-variant"
-                }`} />
-              </div>
-              {/* Text Label */}
-              <span className={`mt-1 text-[10px] tracking-wide transition-all duration-300 ${
-                isActive ? "text-md-on-surface font-bold" : "text-md-on-surface-variant font-medium"
-              }`}>
                 {item.name}
-              </span>
-            </Link>
-          );
-        })}
-        {/* Floating Mobile Theme Toggle (We put it in the bottom right corner or bottom nav) */}
-        <div className="absolute right-4 bottom-24 bg-md-surface-container-high/90 border border-md-outline-variant/30 rounded-full shadow-lg h-12 w-12 flex items-center justify-center backdrop-blur-md">
+              </Link>
+            );
+          })}
+        </nav>
+
+        {/* Separated MD3E Expressive Action FAB for Theme Toggle */}
+        <div className="flex h-14 w-14 items-center justify-center rounded-m3-xl hover:rounded-[18px] active:rounded-[14px] bg-md-secondary-container text-md-on-secondary-container shadow-lg shape-morph overflow-hidden">
           <ThemeToggle />
         </div>
-      </motion.nav>
+      </header>
+
+      {/* Mobile MD3E Floating Bottom Toolbar + Split FAB */}
+      <motion.div
+        initial={{ y: 0 }}
+        animate={{ y: isMobileVisible ? 0 : "160%" }}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        className="fixed bottom-4 left-3 right-3 z-50 flex sm:hidden items-center gap-2 select-none"
+      >
+        <nav
+          aria-label="Mobile navigation"
+          className="flex flex-1 h-16 items-center justify-around px-1.5 rounded-full bg-md-surface-container-highest/95 backdrop-blur-xl shadow-xl"
+        >
+          {navigation.map((item) => {
+            const Icon = item.icon;
+            const isActive = isResumePage
+              ? item.hash === '/resume'
+              : activeSection === item.hash;
+
+            return (
+              <Link
+                key={item.name}
+                href={item.href}
+                onClick={(e) => handleNavClick(e, item)}
+                className="flex flex-col items-center justify-center flex-1 h-12 rounded-full relative overflow-hidden"
+              >
+                <Ripple color={isActive ? "var(--md-sys-color-on-primary)" : "var(--md-sys-color-on-surface)"} />
+                <div className="relative flex items-center justify-center h-8 w-12 rounded-full">
+                  {isActive && (
+                    <motion.span
+                      layoutId="active-nav-pill-mobile"
+                      className="absolute inset-0 bg-md-primary rounded-full"
+                      transition={{ type: "spring", stiffness: 200, damping: 28, mass: 1 }}
+                    />
+                  )}
+                  <Icon
+                    className={`relative z-10 h-4.5 w-4.5 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                      isActive ? "text-md-on-primary scale-105" : "text-md-on-surface-variant"
+                    }`}
+                  />
+                </div>
+                <span
+                  className={`mt-0.5 text-[10px] font-display tracking-wide transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                    isActive ? "text-md-primary font-bold" : "text-md-on-surface-variant font-medium"
+                  }`}
+                >
+                  {item.name}
+                </span>
+              </Link>
+            );
+          })}
+        </nav>
+
+        <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-m3-lg active:rounded-[14px] bg-md-secondary-container text-md-on-secondary-container shadow-xl shape-morph overflow-hidden">
+          <ThemeToggle />
+        </div>
+      </motion.div>
     </>
   );
 }

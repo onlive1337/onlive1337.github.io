@@ -50,26 +50,26 @@ export function ThemeToggle() {
     })
   }, [isDark, setTheme])
 
-  if (!mounted) return <div className="w-10 h-10" />
+  if (!mounted) return <div className="w-full h-full" />
 
   return (
     <button
       ref={buttonRef}
       onClick={toggleTheme}
-      className="relative inline-flex h-10 w-10 items-center justify-center rounded-full hover:bg-md-on-surface/8 text-md-on-surface focus-visible:ring-2 focus-visible:ring-md-primary/50 outline-none select-none transition-colors"
+      className="relative inline-flex h-full w-full items-center justify-center text-current focus-visible:ring-2 focus-visible:ring-md-primary outline-none select-none cursor-pointer"
       aria-label="Toggle theme"
     >
-      <Ripple />
+      <Ripple color="currentColor" />
       <div className="relative h-6 w-6 overflow-hidden pointer-events-none">
         <Sun
-          className={`absolute h-6 w-6 transform transition-all duration-300 ease-[cubic-bezier(0.2,0,0,1)] text-md-primary
+          className={`absolute h-6 w-6 transform transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]
             ${isDark
               ? 'translate-y-0 rotate-0 opacity-100'
               : 'translate-y-full rotate-90 opacity-0'
             }`}
         />
         <Moon
-          className={`absolute h-6 w-6 transform transition-all duration-300 ease-[cubic-bezier(0.2,0,0,1)] text-md-primary
+          className={`absolute h-6 w-6 transform transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]
             ${isDark
               ? '-translate-y-full -rotate-90 opacity-0'
               : 'translate-y-0 rotate-0 opacity-100'

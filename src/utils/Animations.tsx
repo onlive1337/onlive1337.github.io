@@ -11,9 +11,9 @@ interface AnimationProps {
 
 const expressiveSpring: Transition = {
   type: 'spring',
-  stiffness: 140,
-  damping: 16,
-  mass: 0.9,
+  stiffness: 75,
+  damping: 20,
+  mass: 1,
 };
 
 export function InitialFadeIn({
@@ -25,11 +25,11 @@ export function InitialFadeIn({
 
   return (
     <motion.div
-      initial={reduce ? { opacity: 0 } : { opacity: 0, y: 24, scale: 0.98 }}
+      initial={reduce ? { opacity: 0 } : { opacity: 0, y: 16, scale: 0.985 }}
       animate={reduce ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1 }}
       transition={
         reduce
-          ? { duration: 0.3, delay: delay / 1000 }
+          ? { duration: 0.35, delay: delay / 1000 }
           : { ...expressiveSpring, delay: delay / 1000 }
       }
       className={cn('will-change-transform will-change-opacity', className)}
@@ -47,10 +47,10 @@ export function ScrollFadeIn({
 
   return (
     <motion.div
-      initial={reduce ? { opacity: 0 } : { opacity: 0, y: 40, scale: 0.97 }}
+      initial={reduce ? { opacity: 0 } : { opacity: 0, y: 22, scale: 0.985 }}
       whileInView={reduce ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1 }}
       viewport={{ once: true, margin: '-60px' }}
-      transition={reduce ? { duration: 0.3 } : expressiveSpring}
+      transition={reduce ? { duration: 0.35 } : expressiveSpring}
       className={cn('will-change-transform will-change-opacity', className)}
     >
       {children}
@@ -74,7 +74,7 @@ export function StaggerOnScroll({
         hidden: {},
         visible: {
           transition: {
-            staggerChildren: reduce ? 0 : 0.08,
+            staggerChildren: reduce ? 0 : 0.09,
             delayChildren: delay / 1000,
           },
         },
@@ -87,7 +87,7 @@ export function StaggerOnScroll({
 }
 
 export const staggerItemVariants = {
-  hidden: { opacity: 0, y: 32, scale: 0.96 },
+  hidden: { opacity: 0, y: 20, scale: 0.98 },
   visible: {
     opacity: 1,
     y: 0,

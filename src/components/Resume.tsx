@@ -58,28 +58,28 @@ export default function Resume() {
                 <div className="mb-8 flex justify-between items-center select-none">
                     <Link
                         href="/"
-                        className="group relative flex items-center gap-2 text-sm font-bold text-md-on-background-variant hover:text-md-primary transition-colors py-2.5 px-4 rounded-full hover:bg-md-primary/10 overflow-hidden"
+                        className="group relative flex items-center gap-2 type-label text-md-on-secondary-container bg-md-secondary-container hover:bg-md-secondary-container/80 py-2.5 px-5 rounded-[20px] hover:rounded-[14px] active:rounded-m3-sm shape-morph active:scale-[0.98] overflow-hidden"
                     >
                         <Ripple />
-                        <ArrowLeft className="w-4 h-4" />
-                        <span>Back to Portfolio</span>
+                        <ArrowLeft className="w-4 h-4 relative z-10" />
+                        <span className="relative z-10">Back to Portfolio</span>
                     </Link>
 
                     <button
                         onClick={handleDownloadPDF}
                         disabled={isGenerating || !isHtml2pdfReady}
-                        className="relative flex items-center gap-2 px-6 py-2.5 bg-md-primary text-md-on-primary rounded-full hover:bg-md-primary/95 transition-all select-none shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed font-semibold text-sm overflow-hidden"
+                        className="relative flex items-center gap-2 px-6 py-2.5 bg-md-primary text-md-on-primary rounded-[20px] hover:rounded-[14px] active:rounded-m3-sm shape-morph active:scale-[0.98] select-none shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed type-label overflow-hidden"
                     >
                         <Ripple />
                         {isGenerating ? (
                             <>
-                                <Loader2 className="w-4 h-4 animate-spin" />
-                                <span>Generating...</span>
+                                <Loader2 className="w-4 h-4 animate-spin relative z-10" />
+                                <span className="relative z-10">Generating...</span>
                             </>
                         ) : (
                             <>
-                                <Download className="w-4 h-4" />
-                                <span>Download PDF</span>
+                                <Download className="w-4 h-4 relative z-10" />
+                                <span className="relative z-10">Download PDF</span>
                             </>
                         )}
                     </button>
@@ -88,7 +88,7 @@ export default function Resume() {
                 {/* Resume Content (Keep A4 layout settings unchanged for html2pdf) */}
                 <div
                     ref={resumeRef}
-                    className="shadow-xl rounded-[4px]"
+                    className="shadow-xl rounded-sm"
                     style={{
                         width: '210mm',
                         minHeight: '297mm',

@@ -6,23 +6,43 @@
   --animate-wave: wave 20s linear infinite;
   --animate-wave-reverse: wave-reverse 25s linear infinite;
 
-  /* Material You 3 Color Tokens */
+  /* Material You 3 Expressive (2025 Spec) Color Tokens */
   --color-md-primary: var(--md-sys-color-primary);
+  --color-md-primary-dim: var(--md-sys-color-primary-dim);
   --color-md-on-primary: var(--md-sys-color-on-primary);
   --color-md-primary-container: var(--md-sys-color-primary-container);
   --color-md-on-primary-container: var(--md-sys-color-on-primary-container);
+  --color-md-primary-fixed: var(--md-sys-color-primary-fixed);
+  --color-md-primary-fixed-dim: var(--md-sys-color-primary-fixed-dim);
+  --color-md-on-primary-fixed: var(--md-sys-color-on-primary-fixed);
+  --color-md-on-primary-fixed-variant: var(--md-sys-color-on-primary-fixed-variant);
+
   --color-md-secondary: var(--md-sys-color-secondary);
+  --color-md-secondary-dim: var(--md-sys-color-secondary-dim);
   --color-md-on-secondary: var(--md-sys-color-on-secondary);
   --color-md-secondary-container: var(--md-sys-color-secondary-container);
   --color-md-on-secondary-container: var(--md-sys-color-on-secondary-container);
+  --color-md-secondary-fixed: var(--md-sys-color-secondary-fixed);
+  --color-md-secondary-fixed-dim: var(--md-sys-color-secondary-fixed-dim);
+  --color-md-on-secondary-fixed: var(--md-sys-color-on-secondary-fixed);
+  --color-md-on-secondary-fixed-variant: var(--md-sys-color-on-secondary-fixed-variant);
+
   --color-md-tertiary: var(--md-sys-color-tertiary);
+  --color-md-tertiary-dim: var(--md-sys-color-tertiary-dim);
   --color-md-on-tertiary: var(--md-sys-color-on-tertiary);
   --color-md-tertiary-container: var(--md-sys-color-tertiary-container);
   --color-md-on-tertiary-container: var(--md-sys-color-on-tertiary-container);
+  --color-md-tertiary-fixed: var(--md-sys-color-tertiary-fixed);
+  --color-md-tertiary-fixed-dim: var(--md-sys-color-tertiary-fixed-dim);
+  --color-md-on-tertiary-fixed: var(--md-sys-color-on-tertiary-fixed);
+  --color-md-on-tertiary-fixed-variant: var(--md-sys-color-on-tertiary-fixed-variant);
+
   --color-md-error: var(--md-sys-color-error);
+  --color-md-error-dim: var(--md-sys-color-error-dim);
   --color-md-on-error: var(--md-sys-color-on-error);
   --color-md-error-container: var(--md-sys-color-error-container);
   --color-md-on-error-container: var(--md-sys-color-on-error-container);
+
   --color-md-background: var(--md-sys-color-background);
   --color-md-on-background: var(--md-sys-color-on-background);
   --color-md-surface: var(--md-sys-color-surface);
@@ -37,7 +57,7 @@
   --color-md-inverse-on-surface: var(--md-sys-color-inverse-on-surface);
   --color-md-inverse-primary: var(--md-sys-color-inverse-primary);
 
-  /* Tonal surface roles (MD3E surface system) */
+  /* Tonal surface roles (MD3E 2025 surface system) */
   --color-md-surface-dim: var(--md-sys-color-surface-dim);
   --color-md-surface-bright: var(--md-sys-color-surface-bright);
   --color-md-surface-container-lowest: var(--md-sys-color-surface-container-lowest);
@@ -52,10 +72,10 @@
   --font-display: var(--font-roboto-flex), var(--font-inter), sans-serif;
 
   /* MD3 Expressive shape scale → rounded-m3-* utilities */
-  --radius-m3-xs: 4px;
-  --radius-m3-sm: 8px;
-  --radius-m3-md: 12px;
-  --radius-m3-lg: 16px;
+  --radius-m3-xs: 6px;
+  --radius-m3-sm: 10px;
+  --radius-m3-md: 16px;
+  --radius-m3-lg: 22px;
   --radius-m3-xl: 28px;
   --radius-m3-2xl: 36px;
 
@@ -103,12 +123,24 @@
   :root {
     color-scheme: light;
 
-    /* MD3 Expressive motion easings. linear() springs fall back to an
-       overshooting cubic-bezier where unsupported (see @supports below). */
-    --ease-emphasized: cubic-bezier(0.2, 0, 0, 1);
-    --ease-emphasized-decel: cubic-bezier(0.05, 0.7, 0.1, 1);
-    --ease-spring: linear(0, 0.006, 0.025 2.8%, 0.101 6.1%, 0.539 18.9%, 0.721 25.3%, 0.849, 0.937 35.6%, 0.968, 0.991, 1.007, 1.017 43.3%, 1.022, 1.024, 1.021, 1.012 53.4%, 1.001 58.5%, 0.998 62.8%, 0.998 68.1%, 1 75.4%, 1);
-    --ease-spring-bounce: linear(0, 0.218 2.1%, 0.852 6.5%, 1.114, 1.296 10.7%, 1.346, 1.37 12.9%, 1.373, 1.364 14.5%, 1.332 16.1%, 1.176 19.9%, 1.085 23.1%, 1.046, 1.015, 0.998 30.8%, 0.99, 0.984, 0.984 36.9%, 0.997 43%, 1.003 49.1%, 1.001 56.9%, 1);
+    /* Default fallback declarations for MD3E 2025 & View Transition custom properties */
+    --md-sys-color-primary-dim: #7333ab;
+    --md-sys-color-secondary-dim: #824c72;
+    --md-sys-color-tertiary-dim: #006879;
+    --md-sys-color-error-dim: #b3261e;
+    --md-sys-color-background: #fef7ff;
+    --md-sys-color-on-background: #1d1a22;
+    --md-sys-color-surface-variant: #e8def8;
+    --md-sys-color-surface-tint: #8e4ec6;
+    --vt-x: 50%;
+    --vt-y: 50%;
+    --vt-r: 150%;
+
+    /* MD3 Expressive smooth motion easings — fluid deceleration without abrupt jumps */
+    --ease-emphasized: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-emphasized-decel: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-spring-bounce: cubic-bezier(0.25, 1.15, 0.4, 1);
   }
 
   html {
@@ -124,6 +156,7 @@
     background-color: inherit;
   }
 
+  /*noinspection CssInvalidHtmlTagReference*/
   md-ripple {
     --md-ripple-hover-color: var(--md-sys-color-primary);
     --md-ripple-pressed-color: var(--md-sys-color-primary);
@@ -135,14 +168,29 @@
     overflow: hidden;
     pointer-events: none;
   }
-}
 
-*, 
-*::before, 
-*::after {
-  transition-property: background-color, border-color, color, fill, stroke;
-  transition-duration: 400ms;
-  transition-timing-function: cubic-bezier(0.2, 0, 0, 1); /* Material 3 Standard Easing */
+  *, 
+  *::before, 
+  *::after {
+    transition-property: background-color, border-color, color, fill, stroke;
+    transition-duration: 500ms;
+    transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  html, body {
+    min-height: 100dvh;
+    background-color: inherit;
+  }
+
+  body {
+    @apply text-md-on-background font-sans;
+    overscroll-behavior: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  input, textarea {
+    @apply focus:outline-none focus:ring-2 focus:ring-md-primary/50;
+  }
 }
 
 @media (max-width: 767px) {
@@ -177,17 +225,6 @@ html.js-loading * {
   opacity: 0;
 }
 
-html, body {
-  min-height: 100dvh;
-  background-color: inherit;
-}
-
-body {
-  @apply text-md-on-background font-sans;
-  overscroll-behavior: none;
-  -webkit-tap-highlight-color: transparent;
-}
-
 :root {
   --overscroll: #ffffff;
 }
@@ -196,53 +233,79 @@ body {
   --overscroll: #000000;
 }
 
-input, textarea {
-  @apply focus:outline-none focus:ring-2 focus:ring-md-primary/50;
-}
-
-/* linear() springs are Baseline Newly available (2023). Fall back to an
-   overshooting cubic-bezier where unsupported, so motion still feels lively. */
-@supports not (animation-timing-function: linear(0, 1)) {
-  :root {
-    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
-    --ease-spring-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
-  }
-}
-
 @layer components {
-  /* Expressive type scale (MD3E) — bold, emotive headings via Roboto Flex. */
+  /* Expressive type scale (MD3E) — variable Roboto Flex axes (wdth, GRAD, opsz) */
   .type-display {
-    font-family: var(--font-display);
-    font-weight: 800;
-    font-size: clamp(2.75rem, 7vw, 4.25rem);
-    line-height: 1.04;
-    letter-spacing: -0.02em;
+    font-family: var(--font-display), sans-serif;
+    font-weight: 850;
+    font-size: clamp(2.85rem, 7vw, 4.5rem);
+    line-height: 1.02;
+    letter-spacing: -0.025em;
+    font-variation-settings: 'wdth' 118, 'GRAD' 40, 'opsz' 72;
   }
 
   .type-headline {
-    font-family: var(--font-display);
+    font-family: var(--font-display), sans-serif;
     font-weight: 800;
-    font-size: clamp(1.75rem, 4vw, 2.5rem);
-    line-height: 1.1;
-    letter-spacing: -0.015em;
+    font-size: clamp(1.85rem, 4vw, 2.6rem);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    font-variation-settings: 'wdth' 110, 'GRAD' 20, 'opsz' 36;
   }
 
   .type-title {
-    font-family: var(--font-display);
+    font-family: var(--font-display), sans-serif;
     font-weight: 700;
-    letter-spacing: -0.005em;
+    letter-spacing: -0.01em;
+    font-variation-settings: 'wdth' 104, 'GRAD' 0, 'opsz' 20;
+    transition: font-variation-settings 0.55s var(--ease-emphasized), color 0.45s var(--ease-emphasized);
   }
 
-  /* Shape morph: corners relax on hover and tighten on press, driven by the
-     expressive spring. Pair with a base `rounded-*` value on the element. */
+  .group:hover .type-title {
+    font-variation-settings: 'wdth' 107, 'GRAD' 35, 'opsz' 20;
+  }
+
+  /* Shape morph: corners relax on hover and tighten on press with smooth fluid easing. */
   .shape-morph {
     transition:
-      border-radius 0.5s var(--ease-spring),
-      transform 0.45s var(--ease-spring),
-      box-shadow 0.4s var(--ease-emphasized),
-      background-color 0.4s var(--ease-emphasized),
-      border-color 0.4s var(--ease-emphasized),
-      color 0.4s var(--ease-emphasized);
+      border-radius 0.55s var(--ease-spring),
+      transform 0.55s var(--ease-spring),
+      box-shadow 0.5s var(--ease-emphasized),
+      background-color 0.5s var(--ease-emphasized),
+      border-color 0.5s var(--ease-emphasized),
+      color 0.45s var(--ease-emphasized),
+      font-variation-settings 0.55s var(--ease-emphasized);
+  }
+
+  /* Android 16 Segmented List item: outer group corners are 28px (xl),
+     inner adjacent corners are 10px (sm), and hovered/pressed items morph
+     smoothly into full expressive cards. */
+  .m3-segmented-item {
+    border-radius: var(--radius-m3-sm);
+    transition:
+      border-radius 0.55s var(--ease-spring),
+      transform 0.55s var(--ease-spring),
+      background-color 0.5s var(--ease-emphasized),
+      box-shadow 0.5s var(--ease-emphasized);
+  }
+
+  .m3-segmented-item:first-child {
+    border-top-left-radius: var(--radius-m3-xl);
+    border-top-right-radius: var(--radius-m3-xl);
+  }
+
+  .m3-segmented-item:last-child {
+    border-bottom-left-radius: var(--radius-m3-xl);
+    border-bottom-right-radius: var(--radius-m3-xl);
+  }
+
+  .m3-segmented-item:hover,
+  .m3-segmented-item:focus-visible {
+    border-radius: var(--radius-m3-xl);
+  }
+
+  .m3-segmented-item:active {
+    border-radius: var(--radius-m3-lg);
   }
 }
 

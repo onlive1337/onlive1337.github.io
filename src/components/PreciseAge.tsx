@@ -27,7 +27,7 @@ export const PreciseAge = memo(function PreciseAge() {
  return (
    <span
      suppressHydrationWarning
-     className="font-mono bg-linear-to-r from-md-primary to-md-tertiary text-transparent bg-clip-text font-semibold"
+     className="font-mono tabular-nums font-bold"
    >
      {age}
    </span>

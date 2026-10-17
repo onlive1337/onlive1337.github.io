@@ -9,7 +9,7 @@ const jobs = [
         company: "Uzum Bank",
         type: "Full-Time",
         period: "July 2026 — Present",
-        nodeColor: "bg-md-tertiary",
+        iconStyle: "bg-md-tertiary-container text-md-on-tertiary-container",
         badgeStyle: "bg-md-tertiary-container text-md-on-tertiary-container",
     },
     {
@@ -17,7 +17,7 @@ const jobs = [
         company: "PROWEB",
         type: "Full-Time",
         period: "August 2025 — February 2026",
-        nodeColor: "bg-md-primary",
+        iconStyle: "bg-md-primary-container text-md-on-primary-container",
         badgeStyle: "bg-md-primary-container text-md-on-primary-container",
     },
     {
@@ -25,7 +25,7 @@ const jobs = [
         company: "IT Academy",
         type: "Part-Time",
         period: "August 2024 — August 2025",
-        nodeColor: "bg-md-secondary",
+        iconStyle: "bg-md-secondary-container text-md-on-secondary-container",
         badgeStyle: "bg-md-secondary-container text-md-on-secondary-container",
     },
 ];
@@ -39,85 +39,80 @@ const education = {
 
 export const Experience = memo(function Experience() {
     return (
-        <section id="experience" className="py-16 scroll-mt-24">
+        <section id="experience" className="py-12 scroll-mt-24">
             <div className="container mx-auto px-4 max-w-4xl">
-                <h2 className="mb-12 text-center type-headline text-md-on-background">
+                <h2 className="mb-8 text-center type-headline text-md-on-background">
                     Experience
                 </h2>
 
-                <div className="max-w-3xl mx-auto space-y-12">
-                    {/* Work Experience */}
-                    <div className="space-y-6">
-                        <h3 className="flex items-center gap-3 text-lg font-bold font-display text-md-on-background">
-                            <span className="p-2 rounded-xl bg-md-primary/10 text-md-primary">
-                                <Briefcase className="w-5 h-5" />
+                <div className="max-w-3xl mx-auto space-y-8">
+                    {/* Work Experience — Android 16 Segmented List */}
+                    <div className="space-y-3">
+                        <div className="flex items-center gap-2.5 px-2">
+                            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-md-primary-container text-md-on-primary-container">
+                                <Briefcase className="w-4 h-4" />
                             </span>
-                            Work Experience
-                        </h3>
+                            <h3 className="text-base type-title text-md-on-background">
+                                Work Experience
+                            </h3>
+                        </div>
 
-                        <div className="relative">
-                            {/* M3 styled timeline line */}
-                            <div className="absolute left-4.5 sm:left-6.5 top-2 bottom-2 w-0.5 bg-md-outline-variant/30" />
-
-                            <div className="flex flex-col gap-6">
-                                {jobs.map((job, index) => (
-                                    <div key={index} className="relative pl-12 sm:pl-16">
-                                        {/* Dynamic color M3 node marker */}
-                                        <div
-                                            className={`absolute left-3 sm:left-5 top-7 w-3.5 h-3.5 rounded-full ${job.nodeColor} ring-4 ring-md-background z-10 shadow-sm`}
-                                        />
-
-                                        <div className="rounded-m3-xl hover:rounded-m3-2xl border border-md-outline-variant/30 bg-md-surface-container p-6 shadow-sm hover:shadow-lg hover:scale-[1.01] shape-morph relative overflow-hidden select-none">
-                                            <Ripple />
-                                            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2.5">
-                                                <div className="space-y-1">
-                                                    <h4 className="text-lg type-title text-md-on-surface">
-                                                        {job.title}
-                                                    </h4>
-                                                    <div className="flex items-center flex-wrap gap-2 text-xs">
-                                                        <span className="font-semibold text-md-primary">
-                                                            {job.company}
-                                                        </span>
-                                                        {job.type && (
-                                                            <span className={`px-2 py-0.5 rounded-full font-semibold ${job.badgeStyle}`}>
-                                                                {job.type}
-                                                            </span>
-                                                        )}
-                                                    </div>
-                                                </div>
-                                                <div className="flex items-center gap-1.5 text-xs text-md-on-surface-variant font-medium shrink-0">
-                                                    <Calendar className="w-3.5 h-3.5 text-md-primary" />
-                                                    {job.period}
-                                                </div>
+                        <div className="flex flex-col gap-1">
+                            {jobs.map((job) => (
+                                <div
+                                    key={`${job.company}-${job.title}`}
+                                    className="group m3-segmented-item bg-md-surface-container hover:bg-md-surface-container-high p-5 sm:p-6 relative overflow-hidden select-none"
+                                >
+                                    <Ripple />
+                                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                                        <div className="space-y-1.5">
+                                            <h4 className="text-base sm:text-lg type-title text-md-on-surface group-hover:text-md-primary">
+                                                {job.title}
+                                            </h4>
+                                            <div className="flex items-center flex-wrap gap-2 text-xs">
+                                                <span className="font-bold text-md-on-surface-variant">
+                                                    {job.company}
+                                                </span>
+                                                {job.type && (
+                                                    <span className={`px-2.5 py-0.5 rounded-full font-semibold ${job.badgeStyle}`}>
+                                                        {job.type}
+                                                    </span>
+                                                )}
                                             </div>
                                         </div>
+                                        <div className="inline-flex items-center gap-1.5 text-xs bg-md-surface-container-highest text-md-on-surface-variant px-3 py-1.5 rounded-full font-medium shrink-0 self-start sm:self-center">
+                                            <Calendar className="w-3.5 h-3.5 text-md-primary" />
+                                            {job.period}
+                                        </div>
                                     </div>
-                                ))}
-                            </div>
+                                </div>
+                            ))}
                         </div>
                     </div>
 
                     {/* Education */}
-                    <div className="space-y-6">
-                        <h3 className="flex items-center gap-3 text-lg font-bold font-display text-md-on-background">
-                            <span className="p-2 rounded-xl bg-md-secondary/10 text-md-secondary">
-                                <GraduationCap className="w-5 h-5" />
+                    <div className="space-y-3">
+                        <div className="flex items-center gap-2.5 px-2">
+                            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-md-secondary-container text-md-on-secondary-container">
+                                <GraduationCap className="w-4 h-4" />
                             </span>
-                            Education
-                        </h3>
+                            <h3 className="text-base type-title text-md-on-background">
+                                Education
+                            </h3>
+                        </div>
 
-                        <div className="rounded-m3-xl hover:rounded-m3-2xl border border-md-outline-variant/30 bg-md-surface-container p-6 shadow-sm hover:shadow-lg hover:scale-[1.01] shape-morph relative overflow-hidden select-none">
+                        <div className="group rounded-m3-xl hover:rounded-m3-2xl active:rounded-m3-lg bg-md-surface-container hover:bg-md-surface-container-high p-5 sm:p-6 shape-morph relative overflow-hidden select-none">
                             <Ripple />
-                            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2.5">
-                                <div className="space-y-1">
-                                    <h4 className="text-lg font-bold font-display text-md-on-surface">
+                            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                                <div className="space-y-1.5">
+                                    <h4 className="text-base sm:text-lg type-title text-md-on-surface group-hover:text-md-secondary">
                                         {education.title}
                                     </h4>
                                     <span className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold ${education.badgeStyle}`}>
                                         {education.place}
                                     </span>
                                 </div>
-                                <div className="flex items-center gap-1.5 text-xs text-md-on-surface-variant font-medium shrink-0">
+                                <div className="inline-flex items-center gap-1.5 text-xs bg-md-surface-container-highest text-md-on-surface-variant px-3 py-1.5 rounded-full font-medium shrink-0 self-start sm:self-center">
                                     <Calendar className="w-3.5 h-3.5 text-md-secondary" />
                                     {education.period}
                                 </div>

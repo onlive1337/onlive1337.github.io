@@ -3,9 +3,12 @@ import Image from "next/image"
 import { memo, useEffect, useState, useCallback, useRef } from "react"
 import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
+import useSWR from 'swr'
 import { InitialFadeIn } from '@/utils/Animations'
 import { PreciseAge } from '@/components/PreciseAge'
+import { Socials } from '@/components/sections/Socials'
 import { fetchFromAPI } from '@/utils/api'
+import type { DiscordData } from '@/types'
 
 const statusColors = {
   online: 'bg-emerald-500',
@@ -21,22 +24,20 @@ const statusMessages = {
   offline: 'Currently offline'
 } as const;
 
-type Status = {
-  status: keyof typeof statusColors;
-}
+const fetchDiscordStatus = (endpoint: string) => fetchFromAPI<DiscordData>(endpoint);
 
 const Avatar = memo(function Avatar() {
   return (
-    <div className="relative h-40 w-40 overflow-hidden rounded-m3-2xl hover:rounded-m3-lg hover:scale-[1.03] shape-morph border-4 border-md-primary/10 hover:border-md-primary/30 shadow-lg">
+    <div className="relative h-44 w-44 overflow-hidden rounded-m3-2xl hover:rounded-[52px] active:rounded-m3-xl hover:scale-[1.02] shape-morph ring-4 ring-md-surface-container-highest shadow-xl">
       <Image
         src="/avatar.avif"
         alt="Avatar"
-        width={160}
-        height={160}
+        width={176}
+        height={176}
         quality={80}
         priority
-        className="object-cover transition-transform duration-500 hover:scale-105"
-        sizes="160px"
+        className="object-cover w-full h-full transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-105"
+        sizes="176px"
       />
     </div>
   );
@@ -57,17 +58,17 @@ const StatusTooltip = memo(function StatusTooltip({
     <AnimatePresence>
       {show && (
         <motion.div 
-          initial={{ opacity: 0, scale: 0.9, y: 5 }}
+          initial={{ opacity: 0, scale: 0.94, y: 4 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.9, y: 5 }}
+          exit={{ opacity: 0, scale: 0.94, y: 4 }}
           className="fixed z-50 pointer-events-none"
           style={{
             top: `${position.y + 12}px`,
             left: position.x - 60, // center-ish alignment
           }}
-          transition={{ duration: 0.2, ease: [0.2, 0, 0, 1] }}
+          transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
         >
-          <div className="bg-md-inverse-surface text-md-inverse-on-surface text-xs font-semibold py-1.5 px-3.5 rounded-lg shadow-lg whitespace-nowrap tracking-wide border border-md-outline-variant/20">
+          <div className="bg-md-inverse-surface text-md-inverse-on-surface text-xs font-semibold py-1.5 px-3.5 rounded-full shadow-lg whitespace-nowrap tracking-wide">
             {message}
           </div>
         </motion.div>
@@ -77,7 +78,7 @@ const StatusTooltip = memo(function StatusTooltip({
   );
 });
 
-const StatusIndicator = memo(function StatusIndicator({ status }: { status: Status }) {
+const StatusIndicator = memo(function StatusIndicator({ status }: { status: DiscordData }) {
   const [showTooltip, setShowTooltip] = useState(false);
   const [position, setPosition] = useState<{ x: number; y: number } | null>(null);
   const indicatorRef = useRef<HTMLDivElement>(null);
@@ -105,7 +106,7 @@ const StatusIndicator = memo(function StatusIndicator({ status }: { status: Stat
       setShowTooltip(false);
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     document.addEventListener('click', handleClickOutside);
 
     return () => {
@@ -114,22 +115,39 @@ const StatusIndicator = memo(function StatusIndicator({ status }: { status: Stat
     };
   }, [showTooltip, updatePosition]);
 
-  const handleInteraction = () => {
+  const toggleTooltip = useCallback(() => {
     updatePosition();
     setShowTooltip(prev => !prev);
-  };
+  }, [updatePosition]);
 
   return (
     <>
       <div 
         ref={indicatorRef}
-        className={`absolute bottom-1.5 right-1.5 h-8 w-8 rounded-full ${statusColors[status.status]} border-4 border-md-background shadow-md cursor-help transition-all duration-300 hover:scale-110 active:scale-95`}
+        className={`absolute bottom-1.5 right-1.5 h-8 w-8 rounded-m3-md hover:rounded-m3-sm ${statusColors[status.status]} ring-4 ring-md-background shadow-md cursor-help shape-morph hover:scale-105 active:scale-95`}
         onClick={(e) => {
           e.stopPropagation();
-          handleInteraction();
+          toggleTooltip();
         }}
-        onMouseEnter={handleInteraction}
-        onMouseLeave={() => setShowTooltip(false)}
+        onPointerEnter={(e) => {
+          if (e.pointerType === 'mouse') {
+            updatePosition();
+            setShowTooltip(true);
+          }
+        }}
+        onPointerLeave={(e) => {
+          if (e.pointerType === 'mouse') {
+            setShowTooltip(false);
+          }
+        }}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            toggleTooltip();
+          } else if (e.key === 'Escape') {
+            setShowTooltip(false);
+          }
+        }}
         role="button"
         tabIndex={0}
         aria-label={`Discord status: ${status.status}`}
@@ -145,21 +163,22 @@ const StatusIndicator = memo(function StatusIndicator({ status }: { status: Stat
 
 const HeroContent = memo(function HeroContent() {
   return (
-    <div className="text-center space-y-4">
+    <div className="text-center space-y-5">
       <h1 className="type-display text-md-on-background">
         onlive
       </h1>
-      <p className="text-xl md:text-2xl font-semibold tracking-wide text-md-primary">
-        Full Stack Developer
-      </p>
-      <div className="flex flex-col items-center gap-1.5 text-md-on-background-variant">
-        <div className="flex items-center gap-1.5 flex-wrap justify-center font-medium">
-          <span>tech enthusiast</span>
-          <span>from</span>
-          <span className="text-xl cursor-default">🇺🇿</span>
-        </div>
-        <span className="font-mono text-sm opacity-80 select-none bg-md-secondary-container text-md-on-secondary-container px-3 py-0.5 rounded-full">
-          {<PreciseAge />} y.o
+      <div className="flex flex-wrap items-center justify-center gap-2">
+        <span className="px-4 py-1.5 rounded-full bg-md-primary-container text-md-on-primary-container font-display font-bold text-sm md:text-base tracking-wide">
+          Full Stack Developer
+        </span>
+        <span className="px-3.5 py-1.5 rounded-m3-md bg-md-surface-container-high text-md-on-surface font-medium text-sm flex items-center gap-1.5">
+          <span>tech enthusiast from</span>
+          <span className="text-base leading-none cursor-default">🇺🇿</span>
+        </span>
+      </div>
+      <div className="flex justify-center">
+        <span className="font-mono text-xs sm:text-sm select-none bg-md-tertiary-container text-md-on-tertiary-container px-4 py-1 rounded-full font-semibold">
+          <PreciseAge /> y.o
         </span>
       </div>
     </div>
@@ -167,48 +186,33 @@ const HeroContent = memo(function HeroContent() {
 });
 
 export const Hero = memo(function Hero() {
-  const [status, setStatus] = useState<Status | null>(null);
+  const { data, isLoading } = useSWR('discord', fetchDiscordStatus, {
+    refreshInterval: 60000,
+    dedupingInterval: 30000,
+    revalidateOnFocus: false,
+  });
 
-  const fetchStatus = useCallback(async () => {
-    try {
-      const data = await fetchFromAPI<Status>('discord');
-      if (data) {
-        setStatus(data);
-      } else {
-        setStatus({ status: 'offline' });
-      }
-    } catch (err) {
-      console.error('Failed to fetch Discord status:', err);
-      setStatus({ status: 'offline' });
-    }
-  }, []);
-
-  useEffect(() => {
-    const raf = requestAnimationFrame(() => {
-      void fetchStatus();
-    });
-    const interval = setInterval(() => {
-      void fetchStatus();
-    }, 60000);
-    return () => {
-      cancelAnimationFrame(raf);
-      clearInterval(interval);
-    };
-  }, [fetchStatus]);
+  const status: DiscordData | null = isLoading
+    ? null
+    : (data ?? { status: 'offline' });
 
   return (
-    <section className="pt-32 pb-16">
+    <section id="about" className="pt-28 sm:pt-32 pb-12 scroll-mt-24">
       <div className="container mx-auto px-4">
         <div className="flex flex-col items-center gap-8">
-          <InitialFadeIn delay={200}>
+          <InitialFadeIn delay={150}>
             <div className="relative select-none">
               <Avatar />
               {status && <StatusIndicator status={status} />}
             </div>
           </InitialFadeIn>
 
-          <InitialFadeIn delay={300}>
+          <InitialFadeIn delay={250}>
             <HeroContent />
+          </InitialFadeIn>
+
+          <InitialFadeIn delay={350} className="w-full">
+            <Socials />
           </InitialFadeIn>
         </div>
       </div>

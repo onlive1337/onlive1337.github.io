@@ -170,7 +170,7 @@ function NavigationComponent() {
       >
         <nav
           aria-label="Mobile navigation"
-          className="flex flex-1 h-16 items-center justify-around px-1.5 rounded-full bg-md-surface-container-highest/95 backdrop-blur-xl shadow-xl"
+          className="flex flex-1 min-w-0 h-16 items-center justify-between px-2 rounded-full bg-md-surface-container-highest/95 backdrop-blur-xl shadow-xl"
         >
           {navigation.map((item) => {
             const Icon = item.icon;
@@ -183,10 +183,10 @@ function NavigationComponent() {
                 key={item.name}
                 href={item.href}
                 onClick={(e) => handleNavClick(e, item)}
-                className="flex flex-col items-center justify-center flex-1 h-12 rounded-full relative overflow-hidden"
+                className="flex flex-col items-center justify-center flex-auto min-w-0 h-12 px-0.5 rounded-2xl relative"
               >
                 <Ripple color={isActive ? "var(--md-sys-color-on-primary)" : "var(--md-sys-color-on-surface)"} />
-                <div className="relative flex items-center justify-center h-8 w-12 rounded-full">
+                <div className="relative flex items-center justify-center h-8 w-11 min-[390px]:w-12 rounded-full">
                   {isActive && (
                     <motion.span
                       layoutId="active-nav-pill-mobile"
@@ -201,7 +201,7 @@ function NavigationComponent() {
                   />
                 </div>
                 <span
-                  className={`mt-0.5 text-[10px] font-display tracking-wide transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                  className={`mt-0.5 text-[clamp(0.5625rem,0.35rem+1vw,0.625rem)] leading-none font-display tracking-tight whitespace-nowrap transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
                     isActive ? "text-md-primary font-bold" : "text-md-on-surface-variant font-medium"
                   }`}
                 >
